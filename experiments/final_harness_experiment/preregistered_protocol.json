@@ -1,0 +1,16 @@
+{
+  "schema_version": "final-harness-preregistration/v3",
+  "created_at": "2026-10-12T14:35:00+03:00",
+  "status": "registered_after_official_infrastructure_smoke_before_sql_validation",
+  "framework": {"name": "AutoSaddler V2", "commit": "e841543ce6cf6bdf690e65134b12a829ec9f66d1", "provider": "CodexAgentProvider", "proposer_model": "gpt-5.5"},
+  "methods": ["seed_harness", "framework_original_optimizer", "random_search", "rl_optimizer", "tail_aware_rl_variant"],
+  "target": {"model": "ministral-3-8b-instruct-2512", "endpoint": "http://127.0.0.1:1234/v1/chat/completions", "temperature": 0.0, "frozen": true, "context": 2048},
+  "boundary": "official Codex proposer and diagnose/patch application, SQL scenario/evaluator/verifier, task streams and caps fixed; optimizer parent/action selection only changes",
+  "core": {"algorithm_seeds": [0,1,2], "proposed_candidates_per_optimizer_seed": 15, "search_tasks": 3, "validation_tasks": 10, "equal_target_call_cap": 96, "equal_proposer_session_cap": 45, "validation_after_all_frozen": true},
+  "reward": "success - 0.10 * tokens / 1000 - 0.02 * tool_calls",
+  "tail_objective": "0.8 * mean_reward + 0.2 * worst-20%-task mean reward",
+  "tailrl_claim": "tail_aware_rl_variant only; not Tail-Likelihood RL",
+  "success_criterion": "RL minus original validation reward >= 0.02 with paired task-bootstrap 95% CI excluding zero",
+  "held_out_opened": false,
+  "mass_run_status": "not_started_pending_SQL_scenario_and_budget_authorization"
+}

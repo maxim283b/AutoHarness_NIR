@@ -1,0 +1,5 @@
+{
+    "task_id": 576,
+    "final_code": "def is_Sub_Array(arr1, arr2):\n    return arr1 in arr2",
+    "final_pass": false
+}

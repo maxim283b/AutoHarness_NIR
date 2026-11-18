@@ -1,0 +1,5 @@
+{
+    "task_id": 592,
+    "final_code": "import math\n\ndef sum_Of_product(n):\n    # Initialize the sum to 0\n    sum = 0\n    # Iterate through the range from 1 to n\n    for i in range(1, n+1):\n        # Calculate the binomial coefficient for the current i\n        binomial_coefficient = math.comb(i, i)\n        # Multiply the binomial coefficient by the current i\n        product = binomial_coefficient * i\n        # Add the product to the sum\n        sum += product\n    # Return the final sum\n    return sum",
+    "final_pass": false
+}

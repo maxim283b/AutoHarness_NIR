@@ -1,0 +1,18 @@
+{
+  "run_id": "smoke",
+  "split": "train",
+  "n_tasks": 5,
+  "pass_at_1": 0.8,
+  "n_pass": 4,
+  "visible_pass_after_solve": 1.0,
+  "repair_triggered": 0,
+  "repair_success": 0,
+  "harness_errors": 0,
+  "lm_calls": 5,
+  "prompt_tokens_total": 416,
+  "completion_tokens_total": 288,
+  "tokens_per_task_mean": 140.8,
+  "lm_latency_per_task_mean_s": 3.9506267999997364,
+  "wall_time_s": 20.965655899984995,
+  "finished_at": "2026-10-02T12:49:29.777443+00:00"
+}

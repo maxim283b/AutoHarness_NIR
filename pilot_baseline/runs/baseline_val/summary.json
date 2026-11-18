@@ -1,0 +1,18 @@
+{
+  "run_id": "baseline_val",
+  "split": "val",
+  "n_tasks": 20,
+  "pass_at_1": 0.75,
+  "n_pass": 15,
+  "visible_pass_after_solve": 0.8,
+  "repair_triggered": 4,
+  "repair_success": 0,
+  "harness_errors": 0,
+  "lm_calls": 24,
+  "prompt_tokens_total": 2903,
+  "completion_tokens_total": 1873,
+  "tokens_per_task_mean": 238.8,
+  "lm_latency_per_task_mean_s": 7.597252879997541,
+  "wall_time_s": 165.97621749999234,
+  "finished_at": "2026-10-02T13:29:25.950010+00:00"
+}

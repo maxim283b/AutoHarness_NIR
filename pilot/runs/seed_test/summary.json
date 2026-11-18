@@ -1,0 +1,25 @@
+{
+ "run_id": "seed_test",
+ "candidate_file": "seed_harness.json",
+ "candidate_hash": "dcbf6e41fcf13b08f55f59692d904a8d3e9cbfb2b2b9390c9f28aa0517ab41c5",
+ "candidate": {
+  "solver_prompt": "You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.",
+  "repair_prompt": "The previous solution failed a test. Read the error, fix the function, and return only one corrected ```python``` code block."
+ },
+ "split": "test",
+ "n": 50,
+ "pass_at_1": 0.66,
+ "repair_rate": 0.32,
+ "tokens_per_task": 284.04,
+ "ledger": {
+  "target": {
+   "calls": 66,
+   "prompt_tokens": 8602,
+   "completion_tokens": 5600,
+   "seconds": 233.89765977859497,
+   "total_tokens": 14202
+  }
+ },
+ "wall_seconds": 252.4,
+ "no_repair": false
+}

@@ -1,0 +1,161 @@
+diff --git a/opencode-src/packages/opencode/src/session/prompt.ts b/opencode-src/packages/opencode/src/session/prompt.ts
+index 0f85d44..631724f 100644
+--- a/opencode-src/packages/opencode/src/session/prompt.ts
++++ b/opencode-src/packages/opencode/src/session/prompt.ts
+@@ -99,6 +99,33 @@ function isOrphanedInterruptedTool(part: SessionV1.ToolPart) {
+   return part.state.status === "error" && part.state.metadata?.interrupted === true
+ }
+ 
++const FILE_EDIT_TOOLS = new Set(["edit", "write", "apply_patch", "multiedit"])
++
++// Cap the number of times we steer a session that keeps stopping without edits.
++const ZERO_PROGRESS_STEER_LIMIT = 2
++const zeroProgressSteers = new Map<string, number>()
++
++const ZERO_PROGRESS_STEER_TEXT = [
++  `IMPORTANT: Do not finish yet. You have not made any file changes in this session using the edit, write, or apply_patch tools, so the requested work has not been implemented. Continue working immediately: use the file editing tools to actually modify the relevant files. Do not summarize what you have already done, do not describe what you would do, and do not ask for confirmation.
++Once you have made the file changes, verify them (for example by reading the modified files and running the available checks) before finishing.`,
++  `You stopped again without making any file changes. The requested work is still not implemented. You MUST call the edit, write, or apply_patch tool now to modify the relevant files. Do not reply with a summary, a plan, an explanation, or a question, and do not ask for confirmation. Call a file editing tool on the appropriate file in this response.`,
++]
++
++function hasAnyToolPart(msgs: SessionV1.WithParts[]) {
++  return msgs.some((msg) => msg.parts.some((part) => part.type === "tool"))
++}
++
++function hasCompletedFileEdit(msgs: SessionV1.WithParts[]) {
++  return msgs.some((msg) =>
++    msg.parts.some(
++      (part) =>
++        part.type === "tool" &&
++        FILE_EDIT_TOOLS.has(part.tool) &&
++        part.state.status === "completed",
++    ),
++  )
++}
++
+ export interface Interface {
+   readonly cancel: (sessionID: SessionID) => Effect.Effect<void>
+   readonly prompt: (input: PromptInput) => Effect.Effect<SessionV1.WithParts, Image.Error>
+@@ -1125,8 +1152,36 @@ const layer = Layer.effect(
+                 callID: orphan.callID,
+               })
+             }
+-            yield* Effect.logInfo("exiting loop", { "session.id": sessionID })
+-            break
++            const steerCount = zeroProgressSteers.get(sessionID) ?? 0
++            const lastUserMsg = msgs.findLast((msg) => msg.info.role === "user")
++            if (
++              lastAssistant.finish === "stop" &&
++              !session.parentID &&
++              lastUser.agent !== "plan" &&
++              steerCount < ZERO_PROGRESS_STEER_LIMIT &&
++              lastUserMsg &&
++              hasAnyToolPart(msgs) &&
++              !hasCompletedFileEdit(msgs)
++            ) {
++              // The agent stopped, used tools, but never completed any file
++              // edit. Steer instead of exiting so implementation work happens.
++              zeroProgressSteers.set(sessionID, steerCount + 1)
++              yield* Effect.logInfo("zero-progress steer", {
++                "session.id": sessionID,
++                attempt: steerCount + 1,
++              })
++              lastUserMsg.parts.push({
++                id: PartID.ascending(),
++                messageID: lastUser.id,
++                sessionID: lastUser.sessionID,
++                type: "text",
++                text: ZERO_PROGRESS_STEER_TEXT[Math.min(steerCount, ZERO_PROGRESS_STEER_TEXT.length - 1)],
++                synthetic: true,
++              })
++            } else {
++              yield* Effect.logInfo("exiting loop", { "session.id": sessionID })
++              break
++            }
+           }
+ 
+           step++
+diff --git a/opencode-src/packages/opencode/src/tool/apply_patch.ts b/opencode-src/packages/opencode/src/tool/apply_patch.ts
+index 3f89a63..5e850c9 100644
+--- a/opencode-src/packages/opencode/src/tool/apply_patch.ts
++++ b/opencode-src/packages/opencode/src/tool/apply_patch.ts
+@@ -14,6 +14,7 @@ import DESCRIPTION from "./apply_patch.txt"
+ import { FileSystem } from "@opencode-ai/core/filesystem"
+ import { Format } from "../format"
+ import * as Bom from "@/util/bom"
++import { isTestFilePath, TEST_FILE_WARNING } from "./test-file-hint"
+ 
+ export const Parameters = Schema.Struct({
+   patchText: Schema.String.annotate({ description: "The full patch text that describes all changes to be made" }),
+@@ -282,6 +283,9 @@ export const ApplyPatchTool = Tool.define(
+         return `M ${path.relative(instance.worktree, target).replaceAll("\\", "/")}`
+       })
+       let output = `Success. Updated the following files:\n${summaryLines.join("\n")}`
++      if (fileChanges.some((change) => isTestFilePath(change.movePath ?? change.filePath))) {
++        output += TEST_FILE_WARNING
++      }
+ 
+       for (const change of fileChanges) {
+         if (change.type === "delete") continue
+diff --git a/opencode-src/packages/opencode/src/tool/edit.ts b/opencode-src/packages/opencode/src/tool/edit.ts
+index a92e472..973b42d 100644
+--- a/opencode-src/packages/opencode/src/tool/edit.ts
++++ b/opencode-src/packages/opencode/src/tool/edit.ts
+@@ -18,6 +18,7 @@ import { Snapshot } from "@/snapshot"
+ import { assertExternalDirectoryEffect } from "./external-directory"
+ import { FSUtil } from "@opencode-ai/core/fs-util"
+ import * as Bom from "@/util/bom"
++import { isTestFilePath, TEST_FILE_WARNING } from "./test-file-hint"
+ 
+ function normalizeLineEndings(text: string): string {
+   return text.replaceAll("\r\n", "\n")
+@@ -194,6 +195,9 @@ export const EditTool = Tool.define(
+           })
+ 
+           let output = "Edit applied successfully."
++          if (isTestFilePath(filePath)) {
++            output += TEST_FILE_WARNING
++          }
+           yield* lsp.touchFile(filePath, "document")
+           const diagnostics = yield* lsp.diagnostics()
+           const normalizedFilePath = FSUtil.normalizePath(filePath)
+diff --git a/opencode-src/packages/opencode/src/tool/test-file-hint.ts b/opencode-src/packages/opencode/src/tool/test-file-hint.ts
+new file mode 100644
+index 0000000..7c12822
+--- /dev/null
++++ b/opencode-src/packages/opencode/src/tool/test-file-hint.ts
+@@ -0,0 +1,12 @@
++const TEST_DIR_RE = /(^|\/)(tests?|__tests__|specs?|__mocks__)(\/|$)/
++
++export function isTestFilePath(p: string) {
++  const normalized = p.replace(/\\/g, "/")
++  if (TEST_DIR_RE.test(normalized)) return true
++  const base = normalized.slice(normalized.lastIndexOf("/") + 1)
++  return /(^|[-_.])(test|spec)[-_.]/.test(base) || /^test_/.test(base)
++}
++
++export const TEST_FILE_WARNING = `
++
++Warning: you just modified a file that appears to be a test or test-utility file. Keep in mind: validation typically runs the project's own pristine test suite, so edits to test files do not count as implementing the task and may be discarded or overridden. Make sure the required behavior is actually implemented in the relevant source/implementation files, and verify it there, instead of relying on changes to tests.`
+diff --git a/opencode-src/packages/opencode/src/tool/write.ts b/opencode-src/packages/opencode/src/tool/write.ts
+index 37be6d8..0ff76c7 100644
+--- a/opencode-src/packages/opencode/src/tool/write.ts
++++ b/opencode-src/packages/opencode/src/tool/write.ts
+@@ -14,6 +14,7 @@ import { InstanceState } from "@/effect/instance-state"
+ import { trimDiff } from "./edit"
+ import { assertExternalDirectoryEffect } from "./external-directory"
+ import * as Bom from "@/util/bom"
++import { isTestFilePath, TEST_FILE_WARNING } from "./test-file-hint"
+ 
+ const MAX_PROJECT_DIAGNOSTICS_FILES = 5
+ 
+@@ -72,6 +73,9 @@ export const WriteTool = Tool.define(
+           })
+ 
+           let output = "Wrote file successfully."
++          if (isTestFilePath(filepath)) {
++            output += TEST_FILE_WARNING
++          }
+           yield* lsp.touchFile(filepath, "document")
+           const diagnostics = yield* lsp.diagnostics()
+           const normalizedFilepath = FSUtil.normalizePath(filepath)

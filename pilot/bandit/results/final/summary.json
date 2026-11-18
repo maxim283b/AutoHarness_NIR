@@ -1,0 +1,1509 @@
+{
+ "tag": "final",
+ "reward": {
+  "lam_tok_per_1k": 0.1,
+  "lam_tool": 0.02,
+  "lam_latency_per_s": 0.0
+ },
+ "reward_range_for_rescaling": [
+  -0.256,
+  1.0
+ ],
+ "seeds": 100,
+ "base_seed": 2026,
+ "budgets": [
+  10,
+  25,
+  50
+ ],
+ "patterns": [
+  "direct",
+  "plan_execute",
+  "self_refine",
+  "verifier_loop",
+  "memory"
+ ],
+ "n_online": 100,
+ "n_heldout": 50,
+ "harness_hash": "566d265bc49457a2",
+ "target_model": "qwen2.5-coder:1.5b",
+ "target_options": {
+  "temperature": 0,
+  "seed": 0,
+  "num_ctx": 4096,
+  "num_predict": 512
+ },
+ "best_fixed_arm_online": "verifier_loop",
+ "per_pattern": {
+  "direct": {
+   "online_reward": 0.6636549999999997,
+   "online_success": 0.68,
+   "online_tokens": 163.45,
+   "online_tool_calls": 0.0,
+   "online_lm_calls": 1.0,
+   "heldout_reward": 0.564628,
+   "heldout_success": 0.58,
+   "heldout_tokens": 153.72,
+   "heldout_tool_calls": 0.0
+  },
+  "plan_execute": {
+   "online_reward": 0.5154770000000001,
+   "online_success": 0.59,
+   "online_tokens": 745.23,
+   "online_tool_calls": 0.0,
+   "online_lm_calls": 2.0,
+   "heldout_reward": 0.451128,
+   "heldout_success": 0.52,
+   "heldout_tokens": 688.72,
+   "heldout_tool_calls": 0.0
+  },
+  "self_refine": {
+   "online_reward": 0.63583,
+   "online_success": 0.68,
+   "online_tokens": 441.7,
+   "online_tool_calls": 0.0,
+   "online_lm_calls": 2.0,
+   "heldout_reward": 0.5378400000000001,
+   "heldout_success": 0.58,
+   "heldout_tokens": 421.6,
+   "heldout_tool_calls": 0.0
+  },
+  "verifier_loop": {
+   "online_reward": 0.6663539999999999,
+   "online_success": 0.73,
+   "online_tokens": 348.46,
+   "online_tool_calls": 1.44,
+   "online_lm_calls": 1.44,
+   "heldout_reward": 0.565588,
+   "heldout_success": 0.64,
+   "heldout_tokens": 420.12,
+   "heldout_tool_calls": 1.62
+  },
+  "memory": {
+   "online_reward": 0.5522839999999998,
+   "online_success": 0.61,
+   "online_tokens": 377.16,
+   "online_tool_calls": 1.0,
+   "online_lm_calls": 1.0,
+   "heldout_reward": 0.5435979999999999,
+   "heldout_success": 0.6,
+   "heldout_tokens": 364.02,
+   "heldout_tool_calls": 1.0
+  }
+ },
+ "by_type": {
+  "online/math": {
+   "n": 27,
+   "direct": {
+    "reward": 0.4648592592592593,
+    "success": 0.48148148148148145
+   },
+   "plan_execute": {
+    "reward": 0.3233999999999999,
+    "success": 0.4074074074074074
+   },
+   "self_refine": {
+    "reward": 0.4364037037037037,
+    "success": 0.48148148148148145
+   },
+   "verifier_loop": {
+    "reward": 0.44192592592592594,
+    "success": 0.5185185185185185
+   },
+   "memory": {
+    "reward": 0.3135333333333333,
+    "success": 0.37037037037037035
+   }
+  },
+  "online/other": {
+   "n": 7,
+   "direct": {
+    "reward": 0.5528285714285713,
+    "success": 0.5714285714285714
+   },
+   "plan_execute": {
+    "reward": 0.6373,
+    "success": 0.7142857142857143
+   },
+   "self_refine": {
+    "reward": 0.5231428571428571,
+    "success": 0.5714285714285714
+   },
+   "verifier_loop": {
+    "reward": 0.4695857142857142,
+    "success": 0.5714285714285714
+   },
+   "memory": {
+    "reward": 0.3684,
+    "success": 0.42857142857142855
+   }
+  },
+  "online/sequence": {
+   "n": 50,
+   "direct": {
+    "reward": 0.7833899999999998,
+    "success": 0.8
+   },
+   "plan_execute": {
+    "reward": 0.6661100000000001,
+    "success": 0.74
+   },
+   "self_refine": {
+    "reward": 0.7552479999999998,
+    "success": 0.8
+   },
+   "verifier_loop": {
+    "reward": 0.82655,
+    "success": 0.88
+   },
+   "memory": {
+    "reward": 0.7209419999999999,
+    "success": 0.78
+   }
+  },
+  "online/string": {
+   "n": 16,
+   "direct": {
+    "reward": 0.6734375,
+    "success": 0.6875
+   },
+   "plan_execute": {
+    "reward": 0.31558125000000004,
+    "success": 0.375
+   },
+   "self_refine": {
+    "reward": 0.6484812499999999,
+    "success": 0.6875
+   },
+   "verifier_loop": {
+    "reward": 0.6305499999999999,
+    "success": 0.6875
+   },
+   "memory": {
+    "reward": 0.5085687499999999,
+    "success": 0.5625
+   }
+  },
+  "heldout/math": {
+   "n": 10,
+   "direct": {
+    "reward": 0.4848,
+    "success": 0.5
+   },
+   "plan_execute": {
+    "reward": 0.5353600000000001,
+    "success": 0.6
+   },
+   "self_refine": {
+    "reward": 0.45725999999999994,
+    "success": 0.5
+   },
+   "verifier_loop": {
+    "reward": 0.50979,
+    "success": 0.6
+   },
+   "memory": {
+    "reward": 0.44167000000000006,
+    "success": 0.5
+   }
+  },
+  "heldout/sequence": {
+   "n": 29,
+   "direct": {
+    "reward": 0.5353586206896551,
+    "success": 0.5517241379310345
+   },
+   "plan_execute": {
+    "reward": 0.3774965517241379,
+    "success": 0.4482758620689655
+   },
+   "self_refine": {
+    "reward": 0.5078827586206895,
+    "success": 0.5517241379310345
+   },
+   "verifier_loop": {
+    "reward": 0.5086827586206898,
+    "success": 0.5862068965517241
+   },
+   "memory": {
+    "reward": 0.49384137931034483,
+    "success": 0.5517241379310345
+   }
+  },
+  "heldout/string": {
+   "n": 11,
+   "direct": {
+    "reward": 0.7143636363636363,
+    "success": 0.7272727272727273
+   },
+   "plan_execute": {
+    "reward": 0.5686727272727272,
+    "success": 0.6363636363636364
+   },
+   "self_refine": {
+    "reward": 0.6900727272727273,
+    "success": 0.7272727272727273
+   },
+   "verifier_loop": {
+    "reward": 0.7663363636363637,
+    "success": 0.8181818181818182
+   },
+   "memory": {
+    "reward": 0.7674363636363637,
+    "success": 0.8181818181818182
+   }
+  }
+ },
+ "references": {
+  "best_fixed_oracle(online-full-info)": {
+   "pattern": "verifier_loop",
+   "reward": 0.565588,
+   "success": 0.64,
+   "tokens": 420.12,
+   "tool_calls": 1.62
+  },
+  "per_type_oracle(online-full-info)": {
+   "patterns": {
+    "math": "direct",
+    "other": "plan_execute",
+    "sequence": "verifier_loop",
+    "string": "direct"
+   },
+   "reward": 0.549156
+  },
+  "per_task_oracle(heldout, upper bound)": {
+   "reward": 0.6784600000000001,
+   "success": 0.7
+  },
+  "random_expected": {
+   "reward": 0.5325564
+  }
+ },
+ "aggregate": [
+  {
+   "budget": 10,
+   "policy": "random",
+   "n_seeds": 100,
+   "cum_regret_vs_best_fixed": 0.62443267,
+   "cum_regret_vs_best_fixed_ci95": 0.03760034095689006,
+   "cum_regret_vs_task_oracle": 1.656548,
+   "cum_regret_vs_task_oracle_ci95": 0.1863199310794507,
+   "online_mean_reward": 0.5873209,
+   "online_mean_reward_ci95": 0.026877644637022635,
+   "online_success": 0.6399999999999999,
+   "online_success_ci95": 0.02642863460855909,
+   "online_tokens": 426.79100000000005,
+   "online_tokens_ci95": 16.979195343663577,
+   "heldout_reward": 0.53434904,
+   "heldout_reward_ci95": 0.005886934531715495,
+   "heldout_success": 0.5854,
+   "heldout_success_ci95": 0.005678023329407243,
+   "heldout_tokens": 406.34960000000007,
+   "heldout_tokens_ci95": 6.807509216816965,
+   "heldout_tool_calls": 0.5207999999999999,
+   "heldout_tool_calls_ci95": 0.019956448484668106,
+   "deployed_dist": {
+    "random": 100
+   },
+   "p_deploy_best": 0.0,
+   "online_selection_share": {
+    "direct": 0.188,
+    "plan_execute": 0.203,
+    "self_refine": 0.211,
+    "verifier_loop": 0.18,
+    "memory": 0.218
+   },
+   "selection_share_by_type": {
+    "math": {
+     "direct": 0.21052631578947367,
+     "plan_execute": 0.18796992481203006,
+     "self_refine": 0.19172932330827067,
+     "verifier_loop": 0.21428571428571427,
+     "memory": 0.19548872180451127
+    },
+    "other": {
+     "direct": 0.140625,
+     "plan_execute": 0.171875,
+     "self_refine": 0.1875,
+     "verifier_loop": 0.21875,
+     "memory": 0.28125
+    },
+    "sequence": {
+     "direct": 0.18725099601593626,
+     "plan_execute": 0.20717131474103587,
+     "self_refine": 0.22310756972111553,
+     "verifier_loop": 0.16733067729083664,
+     "memory": 0.2151394422310757
+    },
+    "string": {
+     "direct": 0.17261904761904762,
+     "plan_execute": 0.2261904761904762,
+     "self_refine": 0.21428571428571427,
+     "verifier_loop": 0.1488095238095238,
+     "memory": 0.23809523809523808
+    }
+   }
+  },
+  {
+   "budget": 10,
+   "policy": "best_fixed",
+   "n_seeds": 100,
+   "cum_regret_vs_best_fixed": 0.5963399999999999,
+   "cum_regret_vs_best_fixed_ci95": 4.3739992026293875e-17,
+   "cum_regret_vs_task_oracle": 1.3132370000000002,
+   "cum_regret_vs_task_oracle_ci95": 0.17827933056713885,
+   "online_mean_reward": 0.621652,
+   "online_mean_reward_ci95": 0.02745307364213201,
+   "online_success": 0.6719999999999999,
+   "online_success_ci95": 0.026877053710583985,
+   "online_tokens": 409.2799999999999,
+   "online_tokens_ci95": 11.379836784258533,
+   "heldout_reward": 0.5502054399999999,
+   "heldout_reward_ci95": 0.006426433459344358,
+   "heldout_success": 0.5925999999999999,
+   "heldout_success_ci95": 0.006815992175269375,
+   "heldout_tokens": 321.22559999999993,
+   "heldout_tokens_ci95": 33.45201315158568,
+   "heldout_tool_calls": 0.5136,
+   "heldout_tool_calls_ci95": 0.14355058619387823,
+   "deployed_dist": {
+    "direct": 45,
+    "verifier_loop": 28,
+    "self_refine": 12,
+    "plan_execute": 9,
+    "memory": 6
+   },
+   "p_deploy_best": 0.28,
+   "online_selection_share": {
+    "direct": 0.2,
+    "plan_execute": 0.2,
+    "self_refine": 0.2,
+    "verifier_loop": 0.2,
+    "memory": 0.2
+   },
+   "selection_share_by_type": {
+    "math": {
+     "direct": 0.22556390977443608,
+     "plan_execute": 0.21052631578947367,
+     "self_refine": 0.18421052631578946,
+     "verifier_loop": 0.17293233082706766,
+     "memory": 0.20676691729323307
+    },
+    "other": {
+     "direct": 0.28125,
+     "plan_execute": 0.15625,
+     "self_refine": 0.171875,
+     "verifier_loop": 0.203125,
+     "memory": 0.1875
+    },
+    "sequence": {
+     "direct": 0.17729083665338646,
+     "plan_execute": 0.20717131474103587,
+     "self_refine": 0.21115537848605578,
+     "verifier_loop": 0.2151394422310757,
+     "memory": 0.1892430278884462
+    },
+    "string": {
+     "direct": 0.19642857142857142,
+     "plan_execute": 0.17857142857142858,
+     "self_refine": 0.20238095238095238,
+     "verifier_loop": 0.19642857142857142,
+     "memory": 0.2261904761904762
+    }
+   }
+  },
+  {
+   "budget": 10,
+   "policy": "eps_greedy",
+   "n_seeds": 100,
+   "cum_regret_vs_best_fixed": 0.5500231600000004,
+   "cum_regret_vs_best_fixed_ci95": 0.0934454361640232,
+   "cum_regret_vs_task_oracle": 1.6365030000000005,
+   "cum_regret_vs_task_oracle_ci95": 0.21254688740565214,
+   "online_mean_reward": 0.5893254,
+   "online_mean_reward_ci95": 0.02892227458514099,
+   "online_success": 0.639,
+   "online_success_ci95": 0.02784359752676229,
+   "online_tokens": 398.1459999999999,
+   "online_tokens_ci95": 32.67093401116291,
+   "heldout_reward": 0.53970146,
+   "heldout_reward_ci95": 0.007382215623061203,
+   "heldout_success": 0.5883999999999999,
+   "heldout_success_ci95": 0.007029553130329209,
+   "heldout_tokens": 376.9454,
+   "heldout_tokens_ci95": 32.57723136593939,
+   "heldout_tool_calls": 0.5502,
+   "heldout_tool_calls_ci95": 0.13337138293206724,
+   "deployed_dist": {
+    "direct": 26,
+    "memory": 21,
+    "verifier_loop": 21,
+    "self_refine": 18,
+    "plan_execute": 14
+   },
+   "p_deploy_best": 0.21,
+   "online_selection_share": {
+    "direct": 0.261,
+    "plan_execute": 0.171,
+    "self_refine": 0.175,
+    "verifier_loop": 0.19,
+    "memory": 0.203
+   },
+   "selection_share_by_type": {
+    "math": {
+     "direct": 0.31954887218045114,
+     "plan_execute": 0.14285714285714285,
+     "self_refine": 0.15413533834586465,
+     "verifier_loop": 0.17669172932330826,
+     "memory": 0.20676691729323307
+    },
+    "other": {
+     "direct": 0.21875,
+     "plan_execute": 0.15625,
+     "self_refine": 0.171875,
+     "verifier_loop": 0.21875,
+     "memory": 0.234375
+    },
+    "sequence": {
+     "direct": 0.24302788844621515,
+     "plan_execute": 0.18127490039840638,
+     "self_refine": 0.18326693227091634,
+     "verifier_loop": 0.20318725099601595,
+     "memory": 0.1892430278884462
+    },
+    "string": {
+     "direct": 0.23809523809523808,
+     "plan_execute": 0.19047619047619047,
+     "self_refine": 0.18452380952380953,
+     "verifier_loop": 0.16071428571428573,
+     "memory": 0.2261904761904762
+    }
+   }
+  },
+  {
+   "budget": 10,
+   "policy": "ucb1",
+   "n_seeds": 100,
+   "cum_regret_vs_best_fixed": 0.5514975200000003,
+   "cum_regret_vs_best_fixed_ci95": 0.01941245554654327,
+   "cum_regret_vs_task_oracle": 1.5220010000000002,
+   "cum_regret_vs_task_oracle_ci95": 0.19492449490763014,
+   "online_mean_reward": 0.6007756,
+   "online_mean_reward_ci95": 0.028488101395495107,
+   "online_success": 0.652,
+   "online_success_ci95": 0.027925006642068973,
+   "online_tokens": 412.444,
+   "online_tokens_ci95": 15.440796249141396,
+   "heldout_reward": 0.54558578,
+   "heldout_reward_ci95": 0.0071670476590421275,
+   "heldout_success": 0.5883999999999999,
+   "heldout_success_ci95": 0.006895797508100659,
+   "heldout_tokens": 335.62219999999996,
+   "heldout_tokens_ci95": 35.02176684385319,
+   "heldout_tool_calls": 0.46260000000000007,
+   "heldout_tool_calls_ci95": 0.13642188806519548,
+   "deployed_dist": {
+    "direct": 42,
+    "verifier_loop": 23,
+    "self_refine": 14,
+    "plan_execute": 12,
+    "memory": 9
+   },
+   "p_deploy_best": 0.23,
+   "online_selection_share": {
+    "direct": 0.227,
+    "plan_execute": 0.183,
+    "self_refine": 0.202,
+    "verifier_loop": 0.206,
+    "memory": 0.182
+   },
+   "selection_share_by_type": {
+    "math": {
+     "direct": 0.22556390977443608,
+     "plan_execute": 0.15789473684210525,
+     "self_refine": 0.21052631578947367,
+     "verifier_loop": 0.24060150375939848,
+     "memory": 0.16541353383458646
+    },
+    "other": {
+     "direct": 0.359375,
+     "plan_execute": 0.203125,
+     "self_refine": 0.09375,
+     "verifier_loop": 0.140625,
+     "memory": 0.203125
+    },
+    "sequence": {
+     "direct": 0.20916334661354583,
+     "plan_execute": 0.19123505976095617,
+     "self_refine": 0.20318725099601595,
+     "verifier_loop": 0.19721115537848605,
+     "memory": 0.199203187250996
+    },
+    "string": {
+     "direct": 0.23214285714285715,
+     "plan_execute": 0.19047619047619047,
+     "self_refine": 0.2261904761904762,
+     "verifier_loop": 0.20238095238095238,
+     "memory": 0.1488095238095238
+    }
+   }
+  },
+  {
+   "budget": 10,
+   "policy": "thompson",
+   "n_seeds": 100,
+   "cum_regret_vs_best_fixed": 0.5386885300000003,
+   "cum_regret_vs_best_fixed_ci95": 0.04453777442915853,
+   "cum_regret_vs_task_oracle": 1.4017670000000002,
+   "cum_regret_vs_task_oracle_ci95": 0.17845655759131523,
+   "online_mean_reward": 0.612799,
+   "online_mean_reward_ci95": 0.026783632357587194,
+   "online_success": 0.6629999999999999,
+   "online_success_ci95": 0.026082055753395523,
+   "online_tokens": 406.61,
+   "online_tokens_ci95": 20.73087444887334,
+   "heldout_reward": 0.53930212,
+   "heldout_reward_ci95": 0.007873499625079836,
+   "heldout_success": 0.5896,
+   "heldout_success_ci95": 0.007769998598598472,
+   "heldout_tokens": 398.9788000000001,
+   "heldout_tokens_ci95": 31.331186611411702,
+   "heldout_tool_calls": 0.5199999999999999,
+   "heldout_tool_calls_ci95": 0.13717114848158696,
+   "deployed_dist": {
+    "self_refine": 27,
+    "verifier_loop": 27,
+    "direct": 23,
+    "plan_execute": 17,
+    "memory": 6
+   },
+   "p_deploy_best": 0.27,
+   "online_selection_share": {
+    "direct": 0.233,
+    "plan_execute": 0.198,
+    "self_refine": 0.19,
+    "verifier_loop": 0.225,
+    "memory": 0.154
+   },
+   "selection_share_by_type": {
+    "math": {
+     "direct": 0.2556390977443609,
+     "plan_execute": 0.21428571428571427,
+     "self_refine": 0.13157894736842105,
+     "verifier_loop": 0.21428571428571427,
+     "memory": 0.18421052631578946
+    },
+    "other": {
+     "direct": 0.1875,
+     "plan_execute": 0.265625,
+     "self_refine": 0.25,
+     "verifier_loop": 0.15625,
+     "memory": 0.140625
+    },
+    "sequence": {
+     "direct": 0.2290836653386454,
+     "plan_execute": 0.1892430278884462,
+     "self_refine": 0.20318725099601595,
+     "verifier_loop": 0.2450199203187251,
+     "memory": 0.13346613545816732
+    },
+    "string": {
+     "direct": 0.2261904761904762,
+     "plan_execute": 0.17261904761904762,
+     "self_refine": 0.22023809523809523,
+     "verifier_loop": 0.20833333333333334,
+     "memory": 0.17261904761904762
+    }
+   }
+  },
+  {
+   "budget": 10,
+   "policy": "ts_per_type",
+   "n_seeds": 100,
+   "cum_regret_vs_best_fixed": 0.58741798,
+   "cum_regret_vs_best_fixed_ci95": 0.040014371412264466,
+   "cum_regret_vs_task_oracle": 1.7145070000000004,
+   "cum_regret_vs_task_oracle_ci95": 0.20235200211228482,
+   "online_mean_reward": 0.581525,
+   "online_mean_reward_ci95": 0.029036325611980614,
+   "online_success": 0.634,
+   "online_success_ci95": 0.028165755839675278,
+   "online_tokens": 425.55,
+   "online_tokens_ci95": 17.289610718555576,
+   "heldout_reward": 0.5376023,
+   "heldout_reward_ci95": 0.0074118663828591546,
+   "heldout_success": 0.5876,
+   "heldout_success_ci95": 0.0071304001219419585,
+   "heldout_tokens": 394.49700000000007,
+   "heldout_tokens_ci95": 27.183347085033326,
+   "heldout_tool_calls": 0.5274,
+   "heldout_tool_calls_ci95": 0.11799747227150521,
+   "deployed_dist": {
+    "verifier_loop": 26,
+    "self_refine": 24,
+    "direct": 23,
+    "plan_execute": 16,
+    "memory": 11
+   },
+   "p_deploy_best": 0.26,
+   "online_selection_share": {
+    "direct": 0.197,
+    "plan_execute": 0.203,
+    "self_refine": 0.216,
+    "verifier_loop": 0.2,
+    "memory": 0.184
+   },
+   "selection_share_by_type": {
+    "math": {
+     "direct": 0.22556390977443608,
+     "plan_execute": 0.20676691729323307,
+     "self_refine": 0.19924812030075187,
+     "verifier_loop": 0.16917293233082706,
+     "memory": 0.19924812030075187
+    },
+    "other": {
+     "direct": 0.203125,
+     "plan_execute": 0.203125,
+     "self_refine": 0.203125,
+     "verifier_loop": 0.140625,
+     "memory": 0.25
+    },
+    "sequence": {
+     "direct": 0.1892430278884462,
+     "plan_execute": 0.20717131474103587,
+     "self_refine": 0.23107569721115537,
+     "verifier_loop": 0.2151394422310757,
+     "memory": 0.15737051792828685
+    },
+    "string": {
+     "direct": 0.17261904761904762,
+     "plan_execute": 0.18452380952380953,
+     "self_refine": 0.20238095238095238,
+     "verifier_loop": 0.2261904761904762,
+     "memory": 0.21428571428571427
+    }
+   }
+  },
+  {
+   "budget": 25,
+   "policy": "random",
+   "n_seeds": 100,
+   "cum_regret_vs_best_fixed": 1.5379194500000002,
+   "cum_regret_vs_best_fixed_ci95": 0.05641546424591419,
+   "cum_regret_vs_task_oracle": 4.006217999999999,
+   "cum_regret_vs_task_oracle_ci95": 0.308854598184667,
+   "online_mean_reward": 0.5975602,
+   "online_mean_reward_ci95": 0.015904205110563126,
+   "online_success": 0.6496000000000001,
+   "online_success_ci95": 0.015645116753230773,
+   "online_tokens": 421.83799999999997,
+   "online_tokens_ci95": 10.29384333343249,
+   "heldout_reward": 0.5314317000000001,
+   "heldout_reward_ci95": 0.006757718205058762,
+   "heldout_success": 0.5822,
+   "heldout_success_ci95": 0.006660272278839867,
+   "heldout_tokens": 402.643,
+   "heldout_tokens_ci95": 5.943242413206902,
+   "heldout_tool_calls": 0.5252,
+   "heldout_tool_calls_ci95": 0.022786735450363405,
+   "deployed_dist": {
+    "random": 100
+   },
+   "p_deploy_best": 0.0,
+   "online_selection_share": {
+    "direct": 0.1876,
+    "plan_execute": 0.2008,
+    "self_refine": 0.208,
+    "verifier_loop": 0.19,
+    "memory": 0.2136
+   },
+   "selection_share_by_type": {
+    "math": {
+     "direct": 0.1760355029585799,
+     "plan_execute": 0.19230769230769232,
+     "self_refine": 0.21893491124260356,
+     "verifier_loop": 0.1952662721893491,
+     "memory": 0.21745562130177515
+    },
+    "other": {
+     "direct": 0.1638418079096045,
+     "plan_execute": 0.22033898305084745,
+     "self_refine": 0.21468926553672316,
+     "verifier_loop": 0.1807909604519774,
+     "memory": 0.22033898305084745
+    },
+    "sequence": {
+     "direct": 0.1996792301523657,
+     "plan_execute": 0.2028869286287089,
+     "self_refine": 0.2036888532477947,
+     "verifier_loop": 0.17722534081796312,
+     "memory": 0.2165196471531676
+    },
+    "string": {
+     "direct": 0.18,
+     "plan_execute": 0.2,
+     "self_refine": 0.2,
+     "verifier_loop": 0.225,
+     "memory": 0.195
+    }
+   }
+  },
+  {
+   "budget": 25,
+   "policy": "best_fixed",
+   "n_seeds": 100,
+   "cum_regret_vs_best_fixed": 1.4908499999999996,
+   "cum_regret_vs_best_fixed_ci95": 4.3739992026293875e-17,
+   "cum_regret_vs_task_oracle": 3.71639,
+   "cum_regret_vs_task_oracle_ci95": 0.3046778995936449,
+   "online_mean_reward": 0.6091533200000001,
+   "online_mean_reward_ci95": 0.017362012453239005,
+   "online_success": 0.6603999999999999,
+   "online_success_ci95": 0.017208899666078935,
+   "online_tokens": 415.18679999999995,
+   "online_tokens_ci95": 7.506911130872426,
+   "heldout_reward": 0.54857608,
+   "heldout_reward_ci95": 0.006083363393676906,
+   "heldout_success": 0.591,
+   "heldout_success_ci95": 0.006337363948692061,
+   "heldout_tokens": 329.7191999999999,
+   "heldout_tokens_ci95": 31.947261111027206,
+   "heldout_tool_calls": 0.47259999999999996,
+   "heldout_tool_calls_ci95": 0.13651401598903518,
+   "deployed_dist": {
+    "direct": 40,
+    "verifier_loop": 23,
+    "self_refine": 19,
+    "memory": 10,
+    "plan_execute": 8
+   },
+   "p_deploy_best": 0.23,
+   "online_selection_share": {
+    "direct": 0.2,
+    "plan_execute": 0.2,
+    "self_refine": 0.2,
+    "verifier_loop": 0.2,
+    "memory": 0.2
+   },
+   "selection_share_by_type": {
+    "math": {
+     "direct": 0.20118343195266272,
+     "plan_execute": 0.1952662721893491,
+     "self_refine": 0.21301775147928995,
+     "verifier_loop": 0.19674556213017752,
+     "memory": 0.1937869822485207
+    },
+    "other": {
+     "direct": 0.21468926553672316,
+     "plan_execute": 0.2033898305084746,
+     "self_refine": 0.1977401129943503,
+     "verifier_loop": 0.1807909604519774,
+     "memory": 0.2033898305084746
+    },
+    "sequence": {
+     "direct": 0.19727345629510826,
+     "plan_execute": 0.19486768243785085,
+     "self_refine": 0.1996792301523657,
+     "verifier_loop": 0.20930232558139536,
+     "memory": 0.19887730553327987
+    },
+    "string": {
+     "direct": 0.2,
+     "plan_execute": 0.2225,
+     "self_refine": 0.18,
+     "verifier_loop": 0.185,
+     "memory": 0.2125
+    }
+   }
+  },
+  {
+   "budget": 25,
+   "policy": "eps_greedy",
+   "n_seeds": 100,
+   "cum_regret_vs_best_fixed": 1.2886672400000005,
+   "cum_regret_vs_best_fixed_ci95": 0.22162469827179102,
+   "cum_regret_vs_task_oracle": 3.849189,
+   "cum_regret_vs_task_oracle_ci95": 0.3388021377627182,
+   "online_mean_reward": 0.60384136,
+   "online_mean_reward_ci95": 0.017900358733318023,
+   "online_success": 0.6531999999999999,
+   "online_success_ci95": 0.016938351802279282,
+   "online_tokens": 390.4664,
+   "online_tokens_ci95": 26.17742747531218,
+   "heldout_reward": 0.54438748,
+   "heldout_reward_ci95": 0.00684058765132846,
+   "heldout_success": 0.5935999999999999,
+   "heldout_success_ci95": 0.007132576612368995,
+   "heldout_tokens": 370.16519999999997,
+   "heldout_tokens_ci95": 31.173354905101007,
+   "heldout_tool_calls": 0.6098,
+   "heldout_tool_calls_ci95": 0.14330342881614747,
+   "deployed_dist": {
+    "verifier_loop": 29,
+    "direct": 27,
+    "self_refine": 19,
+    "memory": 14,
+    "plan_execute": 11
+   },
+   "p_deploy_best": 0.29,
+   "online_selection_share": {
+    "direct": 0.2388,
+    "plan_execute": 0.1572,
+    "self_refine": 0.194,
+    "verifier_loop": 0.2236,
+    "memory": 0.1864
+   },
+   "selection_share_by_type": {
+    "math": {
+     "direct": 0.25,
+     "plan_execute": 0.1390532544378698,
+     "self_refine": 0.19822485207100593,
+     "verifier_loop": 0.22041420118343194,
+     "memory": 0.19230769230769232
+    },
+    "other": {
+     "direct": 0.2598870056497175,
+     "plan_execute": 0.1694915254237288,
+     "self_refine": 0.15819209039548024,
+     "verifier_loop": 0.24293785310734464,
+     "memory": 0.1694915254237288
+    },
+    "sequence": {
+     "direct": 0.2413793103448276,
+     "plan_execute": 0.15316760224538895,
+     "self_refine": 0.2028869286287089,
+     "verifier_loop": 0.22052927024859664,
+     "memory": 0.18203688853247796
+    },
+    "string": {
+     "direct": 0.2025,
+     "plan_execute": 0.195,
+     "self_refine": 0.175,
+     "verifier_loop": 0.23,
+     "memory": 0.1975
+    }
+   }
+  },
+  {
+   "budget": 25,
+   "policy": "ucb1",
+   "n_seeds": 100,
+   "cum_regret_vs_best_fixed": 1.3746625600000004,
+   "cum_regret_vs_best_fixed_ci95": 0.037580782547230865,
+   "cum_regret_vs_task_oracle": 3.5451109999999995,
+   "cum_regret_vs_task_oracle_ci95": 0.30931526658697817,
+   "online_mean_reward": 0.61600448,
+   "online_mean_reward_ci95": 0.017981560310755547,
+   "online_success": 0.6659999999999999,
+   "online_success_ci95": 0.017667475796222305,
+   "online_tokens": 401.2352,
+   "online_tokens_ci95": 9.023439613011437,
+   "heldout_reward": 0.54821898,
+   "heldout_reward_ci95": 0.005755407178562627,
+   "heldout_success": 0.5953999999999999,
+   "heldout_success_ci95": 0.006541761836018791,
+   "heldout_tokens": 355.8502,
+   "heldout_tokens_ci95": 29.116396884620787,
+   "heldout_tool_calls": 0.5798000000000001,
+   "heldout_tool_calls_ci95": 0.14407147563720873,
+   "deployed_dist": {
+    "direct": 29,
+    "verifier_loop": 29,
+    "self_refine": 24,
+    "memory": 11,
+    "plan_execute": 7
+   },
+   "p_deploy_best": 0.29,
+   "online_selection_share": {
+    "direct": 0.218,
+    "plan_execute": 0.1796,
+    "self_refine": 0.2008,
+    "verifier_loop": 0.216,
+    "memory": 0.1856
+   },
+   "selection_share_by_type": {
+    "math": {
+     "direct": 0.1997041420118343,
+     "plan_execute": 0.1937869822485207,
+     "self_refine": 0.21745562130177515,
+     "verifier_loop": 0.21449704142011836,
+     "memory": 0.17455621301775148
+    },
+    "other": {
+     "direct": 0.2824858757062147,
+     "plan_execute": 0.14124293785310735,
+     "self_refine": 0.1864406779661017,
+     "verifier_loop": 0.1977401129943503,
+     "memory": 0.192090395480226
+    },
+    "sequence": {
+     "direct": 0.2157177225340818,
+     "plan_execute": 0.18203688853247796,
+     "self_refine": 0.18123496391339214,
+     "verifier_loop": 0.22614274258219727,
+     "memory": 0.19486768243785085
+    },
+    "string": {
+     "direct": 0.2275,
+     "plan_execute": 0.165,
+     "self_refine": 0.24,
+     "verifier_loop": 0.195,
+     "memory": 0.1725
+    }
+   }
+  },
+  {
+   "budget": 25,
+   "policy": "thompson",
+   "n_seeds": 100,
+   "cum_regret_vs_best_fixed": 1.2712910400000006,
+   "cum_regret_vs_best_fixed_ci95": 0.09094584965947776,
+   "cum_regret_vs_task_oracle": 3.9371750000000003,
+   "cum_regret_vs_task_oracle_ci95": 0.33981888844372443,
+   "online_mean_reward": 0.6003219200000001,
+   "online_mean_reward_ci95": 0.017088939158560724,
+   "online_success": 0.6507999999999998,
+   "online_success_ci95": 0.016485104318870427,
+   "online_tokens": 400.6207999999999,
+   "online_tokens_ci95": 14.283254405966357,
+   "heldout_reward": 0.5474441999999999,
+   "heldout_reward_ci95": 0.006089503745636988,
+   "heldout_success": 0.5945999999999999,
+   "heldout_success_ci95": 0.006635991049731851,
+   "heldout_tokens": 354.99800000000005,
+   "heldout_tokens_ci95": 30.044742318915574,
+   "heldout_tool_calls": 0.5828,
+   "heldout_tool_calls_ci95": 0.1412156797978457,
+   "deployed_dist": {
+    "direct": 31,
+    "verifier_loop": 27,
+    "self_refine": 21,
+    "memory": 13,
+    "plan_execute": 8
+   },
+   "p_deploy_best": 0.27,
+   "online_selection_share": {
+    "direct": 0.2372,
+    "plan_execute": 0.1652,
+    "self_refine": 0.1976,
+    "verifier_loop": 0.2312,
+    "memory": 0.1688
+   },
+   "selection_share_by_type": {
+    "math": {
+     "direct": 0.22781065088757396,
+     "plan_execute": 0.16568047337278108,
+     "self_refine": 0.1760355029585799,
+     "verifier_loop": 0.2529585798816568,
+     "memory": 0.17751479289940827
+    },
+    "other": {
+     "direct": 0.192090395480226,
+     "plan_execute": 0.1977401129943503,
+     "self_refine": 0.21468926553672316,
+     "verifier_loop": 0.24293785310734464,
+     "memory": 0.15254237288135594
+    },
+    "sequence": {
+     "direct": 0.25020048115477145,
+     "plan_execute": 0.16519647153167602,
+     "self_refine": 0.20048115477145148,
+     "verifier_loop": 0.2141138732959102,
+     "memory": 0.17000801924619086
+    },
+    "string": {
+     "direct": 0.2325,
+     "plan_execute": 0.15,
+     "self_refine": 0.2175,
+     "verifier_loop": 0.2425,
+     "memory": 0.1575
+    }
+   }
+  },
+  {
+   "budget": 25,
+   "policy": "ts_per_type",
+   "n_seeds": 100,
+   "cum_regret_vs_best_fixed": 1.4391894399999998,
+   "cum_regret_vs_best_fixed_ci95": 0.06979153303928393,
+   "cum_regret_vs_task_oracle": 3.920265000000001,
+   "cum_regret_vs_task_oracle_ci95": 0.31766915726703826,
+   "online_mean_reward": 0.6009983200000001,
+   "online_mean_reward_ci95": 0.017735135656442295,
+   "online_success": 0.6512,
+   "online_success_ci95": 0.017409229903076754,
+   "online_tokens": 408.8968000000001,
+   "online_tokens_ci95": 10.973419860459153,
+   "heldout_reward": 0.5434036400000002,
+   "heldout_reward_ci95": 0.0060660493182643094,
+   "heldout_success": 0.5932,
+   "heldout_success_ci95": 0.005687992328341584,
+   "heldout_tokens": 377.6436000000001,
+   "heldout_tokens_ci95": 19.163713263582945,
+   "heldout_tool_calls": 0.6015999999999999,
+   "heldout_tool_calls_ci95": 0.08451963845094694,
+   "deployed_dist": {
+    "verifier_loop": 25,
+    "memory": 23,
+    "self_refine": 21,
+    "direct": 19,
+    "plan_execute": 12
+   },
+   "p_deploy_best": 0.25,
+   "online_selection_share": {
+    "direct": 0.2152,
+    "plan_execute": 0.188,
+    "self_refine": 0.2112,
+    "verifier_loop": 0.1912,
+    "memory": 0.1944
+   },
+   "selection_share_by_type": {
+    "math": {
+     "direct": 0.21893491124260356,
+     "plan_execute": 0.1997041420118343,
+     "self_refine": 0.20414201183431951,
+     "verifier_loop": 0.17159763313609466,
+     "memory": 0.20562130177514792
+    },
+    "other": {
+     "direct": 0.24858757062146894,
+     "plan_execute": 0.1694915254237288,
+     "self_refine": 0.1751412429378531,
+     "verifier_loop": 0.1864406779661017,
+     "memory": 0.22033898305084745
+    },
+    "sequence": {
+     "direct": 0.20048115477145148,
+     "plan_execute": 0.19165998396150763,
+     "self_refine": 0.21972734562951082,
+     "verifier_loop": 0.20048115477145148,
+     "memory": 0.18765036086607859
+    },
+    "string": {
+     "direct": 0.24,
+     "plan_execute": 0.165,
+     "self_refine": 0.2125,
+     "verifier_loop": 0.1975,
+     "memory": 0.185
+    }
+   }
+  },
+  {
+   "budget": 50,
+   "policy": "random",
+   "n_seeds": 100,
+   "cum_regret_vs_best_fixed": 2.93930749,
+   "cum_regret_vs_best_fixed_ci95": 0.08499026840712855,
+   "cum_regret_vs_task_oracle": 7.953228,
+   "cum_regret_vs_task_oracle_ci95": 0.4659273742244093,
+   "online_mean_reward": 0.6063426599999999,
+   "online_mean_reward_ci95": 0.010667958852154845,
+   "online_success": 0.6574000000000001,
+   "online_success_ci95": 0.01046305457070233,
+   "online_tokens": 411.7734,
+   "online_tokens_ci95": 7.964283547521157,
+   "heldout_reward": 0.53437952,
+   "heldout_reward_ci95": 0.0065142306869672316,
+   "heldout_success": 0.5856,
+   "heldout_success_ci95": 0.0062561415675423514,
+   "heldout_tokens": 410.80480000000006,
+   "heldout_tokens_ci95": 6.911317468827822,
+   "heldout_tool_calls": 0.507,
+   "heldout_tool_calls_ci95": 0.022579776058869287,
+   "deployed_dist": {
+    "random": 100
+   },
+   "p_deploy_best": 0.0,
+   "online_selection_share": {
+    "direct": 0.2084,
+    "plan_execute": 0.1938,
+    "self_refine": 0.1954,
+    "verifier_loop": 0.2006,
+    "memory": 0.2018
+   },
+   "selection_share_by_type": {
+    "math": {
+     "direct": 0.2037037037037037,
+     "plan_execute": 0.1948148148148148,
+     "self_refine": 0.19555555555555557,
+     "verifier_loop": 0.21185185185185185,
+     "memory": 0.19407407407407407
+    },
+    "other": {
+     "direct": 0.25806451612903225,
+     "plan_execute": 0.19648093841642228,
+     "self_refine": 0.17888563049853373,
+     "verifier_loop": 0.17302052785923755,
+     "memory": 0.1935483870967742
+    },
+    "sequence": {
+     "direct": 0.20444620881302103,
+     "plan_execute": 0.19094878920206432,
+     "self_refine": 0.1965065502183406,
+     "verifier_loop": 0.20285827709408497,
+     "memory": 0.2052401746724891
+    },
+    "string": {
+     "direct": 0.20759493670886076,
+     "plan_execute": 0.2,
+     "self_refine": 0.19873417721518988,
+     "verifier_loop": 0.1860759493670886,
+     "memory": 0.20759493670886076
+    }
+   }
+  },
+  {
+   "budget": 50,
+   "policy": "best_fixed",
+   "n_seeds": 100,
+   "cum_regret_vs_best_fixed": 2.981699999999999,
+   "cum_regret_vs_best_fixed_ci95": 0.0,
+   "cum_regret_vs_task_oracle": 7.765904000000001,
+   "cum_regret_vs_task_oracle_ci95": 0.4313269377863988,
+   "online_mean_reward": 0.6100891400000001,
+   "online_mean_reward_ci95": 0.010438969508862769,
+   "online_success": 0.6614,
+   "online_success_ci95": 0.010337692171579855,
+   "online_tokens": 416.06860000000006,
+   "online_tokens_ci95": 4.4732171863963135,
+   "heldout_reward": 0.5449887600000001,
+   "heldout_reward_ci95": 0.006889460481696523,
+   "heldout_success": 0.5913999999999998,
+   "heldout_success_ci95": 0.0070971259398478065,
+   "heldout_tokens": 361.39240000000007,
+   "heldout_tokens_ci95": 32.59920162243954,
+   "heldout_tool_calls": 0.5136000000000001,
+   "heldout_tool_calls_ci95": 0.14355058619387823,
+   "deployed_dist": {
+    "direct": 32,
+    "verifier_loop": 28,
+    "self_refine": 23,
+    "plan_execute": 11,
+    "memory": 6
+   },
+   "p_deploy_best": 0.28,
+   "online_selection_share": {
+    "direct": 0.2,
+    "plan_execute": 0.2,
+    "self_refine": 0.2,
+    "verifier_loop": 0.2,
+    "memory": 0.2
+   },
+   "selection_share_by_type": {
+    "math": {
+     "direct": 0.20222222222222222,
+     "plan_execute": 0.2,
+     "self_refine": 0.2051851851851852,
+     "verifier_loop": 0.19111111111111112,
+     "memory": 0.20148148148148148
+    },
+    "other": {
+     "direct": 0.21407624633431085,
+     "plan_execute": 0.18475073313782991,
+     "self_refine": 0.21700879765395895,
+     "verifier_loop": 0.17302052785923755,
+     "memory": 0.21114369501466276
+    },
+    "sequence": {
+     "direct": 0.1976974990075427,
+     "plan_execute": 0.2020643112346169,
+     "self_refine": 0.19571258435887257,
+     "verifier_loop": 0.20325526002381897,
+     "memory": 0.20127034537514887
+    },
+    "string": {
+     "direct": 0.19746835443037974,
+     "plan_execute": 0.2,
+     "self_refine": 0.19746835443037974,
+     "verifier_loop": 0.21645569620253163,
+     "memory": 0.18860759493670887
+    }
+   }
+  },
+  {
+   "budget": 50,
+   "policy": "eps_greedy",
+   "n_seeds": 100,
+   "cum_regret_vs_best_fixed": 1.99304058,
+   "cum_regret_vs_best_fixed_ci95": 0.3583167411991823,
+   "cum_regret_vs_task_oracle": 7.091731999999999,
+   "cum_regret_vs_task_oracle_ci95": 0.5067257124778802,
+   "online_mean_reward": 0.6235725799999999,
+   "online_mean_reward_ci95": 0.011287241459293301,
+   "online_success": 0.6726000000000002,
+   "online_success_ci95": 0.010697776784043126,
+   "online_tokens": 373.83420000000007,
+   "online_tokens_ci95": 21.20536526120484,
+   "heldout_reward": 0.54990306,
+   "heldout_reward_ci95": 0.005787176307375017,
+   "heldout_success": 0.6002,
+   "heldout_success_ci95": 0.006880361700616703,
+   "heldout_tokens": 361.08940000000007,
+   "heldout_tokens_ci95": 28.596311889789696,
+   "heldout_tool_calls": 0.7094000000000003,
+   "heldout_tool_calls_ci95": 0.14973371195289298,
+   "deployed_dist": {
+    "verifier_loop": 37,
+    "direct": 27,
+    "self_refine": 18,
+    "memory": 11,
+    "plan_execute": 7
+   },
+   "p_deploy_best": 0.37,
+   "online_selection_share": {
+    "direct": 0.22,
+    "plan_execute": 0.0992,
+    "self_refine": 0.2318,
+    "verifier_loop": 0.298,
+    "memory": 0.151
+   },
+   "selection_share_by_type": {
+    "math": {
+     "direct": 0.22740740740740742,
+     "plan_execute": 0.09925925925925926,
+     "self_refine": 0.22,
+     "verifier_loop": 0.29259259259259257,
+     "memory": 0.16074074074074074
+    },
+    "other": {
+     "direct": 0.19941348973607037,
+     "plan_execute": 0.09090909090909091,
+     "self_refine": 0.20527859237536658,
+     "verifier_loop": 0.3196480938416422,
+     "memory": 0.18475073313782991
+    },
+    "sequence": {
+     "direct": 0.21714966256450974,
+     "plan_execute": 0.10123064708217547,
+     "self_refine": 0.2354108773322747,
+     "verifier_loop": 0.29734021437078206,
+     "memory": 0.14886859865025803
+    },
+    "string": {
+     "direct": 0.22531645569620254,
+     "plan_execute": 0.09620253164556962,
+     "self_refine": 0.2518987341772152,
+     "verifier_loop": 0.3,
+     "memory": 0.12658227848101267
+    }
+   }
+  },
+  {
+   "budget": 50,
+   "policy": "ucb1",
+   "n_seeds": 100,
+   "cum_regret_vs_best_fixed": 2.7307841000000006,
+   "cum_regret_vs_best_fixed_ci95": 0.06760599676046929,
+   "cum_regret_vs_task_oracle": 7.275253000000001,
+   "cum_regret_vs_task_oracle_ci95": 0.38876265102733537,
+   "online_mean_reward": 0.6199021600000001,
+   "online_mean_reward_ci95": 0.010652239341098674,
+   "online_success": 0.6701999999999999,
+   "online_success_ci95": 0.010430962425937173,
+   "online_tokens": 401.3384,
+   "online_tokens_ci95": 6.550442392787477,
+   "heldout_reward": 0.55126466,
+   "heldout_reward_ci95": 0.0050657438046669435,
+   "heldout_success": 0.5979999999999999,
+   "heldout_success_ci95": 0.006216817855014273,
+   "heldout_tokens": 340.15340000000003,
+   "heldout_tokens_ci95": 28.132108673420305,
+   "heldout_tool_calls": 0.636,
+   "heldout_tool_calls_ci95": 0.14379055610241734,
+   "deployed_dist": {
+    "direct": 32,
+    "verifier_loop": 30,
+    "self_refine": 18,
+    "memory": 15,
+    "plan_execute": 5
+   },
+   "p_deploy_best": 0.3,
+   "online_selection_share": {
+    "direct": 0.219,
+    "plan_execute": 0.1762,
+    "self_refine": 0.1964,
+    "verifier_loop": 0.2204,
+    "memory": 0.188
+   },
+   "selection_share_by_type": {
+    "math": {
+     "direct": 0.21925925925925926,
+     "plan_execute": 0.17703703703703705,
+     "self_refine": 0.20074074074074075,
+     "verifier_loop": 0.21777777777777776,
+     "memory": 0.18518518518518517
+    },
+    "other": {
+     "direct": 0.25513196480938416,
+     "plan_execute": 0.17888563049853373,
+     "self_refine": 0.15835777126099707,
+     "verifier_loop": 0.19648093841642228,
+     "memory": 0.21114369501466276
+    },
+    "sequence": {
+     "direct": 0.21635569670504168,
+     "plan_execute": 0.1707026597856292,
+     "self_refine": 0.19690353314807463,
+     "verifier_loop": 0.2318380309646685,
+     "memory": 0.18420007939658595
+    },
+    "string": {
+     "direct": 0.21139240506329113,
+     "plan_execute": 0.1911392405063291,
+     "self_refine": 0.20379746835443038,
+     "verifier_loop": 0.19873417721518988,
+     "memory": 0.1949367088607595
+    }
+   }
+  },
+  {
+   "budget": 50,
+   "policy": "thompson",
+   "n_seeds": 100,
+   "cum_regret_vs_best_fixed": 2.4760887900000004,
+   "cum_regret_vs_best_fixed_ci95": 0.19173357362542517,
+   "cum_regret_vs_task_oracle": 7.556197,
+   "cum_regret_vs_task_oracle_ci95": 0.4230140293806038,
+   "online_mean_reward": 0.6142832800000001,
+   "online_mean_reward_ci95": 0.01026456566930812,
+   "online_success": 0.6636,
+   "online_success_ci95": 0.009894652399200796,
+   "online_tokens": 393.6872000000001,
+   "online_tokens_ci95": 12.5893520970046,
+   "heldout_reward": 0.5490643800000001,
+   "heldout_reward_ci95": 0.005667307663454805,
+   "heldout_success": 0.5982,
+   "heldout_success_ci95": 0.006711346954180954,
+   "heldout_tokens": 360.19619999999986,
+   "heldout_tokens_ci95": 27.134005069982493,
+   "heldout_tool_calls": 0.6558000000000002,
+   "heldout_tool_calls_ci95": 0.1454672158620858,
+   "deployed_dist": {
+    "verifier_loop": 34,
+    "direct": 27,
+    "self_refine": 21,
+    "memory": 12,
+    "plan_execute": 6
+   },
+   "p_deploy_best": 0.34,
+   "online_selection_share": {
+    "direct": 0.2304,
+    "plan_execute": 0.1574,
+    "self_refine": 0.2186,
+    "verifier_loop": 0.2316,
+    "memory": 0.162
+   },
+   "selection_share_by_type": {
+    "math": {
+     "direct": 0.24296296296296296,
+     "plan_execute": 0.14962962962962964,
+     "self_refine": 0.21407407407407408,
+     "verifier_loop": 0.22518518518518518,
+     "memory": 0.16814814814814816
+    },
+    "other": {
+     "direct": 0.22287390029325513,
+     "plan_execute": 0.1466275659824047,
+     "self_refine": 0.20527859237536658,
+     "verifier_loop": 0.25513196480938416,
+     "memory": 0.17008797653958943
+    },
+    "sequence": {
+     "direct": 0.2242953552997221,
+     "plan_execute": 0.1572052401746725,
+     "self_refine": 0.22231044065105202,
+     "verifier_loop": 0.22985311631599842,
+     "memory": 0.166335847558555
+    },
+    "string": {
+     "direct": 0.23164556962025318,
+     "plan_execute": 0.1759493670886076,
+     "self_refine": 0.22025316455696203,
+     "verifier_loop": 0.2379746835443038,
+     "memory": 0.1341772151898734
+    }
+   }
+  },
+  {
+   "budget": 50,
+   "policy": "ts_per_type",
+   "n_seeds": 100,
+   "cum_regret_vs_best_fixed": 2.6599848300000004,
+   "cum_regret_vs_best_fixed_ci95": 0.13464872155282256,
+   "cum_regret_vs_task_oracle": 7.682606,
+   "cum_regret_vs_task_oracle_ci95": 0.34050624617573866,
+   "online_mean_reward": 0.6117551,
+   "online_mean_reward_ci95": 0.00900602839712401,
+   "online_success": 0.6616000000000001,
+   "online_success_ci95": 0.008821517714536358,
+   "online_tokens": 402.16900000000004,
+   "online_tokens_ci95": 10.084042092077757,
+   "heldout_reward": 0.54982086,
+   "heldout_reward_ci95": 0.005587274074426555,
+   "heldout_success": 0.5946,
+   "heldout_success_ci95": 0.0048844934437483065,
+   "heldout_tokens": 349.0714,
+   "heldout_tokens_ci95": 20.003232238992762,
+   "heldout_tool_calls": 0.4936,
+   "heldout_tool_calls_ci95": 0.0834443512661116,
+   "deployed_dist": {
+    "direct": 37,
+    "verifier_loop": 21,
+    "self_refine": 18,
+    "memory": 12,
+    "plan_execute": 12
+   },
+   "p_deploy_best": 0.21,
+   "online_selection_share": {
+    "direct": 0.2372,
+    "plan_execute": 0.1774,
+    "self_refine": 0.206,
+    "verifier_loop": 0.2084,
+    "memory": 0.171
+   },
+   "selection_share_by_type": {
+    "math": {
+     "direct": 0.21481481481481482,
+     "plan_execute": 0.18222222222222223,
+     "self_refine": 0.2311111111111111,
+     "verifier_loop": 0.1874074074074074,
+     "memory": 0.18444444444444444
+    },
+    "other": {
+     "direct": 0.21994134897360704,
+     "plan_execute": 0.2434017595307918,
+     "self_refine": 0.15542521994134897,
+     "verifier_loop": 0.187683284457478,
+     "memory": 0.1935483870967742
+    },
+    "sequence": {
+     "direct": 0.2612147677649861,
+     "plan_execute": 0.16911472806669314,
+     "self_refine": 0.20682810639142518,
+     "verifier_loop": 0.2076220722508932,
+     "memory": 0.15522032552600237
+    },
+    "string": {
+     "direct": 0.20632911392405062,
+     "plan_execute": 0.1670886075949367,
+     "self_refine": 0.18227848101265823,
+     "verifier_loop": 0.25569620253164554,
+     "memory": 0.18860759493670887
+    }
+   }
+  }
+ ],
+ "latency_reliability": {
+  "n_identical_request_pairs": 96,
+  "median_rel_abs_diff": 0.3493746611564534,
+  "p90_rel_abs_diff": 0.9617239500716173,
+  "corr_latency_tokens": 0.7007251008130614
+ },
+ "argv": [
+  "bandit\\simulate.py",
+  "--seeds",
+  "100",
+  "--tag",
+  "final"
+ ]
+}

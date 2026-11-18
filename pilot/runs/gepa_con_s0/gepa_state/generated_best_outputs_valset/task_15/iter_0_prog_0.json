@@ -1,0 +1,5 @@
+{
+    "task_id": 572,
+    "final_code": "def two_unique_nums(nums):\n    # Convert the list of lists into a set to remove duplicates\n    unique_nums = set()\n    for sublist in nums:\n        unique_nums.update(sublist)\n    # Convert the set back to a list and return the first two unique numbers\n    return list(unique_nums)[:2]",
+    "final_pass": false
+}

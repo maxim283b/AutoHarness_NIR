@@ -1,0 +1,93 @@
+{
+  "task_id": 792,
+  "success": true,
+  "hidden_error": "",
+  "error": "",
+  "initial_protocol": "P1",
+  "final_protocol": "P1",
+  "attempts": 1,
+  "switch_count": 0,
+  "errors": 0,
+  "tool_calls": 1,
+  "switches": [],
+  "events": [
+    {
+      "kind": "executor",
+      "attempt": 0,
+      "protocol": "P1",
+      "content": "```python\ndef count_list(lists):\n    return len(lists)\n```",
+      "usage": {
+        "prompt_tokens": 132,
+        "completion_tokens": 17,
+        "calls": 1,
+        "latency_s": 7.226116099999672,
+        "estimated_tokens": false
+      }
+    },
+    {
+      "kind": "visible_check",
+      "attempt": 0,
+      "protocol": "P1",
+      "content": "True: ",
+      "usage": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "calls": 0,
+        "latency_s": 0.0,
+        "estimated_tokens": false
+      }
+    }
+  ],
+  "state": {
+    "task_id": 792,
+    "attempt": 1,
+    "code": "def count_list(lists):\n    return len(lists)",
+    "plan": "",
+    "critique": "",
+    "feedback": "",
+    "visible_pass": true,
+    "failed_attempts": 0,
+    "event_count": 2,
+    "event_history": [
+      {
+        "kind": "executor",
+        "attempt": 0,
+        "protocol": "P1",
+        "content": "```python\ndef count_list(lists):\n    return len(lists)\n```",
+        "usage": {
+          "prompt_tokens": 132,
+          "completion_tokens": 17,
+          "calls": 1,
+          "latency_s": 7.226116099999672,
+          "estimated_tokens": false
+        }
+      },
+      {
+        "kind": "visible_check",
+        "attempt": 0,
+        "protocol": "P1",
+        "content": "True: ",
+        "usage": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "calls": 0,
+          "latency_s": 0.0,
+          "estimated_tokens": false
+        }
+      }
+    ]
+  },
+  "prompt_tokens": 132,
+  "completion_tokens": 17,
+  "tokens": 149,
+  "calls": 1,
+  "controller_tokens": 0,
+  "controller_calls": 0,
+  "controller_latency_s": 0.0,
+  "llm_latency_s": 7.226116099999672,
+  "wall_s": 7.438546699999279,
+  "cost_usd": null,
+  "controller_cost_usd": null,
+  "estimated_tokens": false,
+  "mock": false
+}

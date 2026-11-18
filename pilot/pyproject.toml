@@ -1,0 +1,15 @@
+[project]
+name = "autoharness-pilot"
+version = "0.1.0"
+description = "Pilot: frozen small LLM + GEPA harness optimization on MBPP-sanitized (baseline stage)"
+requires-python = ">=3.10,<3.15"
+dependencies = [
+    "gepa[full] @ git+https://github.com/gepa-ai/gepa.git@fb1ed58",
+    "datasets",
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

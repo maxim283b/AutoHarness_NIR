@@ -1,0 +1,126 @@
+{
+  "protocol_version": "1.0.0",
+  "frozen_at": "2026-10-09T00:00:00+03:00",
+  "status": "frozen_before_new_validation",
+  "amendment_policy": "Never edit after a new validation result is observed. Add a separately named amendment and versioned run instead.",
+  "backend": {
+    "name": "lmstudio",
+    "base_url": "http://127.0.0.1:1234",
+    "chat_endpoint": "http://127.0.0.1:1234/v1/chat/completions",
+    "model_id": "ministral-3-8b-instruct-2512",
+    "model_artifact_hash": null,
+    "artifact_hash_note": "LM Studio /v1/models exposes model id but no artifact hash; this is a preregistered reproducibility caveat.",
+    "temperature": 0.0,
+    "generation_seed": 20261009,
+    "context_size": 2048,
+    "generation_max_tokens": 384
+  },
+  "primary_domain": "sql",
+  "transfer_domain": "python_mbpp",
+  "domain_reason": "SQL has a deterministic read-only SQLite verifier, structured failure classes, no generated-code subprocess in the primary loop, and template-group isolated splits.",
+  "manifests": {
+    "sql_manifest": {
+      "path": "pilot_sql/splits_manifest.json",
+      "sha256": "47db1d87fece7559baa8a125f9c5eba281c7fd1e49cf69422aa0812f1349e19c"
+    },
+    "sql_catalogue": {
+      "path": "pilot_sql/tasks.py",
+      "sha256": "84cef02dc6f3417c5013d4b388e3ab0a2c8bb922ae5a8024f67e5443024d4a2d"
+    },
+    "sql_verifier": {
+      "path": "pilot_sql/verifier.py",
+      "sha256": "caf4356b64945abcc0fc6e4a1b123fd8a2d1f20c3e06d63df7ed6fb8fc930633"
+    },
+    "sql_database": {
+      "path": "pilot_sql/data/benchmark.sqlite",
+      "sha256": "4df2d88dd9960e6b3f13dd2fb62b64c61720472219cabe70b9a17dd67f9bd924"
+    },
+    "python_manifest": {
+      "path": "pilot/splits_manifest.json",
+      "sha256": "63c27a5df1c0405f7c93e20892d0bb29943aea4a369c19185155802f03f99249"
+    },
+    "python_data": {
+      "path": "pilot/data/mbpp_sanitized.json",
+      "sha256": "18ba230e5473cae7dae60779621b04976b4eeb57448bcb393132c75919a02dd2"
+    }
+  },
+  "splits": {
+    "search": "first 10 ids from SQL manifest search, fixed before runs",
+    "validation": "first 10 ids from SQL manifest validation; evaluated only after each final genome is frozen",
+    "held_out": "all SQL held-out ids remain unopened",
+    "transfer": "first 10 MBPP validation ids; evaluate only if core finalists and infrastructure permit"
+  },
+  "methods": [
+    "seed_harness",
+    "random_mutation_search",
+    "literature_inspired_baseline",
+    "bandit_mutation_operator",
+    "sequential_evolution_mean",
+    "sequential_evolution_tail"
+  ],
+  "method_notes": {
+    "literature_inspired_baseline": "Steering-only sequential propose/evaluate/accept loop inspired by BetterHarness and AutoSaddler. No claim of exact reproduction; no LLM proposer.",
+    "sequential_optimizer_choice": "Evolutionary search is used because three candidate evaluations per seed are too few for a stable Bayesian surrogate and do not justify training an RL policy.",
+    "gepa": "Optional only; excluded from complete_core unless its target and proposer budgets can be made symmetric without delaying the mandatory matrix."
+  },
+  "genome_space": {
+    "system_prompt_templates": ["seed_sql", "schema_grounded", "constraint_first", "verify_columns"],
+    "patterns": ["direct", "plan_execute", "self_refine", "verifier_loop"],
+    "planning_modes": ["none", "concise_private_plan", "checklist"],
+    "max_repairs": [0, 1, 2],
+    "memory_k": [0],
+    "use_visible_verifier": [false, true],
+    "verifier_triggers": ["final_only", "after_each_attempt"],
+    "stop_rules": ["first_success", "max_repairs_or_success"],
+    "tool_policies": ["read_only_sql_single_statement"],
+    "context_budgets": [2048],
+    "generation_max_tokens": [256, 384]
+  },
+  "immutable_surfaces": [
+    "hidden tests and private answers",
+    "reference_sql",
+    "Python sandbox",
+    "SQL authorizer",
+    "verifier implementation",
+    "target model weights",
+    "benchmark contents after manifest freeze"
+  ],
+  "core_design": {
+    "algorithm_seeds": [0, 1, 2],
+    "search_observations": 10,
+    "candidate_evaluations_per_method_seed": 3,
+    "tasks_per_candidate": 10,
+    "task_evaluation_budget_per_method_seed": 30,
+    "validation_task_units": 10,
+    "context_budget": 2048,
+    "status_label_if_complete": "complete_core",
+    "optional_extension": "25 search observations and context 4096 only after complete_core"
+  },
+  "budgets": {
+    "target_task_evaluations": "30 search plus 10 validation per method and algorithm seed",
+    "proposer_calls": 0,
+    "reason_for_small_candidate_count": "A symmetric complete matrix is prioritized over the recommended 25 candidate evaluations; this is preregistered, not a post-result reduction.",
+    "single_mass_process": true
+  },
+  "reward": {
+    "formula": "success - 0.10 * tokens / 1000 - 0.02 * tool_calls",
+    "latency_in_reward": false
+  },
+  "objectives": {
+    "mean": "mean task reward",
+    "tail": "0.5 * mean_reward + 0.5 * mean of worst ceil(0.20*n) task rewards",
+    "tail_fraction": 0.2,
+    "tail_small_n_rule": "Use at least one task; for n=10 use the two lowest rewards."
+  },
+  "finalist_rule": "Freeze the highest search objective genome for each method/seed. Compare on validation without updates. Overall finalists are the top two methods by mean validation reward averaged over algorithm seeds; ties break by success, then fewer tokens, then genome hash.",
+  "early_stopping": "No statistical early stop inside complete_core. Stop only for exhausted task budget, three consecutive infrastructure failures, or unavailable required model.",
+  "infrastructure_errors": "Log separately; do not score as task failure; retry up to two times, then stop the run resumably without consuming the task-evaluation budget.",
+  "confidence_intervals": {
+    "task_bootstrap": "95% percentile bootstrap over task ids, 10000 resamples, seed 20261009",
+    "algorithm_randomness": "Report percentile interval over the three algorithm seeds separately; never call it a task-generalization CI."
+  },
+  "feature_fitting": "No learned feature encoder is used. Any future encoder vocabulary, normalization, or statistics must be fit on search only.",
+  "budget_zero_label": "uninformed cold start",
+  "leakage_policy": "Model messages may contain only public task fields and generic verifier errors. Never log or send reference_sql, hidden tests, or private answers.",
+  "held_out_policy": "Do not open held-out in this exploratory run unless algorithms and finalist hashes are frozen and validation power is judged sufficient. The default is to leave it closed."
+}

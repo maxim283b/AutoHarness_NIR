@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "C:\Users\efr_v\Documents\ChatGPT\autoharness\pilot\run_eval.py", line 27, in <module>
+    from data import DEFAULT_MANIFEST, load_split
+ImportError: cannot import name 'DEFAULT_MANIFEST' from 'data' (C:\Users\efr_v\Documents\ChatGPT\autoharness\pilot\data.py)

@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "completed_iterations": 6,
+  "unresolved_sessions": 0,
+  "abandoned_reflections": 0,
+  "candidate_id": "sha256:0e3d5ac260d07c48d98e3093d4e35061622dc785c85f968b2d18587eff8503fc",
+  "development_score": 0.3125,
+  "run_id": "swe-improved-v2-h1-20261112"
+}

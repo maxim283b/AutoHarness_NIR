@@ -1,0 +1,30 @@
+{
+  "decision": "CONTEXT_SIGNAL",
+  "rationale": "Контекстная модель ожидаемой награды улучшает validation reward над заранее выбранной fixed-схемой на предзарегистрированный порог, а non-heldout oracle gap подтверждает гетерогенность; переходить к ограниченному contextual-bandit replay.",
+  "primary_gate": {
+    "scope": "combined",
+    "nonheldout_oracle_gap": 0.105106875,
+    "validation_oracle_gap": 0.04782285714285714,
+    "validation_oracle_gap_ci95": [
+      0.04782285714285714,
+      0.013048428571428572,
+      0.11607847771236328
+    ],
+    "context_reward_effect": 0.030671428571428554,
+    "context_reward_effect_ci95": [
+      0.030671428571428554,
+      -0.004653756467110148,
+      0.10055685483870964
+    ],
+    "context_success_effect": 0.02857142857142857,
+    "required_reward_effect": 0.02,
+    "required_oracle_gap": 0.05,
+    "allowed_success_drop": 0.01
+  },
+  "caveats": [
+    "model_artifact_hash is missing for both domains",
+    "Python has only one task_template and cannot support within-domain GroupKFold",
+    "temperature=0 repeats may not be independent stochastic replications",
+    "transfer adaptation at 5/10/25/50 target observations was not run"
+  ]
+}

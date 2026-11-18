@@ -1,0 +1,69 @@
+optimization:
+  acceptance:
+    type: matched_valid_strict_improvement
+  budget:
+    max_iterations: 6
+    max_rollouts: 384
+  development:
+    type: full_on_accept
+  diagnosis_patch_timeout_seconds: 7200
+  ranking:
+    type: macro_benchmark_development
+  reflection_timeout_seconds: 3600
+  selection_timeout_seconds: 1800
+  session_retries: 2
+  session_retry_backoff_seconds: 10
+  task_selection:
+    batch_size: 8
+    seed: 20261112
+    type: balanced_benchmarks
+provider:
+  capabilities:
+  - read_workspace
+  - edit_workspace
+  - run_commands
+  - load_skills
+  settings:
+    model: opencode-go/glm-5.3
+    output_repair_attempts: 1
+  type: opencode_acp
+scenario:
+  settings:
+    batch_per_benchmark: 8
+    benchmarks:
+    - swe_bench_pro
+    budget_prior_runs: []
+    capability_phase_iterations: 3
+    case_selection_seed: 20261112
+    context_output_access_version: 1
+    context_policy_version: native-compaction-v1
+    development_per_benchmark: 16
+    fullsource_host_version: 1
+    fullsource_manifest: improved_v2/manifest.json
+    git_stdin_compat_version: 1
+    launch_ready: true
+    lifecycle_version: 2
+    mode: real
+    native_export_version: 2
+    opencode_prompt_version: 1
+    optimizer_instruction_path_version: 1
+    optimizer_scratch_access_version: 2
+    optimizer_timeout_export_version: 1
+    request_guard_version: 3
+    request_timeout_version: 1
+    require_cleanup_proof: true
+    require_complete_optimization_stages: true
+    require_go_guard: true
+    reservation_version: 2
+    stream_transport_version: 1
+    swe_agent_timeout_seconds: 1800
+    swe_native_go_optimization: true
+    target_model: opencode-go/qwen3.7-plus
+    train_per_benchmark: 24
+    optimizer_model_name: GLM-5.3
+    improved_autosaddler_v2: false
+  type: shared_opencode
+schema_version: autosaddler/v2
+storage:
+  run_root: "/Users/maksi/Documents/ChatGPT/\u043D\u0438\u0440/swe/results/autosaddler_reproduction/improved_v2_runs"
+  type: local

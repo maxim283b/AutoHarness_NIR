@@ -1,0 +1,13 @@
+--- codex-acp-2.5.0/dist/index.js
++++ codex-acp-2.5.0/dist/index.js
+@@
+-        "mcp_servers": Object.fromEntries(serversToConfigure.map((mcp) => [mcp.name, toCodexMcpServerConfig(mcp.server)]))
++        "mcp_servers": { ...configWithWorkspaceRoots.mcp_servers, ...Object.fromEntries(serversToConfigure.map((mcp) => [mcp.name, toCodexMcpServerConfig(mcp.server)])) }
+@@
+ function prepareCodexHookConfig(config2) {
+-  if (config2?.["hooks"] === void 0) return { sessionConfig: config2, appServerStartupArgs: ["app-server"] };
++  const isolationArgs = process.env["AUTOHARNESS_ACP_ISOLATE"] === "1" ? ["-c", "features.plugins=false", "-c", "features.remote_plugin=false", "-c", "features.apps=false", "-c", "features.multi_agent=false", "-c", "features.shell_tool=false"] : [];
++  if (config2?.["hooks"] === void 0) return { sessionConfig: config2, appServerStartupArgs: ["app-server", ...isolationArgs] };
+@@
+-  return { sessionConfig, appServerStartupArgs: ["app-server", "-c", `hooks=${toToml(hooks)}`] };
++  return { sessionConfig, appServerStartupArgs: ["app-server", ...isolationArgs, "-c", `hooks=${toToml(hooks)}`] };

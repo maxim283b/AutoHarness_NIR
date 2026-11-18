@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="520" viewBox="0 0 920 520">
+<rect width="100%" height="100%" fill="white"/>
+<text x="460.0" y="32" text-anchor="middle" font-family="Arial" font-size="20" font-weight="bold">Средний reward по всем non-heldout</text>
+<line x1="80" y1="430.0" x2="890" y2="430.0" stroke="#e5e7eb"/>
+<text x="72" y="434.0" text-anchor="end" font-family="Arial" font-size="12">-0.07</text>
+<line x1="80" y1="358.0" x2="890" y2="358.0" stroke="#e5e7eb"/>
+<text x="72" y="362.0" text-anchor="end" font-family="Arial" font-size="12">0.10</text>
+<line x1="80" y1="286.0" x2="890" y2="286.0" stroke="#e5e7eb"/>
+<text x="72" y="290.0" text-anchor="end" font-family="Arial" font-size="12">0.27</text>
+<line x1="80" y1="214.0" x2="890" y2="214.0" stroke="#e5e7eb"/>
+<text x="72" y="218.0" text-anchor="end" font-family="Arial" font-size="12">0.44</text>
+<line x1="80" y1="142.0" x2="890" y2="142.0" stroke="#e5e7eb"/>
+<text x="72" y="146.0" text-anchor="end" font-family="Arial" font-size="12">0.62</text>
+<line x1="80" y1="70.0" x2="890" y2="70.0" stroke="#e5e7eb"/>
+<text x="72" y="74.0" text-anchor="end" font-family="Arial" font-size="12">0.79</text>
+<rect x="108.3" y="126.1" width="70.9" height="273.9" fill="#2563eb"/>
+<rect x="310.9" y="115.3" width="70.9" height="284.7" fill="#2563eb"/>
+<rect x="513.4" y="264.7" width="70.9" height="135.3" fill="#2563eb"/>
+<rect x="715.9" y="100.0" width="70.9" height="300.0" fill="#2563eb"/>
+<rect x="181.2" y="250.8" width="70.9" height="149.2" fill="#d97706"/>
+<rect x="383.8" y="316.7" width="70.9" height="83.3" fill="#d97706"/>
+<rect x="586.2" y="252.0" width="70.9" height="148.0" fill="#d97706"/>
+<rect x="788.8" y="244.3" width="70.9" height="155.7" fill="#d97706"/>
+<text x="181.2" y="454" text-anchor="middle" font-family="Arial" font-size="12">direct</text>
+<text x="383.8" y="454" text-anchor="middle" font-family="Arial" font-size="12">memory_assisted</text>
+<text x="586.2" y="454" text-anchor="middle" font-family="Arial" font-size="12">self_refine</text>
+<text x="788.8" y="454" text-anchor="middle" font-family="Arial" font-size="12">verifier_loop</text>
+<rect x="80" y="485" width="14" height="14" fill="#2563eb"/><text x="100" y="497" font-family="Arial" font-size="12">Python</text>
+<rect x="260" y="485" width="14" height="14" fill="#d97706"/><text x="280" y="497" font-family="Arial" font-size="12">SQL</text>
+<text x="18" y="250.0" transform="rotate(-90 18 250.0)" text-anchor="middle" font-family="Arial" font-size="13">reward</text>
+</svg>

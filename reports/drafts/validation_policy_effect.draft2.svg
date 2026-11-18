@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="520" viewBox="0 0 920 520">
+<rect width="100%" height="100%" fill="white"/>
+<text x="460.0" y="32" text-anchor="middle" font-family="Arial" font-size="20" font-weight="bold">Эффект pair reward policy против best fixed</text>
+<line x1="80" y1="430.0" x2="890" y2="430.0" stroke="#e5e7eb"/>
+<text x="72" y="434.0" text-anchor="end" font-family="Arial" font-size="12">-0.01</text>
+<line x1="80" y1="358.0" x2="890" y2="358.0" stroke="#e5e7eb"/>
+<text x="72" y="362.0" text-anchor="end" font-family="Arial" font-size="12">0.01</text>
+<line x1="80" y1="286.0" x2="890" y2="286.0" stroke="#e5e7eb"/>
+<text x="72" y="290.0" text-anchor="end" font-family="Arial" font-size="12">0.02</text>
+<line x1="80" y1="214.0" x2="890" y2="214.0" stroke="#e5e7eb"/>
+<text x="72" y="218.0" text-anchor="end" font-family="Arial" font-size="12">0.03</text>
+<line x1="80" y1="142.0" x2="890" y2="142.0" stroke="#e5e7eb"/>
+<text x="72" y="146.0" text-anchor="end" font-family="Arial" font-size="12">0.04</text>
+<line x1="80" y1="70.0" x2="890" y2="70.0" stroke="#e5e7eb"/>
+<text x="72" y="74.0" text-anchor="end" font-family="Arial" font-size="12">0.06</text>
+<rect x="117.8" y="399.9" width="192.4" height="1.0" fill="#2563eb"/>
+<rect x="387.8" y="163.2" width="192.4" height="236.8" fill="#2563eb"/>
+<rect x="657.8" y="216.0" width="192.4" height="184.0" fill="#2563eb"/>
+<text x="215.0" y="454" text-anchor="middle" font-family="Arial" font-size="12">Python</text>
+<text x="485.0" y="454" text-anchor="middle" font-family="Arial" font-size="12">SQL</text>
+<text x="755.0" y="454" text-anchor="middle" font-family="Arial" font-size="12">Combined</text>
+<rect x="80" y="485" width="14" height="14" fill="#2563eb"/><text x="100" y="497" font-family="Arial" font-size="12">reward effect</text>
+<text x="18" y="250.0" transform="rotate(-90 18 250.0)" text-anchor="middle" font-family="Arial" font-size="13">selected - fixed reward</text>
+</svg>

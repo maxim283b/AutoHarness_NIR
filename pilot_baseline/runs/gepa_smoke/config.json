@@ -1,0 +1,135 @@
+{
+  "run_id": "gepa_smoke",
+  "started_at": "2026-10-02T13:52:03.357404+00:00",
+  "command": "run_optimize.py --run-id gepa_smoke --max-metric-calls 30",
+  "seed_candidate": {
+    "solver_prompt": "You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.",
+    "repair_prompt": "The previous solution failed a test. Read the error, fix the function, and return only one corrected ```python``` code block."
+  },
+  "seed_candidate_hash": "80356790ad5c7d38116c22bd88443be68fe005eb50a062e11919dcba0b1ab2aa",
+  "harness": {
+    "task_lm": "ollama_chat/qwen2.5-coder:1.5b",
+    "api_base": "http://localhost:11434",
+    "temperature": 0.0,
+    "max_tokens": 512,
+    "num_ctx": 4096,
+    "seed": 0,
+    "use_repair": true,
+    "max_repairs": 1,
+    "sandbox_timeout_s": 10.0,
+    "request_timeout_s": 600.0
+  },
+  "target_model": {
+    "ollama_version": "0.35.0",
+    "model_name": "qwen2.5-coder:1.5b",
+    "model_digest": "d7372fd828518a4d38b1eb196c673c31a85f2ed302b3d1e406c4c2d1b64a0668",
+    "model_details": {
+      "parent_model": "",
+      "format": "gguf",
+      "family": "qwen2",
+      "families": [
+        "qwen2"
+      ],
+      "parameter_size": "1.5B",
+      "quantization_level": "Q4_K_M",
+      "context_length": 32768,
+      "embedding_length": 1536
+    }
+  },
+  "reflection_lm": "ollama_chat/qwen2.5-coder:7b",
+  "reflection_kwargs": {
+    "max_tokens": 2048,
+    "num_ctx": 8192,
+    "seed": 0,
+    "timeout": 1800,
+    "num_retries": 3
+  },
+  "reflection_model": {
+    "ollama_version": "0.35.0",
+    "model_name": "qwen2.5-coder:7b",
+    "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+    "model_details": {
+      "parent_model": "",
+      "format": "gguf",
+      "family": "qwen2",
+      "families": [
+        "qwen2"
+      ],
+      "parameter_size": "7.6B",
+      "quantization_level": "Q4_K_M",
+      "context_length": 32768,
+      "embedding_length": 3584
+    }
+  },
+  "teacher_label": "local teacher",
+  "gepa_optimize_kwargs": {
+    "reflection_minibatch_size": 3,
+    "candidate_selection_strategy": "pareto",
+    "module_selector": "round_robin",
+    "max_metric_calls": 30,
+    "cache_evaluation": true,
+    "seed": 0,
+    "display_progress_bar": false
+  },
+  "trainset_task_ids": [
+    742,
+    792,
+    787,
+    605,
+    801,
+    744,
+    758,
+    627,
+    637,
+    630,
+    732,
+    754,
+    628,
+    752,
+    760,
+    620,
+    772,
+    635,
+    604,
+    762,
+    611,
+    797,
+    726,
+    771,
+    786,
+    728,
+    731,
+    805,
+    766,
+    720
+  ],
+  "valset_task_ids": [
+    596,
+    566,
+    597,
+    554,
+    581,
+    578,
+    569,
+    562,
+    576,
+    579,
+    567,
+    560,
+    559,
+    555,
+    586,
+    572,
+    565,
+    598,
+    585,
+    592
+  ],
+  "splits_manifest_sha256": "16c91abab3b76e604491483906c7e4d7657b2685c7ffec10524f339eed7c96d5",
+  "framework": {
+    "gepa": "0.1.4",
+    "gepa_commit": "fb1ed58",
+    "litellm": "1.103.2"
+  },
+  "python": "3.13.9 (tags/v3.13.9:8183fa5, Oct 14 2025, 14:09:13) [MSC v.1944 64 bit (AMD64)]"
+}

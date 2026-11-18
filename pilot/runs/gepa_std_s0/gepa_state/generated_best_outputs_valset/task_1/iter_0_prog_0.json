@@ -1,0 +1,5 @@
+{
+    "task_id": 566,
+    "final_code": "def sum_digits(n):\n    return sum(int(digit) for digit in str(n))",
+    "final_pass": true
+}

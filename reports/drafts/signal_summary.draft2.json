@@ -1,0 +1,942 @@
+{
+  "analysis_version": "1.0",
+  "seed": 20261008,
+  "bootstrap_replicates": 10000,
+  "reward": {
+    "lambda_tokens": 0.1,
+    "lambda_tools": 0.02,
+    "latency_in_reward": false
+  },
+  "heldout_used": false,
+  "audit": {
+    "valid_rows": 640,
+    "complete_task_seed_units": 160,
+    "duplicate_rows": 0,
+    "incomplete_units": [],
+    "heldout_rows": 0,
+    "task_split_violations": [],
+    "template_split_violations": [
+      {
+        "domain": "python",
+        "task_template": "mbpp-sanitized",
+        "splits": [
+          "search",
+          "validation"
+        ]
+      }
+    ],
+    "model_identities": {
+      "python": {
+        "backend": "lmstudio",
+        "model": "ministral-3-8b-instruct-2512",
+        "model_artifact_hash": null,
+        "temperature": 0.0,
+        "max_tokens": 512,
+        "num_ctx": 4096
+      },
+      "sql": {
+        "backend": "lmstudio",
+        "model": "ministral-3-8b-instruct-2512",
+        "model_artifact_hash": null,
+        "temperature": 0.0,
+        "max_tokens": 512,
+        "num_ctx": 4096
+      }
+    },
+    "model_id_match": true,
+    "artifact_hash_missing": true,
+    "leakage_marker_hits": [],
+    "excluded_infrastructure_runs": {
+      "python_initial": {
+        "path": "runs\\python_signal_20261008",
+        "rows": 328,
+        "infrastructure_error_rows": 328,
+        "error_classes": {
+          "URLError": 328
+        }
+      }
+    }
+  },
+  "scopes": {
+    "python": {
+      "n_rows": 320,
+      "n_tasks": 40,
+      "n_task_seed_units": 80,
+      "split_units": {
+        "validation": 10,
+        "search": 70
+      },
+      "aggregate_main": {
+        "direct": {
+          "n": 80,
+          "success": 0.6875,
+          "success_ci95": [
+            0.6875,
+            0.5142857142857142,
+            0.8488372093023255
+          ],
+          "reward": 0.6534737500000001,
+          "reward_ci95": [
+            0.6534737500000001,
+            0.48067569691119694,
+            0.8152627556818183
+          ],
+          "tokens": 140.2625,
+          "tokens_ci95": [
+            140.2625,
+            120.131278604119,
+            163.1876201923077
+          ],
+          "tool_calls": 1.0,
+          "tool_calls_ci95": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "memory_assisted": {
+          "n": 80,
+          "success": 0.7625,
+          "success_ci95": [
+            0.7625,
+            0.6052631578947368,
+            0.9032515442690456
+          ],
+          "reward": 0.6791787499999999,
+          "reward_ci95": [
+            0.6791787499999999,
+            0.5222457037815126,
+            0.8205803336466164
+          ],
+          "tokens": 433.2125,
+          "tokens_ci95": [
+            433.2125,
+            402.111036036036,
+            466.9424210963455
+          ],
+          "tool_calls": 2.0,
+          "tool_calls_ci95": [
+            2.0,
+            2.0,
+            2.0
+          ]
+        },
+        "self_refine": {
+          "n": 80,
+          "success": 0.375,
+          "success_ci95": [
+            0.375,
+            0.2125,
+            0.5487804878048781
+          ],
+          "reward": 0.32272249999999997,
+          "reward_ci95": [
+            0.32272249999999997,
+            0.15923210615220484,
+            0.49621261788617876
+          ],
+          "tokens": 322.775,
+          "tokens_ci95": [
+            322.775,
+            274.20169763513513,
+            378.2747791858679
+          ],
+          "tool_calls": 1.0,
+          "tool_calls_ci95": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "verifier_loop": {
+          "n": 80,
+          "success": 0.7625,
+          "success_ci95": [
+            0.7625,
+            0.6046511627906976,
+            0.9024390243902439
+          ],
+          "reward": 0.71572375,
+          "reward_ci95": [
+            0.71572375,
+            0.550663125,
+            0.8602724155722326
+          ],
+          "tokens": 212.7625,
+          "tokens_ci95": [
+            212.7625,
+            158.81699517867273,
+            275.38356092436976
+          ],
+          "tool_calls": 1.275,
+          "tool_calls_ci95": [
+            1.275,
+            1.1219512195121952,
+            1.4375
+          ]
+        }
+      },
+      "validation_oracle": {
+        "n_task_seed_units": 10,
+        "fixed_harness": "verifier_loop",
+        "mean_oracle_gap": 0.01968,
+        "oracle_gap_ci95": [
+          0.01968,
+          0.00451,
+          0.03562
+        ],
+        "unique_best_share": {
+          "direct": 0.4,
+          "memory_assisted": 0.0,
+          "self_refine": 0.0,
+          "verifier_loop": 0.6
+        },
+        "practically_best_share": {
+          "direct": 1.0,
+          "memory_assisted": 0.5,
+          "self_refine": 0.5,
+          "verifier_loop": 0.9
+        }
+      },
+      "validation_gate": {
+        "status": "ok",
+        "features": [
+          "has_edge_case",
+          "n_chars",
+          "n_visible_asserts",
+          "n_words"
+        ],
+        "n_train_units": 70,
+        "n_validation_units": 10,
+        "best_fixed_from_development": "verifier_loop",
+        "development_fixed_rewards": {
+          "direct": 0.6660271428571428,
+          "memory_assisted": 0.7027057142857143,
+          "self_refine": 0.34780285714285714,
+          "verifier_loop": 0.7399585714285715
+        },
+        "selected_harness_share": {
+          "direct": 0.0,
+          "memory_assisted": 0.1,
+          "self_refine": 0.0,
+          "verifier_loop": 0.9
+        },
+        "policy_reward": 0.5461,
+        "fixed_reward": 0.54608,
+        "reward_effect": 2.0000000000000574e-05,
+        "reward_effect_ci95": [
+          2.0000000000000574e-05,
+          0.0,
+          6.0000000000001716e-05
+        ],
+        "policy_success": 0.6,
+        "fixed_success": 0.6,
+        "success_effect": 0.0
+      },
+      "seed_stability": {
+        "seeds": [
+          20261008,
+          20261009,
+          20261010
+        ],
+        "n_repeated_tasks": 20,
+        "rank_by_seed": {
+          "20261008": [
+            "verifier_loop",
+            "memory_assisted",
+            "direct",
+            "self_refine"
+          ],
+          "20261009": [
+            "verifier_loop",
+            "memory_assisted",
+            "direct",
+            "self_refine"
+          ],
+          "20261010": [
+            "verifier_loop",
+            "memory_assisted",
+            "direct",
+            "self_refine"
+          ]
+        },
+        "consensus_order": [
+          "verifier_loop",
+          "memory_assisted",
+          "direct",
+          "self_refine"
+        ],
+        "order_agreement_share": 1.0,
+        "mean_seed_pair_reward_correlation": 0.9999996932425943,
+        "identical_task_harness_vector_share": 0.9
+      },
+      "predictive_cv": {
+        "status": "unavailable",
+        "reason": "fewer than two task_template groups",
+        "n_template_groups": 1
+      },
+      "sensitivity": {
+        "main": {
+          "best_fixed": "verifier_loop",
+          "oracle_gap": 0.1186175
+        },
+        "low_cost": {
+          "best_fixed": "verifier_loop",
+          "oracle_gap": 0.11555875
+        },
+        "high_cost": {
+          "best_fixed": "verifier_loop",
+          "oracle_gap": 0.12636
+        },
+        "quality_first": {
+          "best_fixed": "memory_assisted",
+          "oracle_gap": 0.1125
+        }
+      }
+    },
+    "sql": {
+      "n_rows": 320,
+      "n_tasks": 40,
+      "n_task_seed_units": 80,
+      "split_units": {
+        "online": 10,
+        "search": 45,
+        "validation": 25
+      },
+      "aggregate_main": {
+        "direct": {
+          "n": 80,
+          "success": 0.4,
+          "success_ci95": [
+            0.4,
+            0.23863636363636365,
+            0.5769230769230769
+          ],
+          "reward": 0.3559325,
+          "reward_ci95": [
+            0.3559325,
+            0.19505982142857145,
+            0.5322796153846153
+          ],
+          "tokens": 240.675,
+          "tokens_ci95": [
+            240.675,
+            230.90988372093022,
+            252.5375
+          ],
+          "tool_calls": 1.0,
+          "tool_calls_ci95": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "memory_assisted": {
+          "n": 80,
+          "success": 0.3125,
+          "success_ci95": [
+            0.3125,
+            0.16666666666666666,
+            0.47619047619047616
+          ],
+          "reward": 0.198845,
+          "reward_ci95": [
+            0.198845,
+            0.053758437499999985,
+            0.3621313654181184
+          ],
+          "tokens": 736.55,
+          "tokens_ci95": [
+            736.55,
+            725.7123958333333,
+            747.5556547619047
+          ],
+          "tool_calls": 2.0,
+          "tool_calls_ci95": [
+            2.0,
+            2.0,
+            2.0
+          ]
+        },
+        "self_refine": {
+          "n": 80,
+          "success": 0.4125,
+          "success_ci95": [
+            0.4125,
+            0.25,
+            0.5875
+          ],
+          "reward": 0.35314875,
+          "reward_ci95": [
+            0.35314875,
+            0.18841951680672267,
+            0.5292314166666666
+          ],
+          "tokens": 393.5125,
+          "tokens_ci95": [
+            393.5125,
+            369.0927810077519,
+            421.8573359073359
+          ],
+          "tool_calls": 1.0,
+          "tool_calls_ci95": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "verifier_loop": {
+          "n": 80,
+          "success": 0.4375,
+          "success_ci95": [
+            0.4375,
+            0.275,
+            0.6153846153846154
+          ],
+          "reward": 0.371345,
+          "reward_ci95": [
+            0.371345,
+            0.2028760089285714,
+            0.5549174023892772
+          ],
+          "tokens": 341.55,
+          "tokens_ci95": [
+            341.55,
+            306.39155844155846,
+            379.2128693181818
+          ],
+          "tool_calls": 1.6,
+          "tool_calls_ci95": [
+            1.6,
+            1.4230769230769231,
+            1.7613636363636365
+          ]
+        }
+      },
+      "validation_oracle": {
+        "n_task_seed_units": 25,
+        "fixed_harness": "verifier_loop",
+        "mean_oracle_gap": 0.059079999999999994,
+        "oracle_gap_ci95": [
+          0.059079999999999994,
+          0.012072876588021779,
+          0.16136404761904757
+        ],
+        "unique_best_share": {
+          "direct": 0.52,
+          "memory_assisted": 0.04,
+          "self_refine": 0.0,
+          "verifier_loop": 0.0
+        },
+        "practically_best_share": {
+          "direct": 0.96,
+          "memory_assisted": 0.04,
+          "self_refine": 0.96,
+          "verifier_loop": 0.92
+        }
+      },
+      "validation_gate": {
+        "status": "ok",
+        "features": [
+          "family",
+          "joins",
+          "n_allowed_operations",
+          "n_chars",
+          "n_words",
+          "subqueries",
+          "tables",
+          "window"
+        ],
+        "n_train_units": 55,
+        "n_validation_units": 25,
+        "best_fixed_from_development": "verifier_loop",
+        "development_fixed_rewards": {
+          "direct": 0.33795454545454545,
+          "memory_assisted": 0.1591090909090909,
+          "self_refine": 0.3415363636363636,
+          "verifier_loop": 0.3702109090909091
+        },
+        "selected_harness_share": {
+          "direct": 0.24,
+          "memory_assisted": 0.2,
+          "self_refine": 0.56,
+          "verifier_loop": 0.0
+        },
+        "policy_reward": 0.41330799999999995,
+        "fixed_reward": 0.37384,
+        "reward_effect": 0.03946799999999998,
+        "reward_effect_ci95": [
+          0.03946799999999998,
+          -0.010657214285714308,
+          0.14322451058201055
+        ],
+        "policy_success": 0.48,
+        "fixed_success": 0.44,
+        "success_effect": 0.04
+      },
+      "seed_stability": {
+        "seeds": [
+          20261008,
+          20261009,
+          20261010
+        ],
+        "n_repeated_tasks": 20,
+        "rank_by_seed": {
+          "20261008": [
+            "self_refine",
+            "verifier_loop",
+            "direct",
+            "memory_assisted"
+          ],
+          "20261009": [
+            "self_refine",
+            "verifier_loop",
+            "direct",
+            "memory_assisted"
+          ],
+          "20261010": [
+            "self_refine",
+            "verifier_loop",
+            "direct",
+            "memory_assisted"
+          ]
+        },
+        "consensus_order": [
+          "self_refine",
+          "verifier_loop",
+          "direct",
+          "memory_assisted"
+        ],
+        "order_agreement_share": 1.0,
+        "mean_seed_pair_reward_correlation": 0.9999999962257027,
+        "identical_task_harness_vector_share": 0.9666666666666667
+      },
+      "predictive_cv": {
+        "status": "ok",
+        "implementation": "dependency-free fixed-hyperparameter implementation",
+        "features": [
+          "family",
+          "joins",
+          "n_allowed_operations",
+          "n_chars",
+          "n_words",
+          "subqueries",
+          "tables",
+          "window"
+        ],
+        "n_task_seed_units": 80,
+        "n_template_groups": 16,
+        "majority_accuracy": 0.8875,
+        "logistic_accuracy": 0.875,
+        "tree_accuracy": 0.8875,
+        "logistic_selected_reward": 0.3876,
+        "tree_selected_reward": 0.3559325,
+        "pair_model_selected_reward": 0.34280125,
+        "fold_best_fixed_reward": 0.31116,
+        "oracle_reward": 0.46294124999999997,
+        "logistic_brier": 0.2452454481423338,
+        "logistic_ece_10_bins": 0.11050947232944902,
+        "pair_model_mae": 0.3941672611912065
+      },
+      "sensitivity": {
+        "main": {
+          "best_fixed": "verifier_loop",
+          "oracle_gap": 0.09159625
+        },
+        "low_cost": {
+          "best_fixed": "verifier_loop",
+          "oracle_gap": 0.083298125
+        },
+        "high_cost": {
+          "best_fixed": "direct",
+          "oracle_gap": 0.10076750000000001
+        },
+        "quality_first": {
+          "best_fixed": "verifier_loop",
+          "oracle_gap": 0.075
+        }
+      }
+    },
+    "combined": {
+      "n_rows": 640,
+      "n_tasks": 80,
+      "n_task_seed_units": 160,
+      "split_units": {
+        "validation": 35,
+        "search": 115,
+        "online": 10
+      },
+      "aggregate_main": {
+        "direct": {
+          "n": 160,
+          "success": 0.54375,
+          "success_ci95": [
+            0.54375,
+            0.4240506329113924,
+            0.6708860759493671
+          ],
+          "reward": 0.504703125,
+          "reward_ci95": [
+            0.504703125,
+            0.38428377255412993,
+            0.6319449440789474
+          ],
+          "tokens": 190.46875,
+          "tokens_ci95": [
+            190.46875,
+            173.3467156862745,
+            206.9285943223443
+          ],
+          "tool_calls": 1.0,
+          "tool_calls_ci95": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "memory_assisted": {
+          "n": 160,
+          "success": 0.5375,
+          "success_ci95": [
+            0.5375,
+            0.4166666666666667,
+            0.66
+          ],
+          "reward": 0.439011875,
+          "reward_ci95": [
+            0.439011875,
+            0.31729719155844155,
+            0.5630216490091463
+          ],
+          "tokens": 584.88125,
+          "tokens_ci95": [
+            584.88125,
+            543.4130903614458,
+            624.3619627192982
+          ],
+          "tool_calls": 2.0,
+          "tool_calls_ci95": [
+            2.0,
+            2.0,
+            2.0
+          ]
+        },
+        "self_refine": {
+          "n": 160,
+          "success": 0.39375,
+          "success_ci95": [
+            0.39375,
+            0.2777777777777778,
+            0.5131622807017544
+          ],
+          "reward": 0.33793562499999996,
+          "reward_ci95": [
+            0.33793562499999996,
+            0.22172693229166668,
+            0.4577393376508684
+          ],
+          "tokens": 358.14375,
+          "tokens_ci95": [
+            358.14375,
+            328.83599788765446,
+            388.2762947311635
+          ],
+          "tool_calls": 1.0,
+          "tool_calls_ci95": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "verifier_loop": {
+          "n": 160,
+          "success": 0.6,
+          "success_ci95": [
+            0.6,
+            0.4810126582278481,
+            0.7222222222222222
+          ],
+          "reward": 0.5435343749999999,
+          "reward_ci95": [
+            0.5435343749999999,
+            0.4202231878955696,
+            0.6703804635870458
+          ],
+          "tokens": 277.15625,
+          "tokens_ci95": [
+            277.15625,
+            239.59133040935671,
+            315.19263698630135
+          ],
+          "tool_calls": 1.4375,
+          "tool_calls_ci95": [
+            1.4375,
+            1.3124816176470588,
+            1.5568181818181819
+          ]
+        }
+      },
+      "validation_oracle": {
+        "n_task_seed_units": 35,
+        "fixed_harness": "verifier_loop",
+        "mean_oracle_gap": 0.04782285714285714,
+        "oracle_gap_ci95": [
+          0.04782285714285714,
+          0.013048428571428572,
+          0.11607847771236328
+        ],
+        "unique_best_share": {
+          "direct": 0.4857142857142857,
+          "memory_assisted": 0.02857142857142857,
+          "self_refine": 0.0,
+          "verifier_loop": 0.17142857142857143
+        },
+        "practically_best_share": {
+          "direct": 0.9714285714285714,
+          "memory_assisted": 0.17142857142857143,
+          "self_refine": 0.8285714285714286,
+          "verifier_loop": 0.9142857142857143
+        }
+      },
+      "validation_gate": {
+        "status": "ok",
+        "features": [
+          "family",
+          "has_edge_case",
+          "joins",
+          "n_allowed_operations",
+          "n_chars",
+          "n_visible_asserts",
+          "n_words",
+          "subqueries",
+          "tables",
+          "window",
+          "domain_sql"
+        ],
+        "n_train_units": 125,
+        "n_validation_units": 35,
+        "best_fixed_from_development": "verifier_loop",
+        "development_fixed_rewards": {
+          "direct": 0.5216752,
+          "memory_assisted": 0.46352319999999997,
+          "self_refine": 0.34504559999999995,
+          "verifier_loop": 0.5772695999999999
+        },
+        "selected_harness_share": {
+          "direct": 0.2857142857142857,
+          "memory_assisted": 0.17142857142857143,
+          "self_refine": 0.2857142857142857,
+          "verifier_loop": 0.2571428571428571
+        },
+        "policy_reward": 0.45372285714285715,
+        "fixed_reward": 0.4230514285714286,
+        "reward_effect": 0.030671428571428554,
+        "reward_effect_ci95": [
+          0.030671428571428554,
+          -0.004653756467110148,
+          0.10055685483870964
+        ],
+        "policy_success": 0.5142857142857142,
+        "fixed_success": 0.4857142857142857,
+        "success_effect": 0.02857142857142857
+      },
+      "seed_stability": {
+        "seeds": [
+          20261008,
+          20261009,
+          20261010
+        ],
+        "n_repeated_tasks": 40,
+        "rank_by_seed": {
+          "20261008": [
+            "verifier_loop",
+            "direct",
+            "memory_assisted",
+            "self_refine"
+          ],
+          "20261009": [
+            "verifier_loop",
+            "direct",
+            "memory_assisted",
+            "self_refine"
+          ],
+          "20261010": [
+            "verifier_loop",
+            "direct",
+            "memory_assisted",
+            "self_refine"
+          ]
+        },
+        "consensus_order": [
+          "verifier_loop",
+          "direct",
+          "memory_assisted",
+          "self_refine"
+        ],
+        "order_agreement_share": 1.0,
+        "mean_seed_pair_reward_correlation": 0.9999998505443286,
+        "identical_task_harness_vector_share": 0.9333333333333333
+      },
+      "predictive_cv": {
+        "status": "ok",
+        "implementation": "dependency-free fixed-hyperparameter implementation",
+        "features": [
+          "family",
+          "has_edge_case",
+          "joins",
+          "n_allowed_operations",
+          "n_chars",
+          "n_visible_asserts",
+          "n_words",
+          "subqueries",
+          "tables",
+          "window",
+          "domain_sql"
+        ],
+        "n_task_seed_units": 160,
+        "n_template_groups": 17,
+        "majority_accuracy": 0.55,
+        "logistic_accuracy": 0.53125,
+        "tree_accuracy": 0.5125,
+        "logistic_selected_reward": 0.508836875,
+        "tree_selected_reward": 0.508836875,
+        "pair_model_selected_reward": 0.513666875,
+        "fold_best_fixed_reward": 0.5435343749999999,
+        "oracle_reward": 0.6486412500000001,
+        "logistic_brier": 0.9125317336404558,
+        "logistic_ece_10_bins": 0.4547285987468516,
+        "pair_model_mae": 0.566663277167042
+      },
+      "sensitivity": {
+        "main": {
+          "best_fixed": "verifier_loop",
+          "oracle_gap": 0.105106875
+        },
+        "low_cost": {
+          "best_fixed": "verifier_loop",
+          "oracle_gap": 0.0994284375
+        },
+        "high_cost": {
+          "best_fixed": "verifier_loop",
+          "oracle_gap": 0.11990125
+        },
+        "quality_first": {
+          "best_fixed": "verifier_loop",
+          "oracle_gap": 0.09375
+        }
+      }
+    }
+  },
+  "transfer": {
+    "Python → SQL": {
+      "status": "ok",
+      "features": [
+        "n_chars",
+        "n_words"
+      ],
+      "n_train_units": 70,
+      "n_validation_units": 25,
+      "best_fixed_from_development": "verifier_loop",
+      "development_fixed_rewards": {
+        "direct": 0.6660271428571428,
+        "memory_assisted": 0.7027057142857143,
+        "self_refine": 0.34780285714285714,
+        "verifier_loop": 0.7399585714285715
+      },
+      "selected_harness_share": {
+        "direct": 0.0,
+        "memory_assisted": 0.0,
+        "self_refine": 0.0,
+        "verifier_loop": 1.0
+      },
+      "policy_reward": 0.37384,
+      "fixed_reward": 0.37384,
+      "reward_effect": 0.0,
+      "reward_effect_ci95": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "policy_success": 0.44,
+      "fixed_success": 0.44,
+      "success_effect": 0.0,
+      "source_domain": "python",
+      "target_domain": "sql",
+      "comparison_note": "Target best fixed is selected on target development data; the policy is zero-shot from the source domain."
+    },
+    "SQL → Python": {
+      "status": "ok",
+      "features": [
+        "n_chars",
+        "n_words"
+      ],
+      "n_train_units": 55,
+      "n_validation_units": 10,
+      "best_fixed_from_development": "verifier_loop",
+      "development_fixed_rewards": {
+        "direct": 0.33795454545454545,
+        "memory_assisted": 0.1591090909090909,
+        "self_refine": 0.3415363636363636,
+        "verifier_loop": 0.3702109090909091
+      },
+      "selected_harness_share": {
+        "direct": 1.0,
+        "memory_assisted": 0.0,
+        "self_refine": 0.0,
+        "verifier_loop": 0.0
+      },
+      "policy_reward": 0.5656,
+      "fixed_reward": 0.54608,
+      "reward_effect": 0.019519999999999985,
+      "reward_effect_ci95": [
+        0.019519999999999985,
+        0.004279999999999992,
+        0.03555049999999999
+      ],
+      "policy_success": 0.6,
+      "fixed_success": 0.6,
+      "success_effect": 0.0,
+      "source_domain": "sql",
+      "target_domain": "python",
+      "comparison_note": "Target best fixed is selected on target development data; the policy is zero-shot from the source domain."
+    }
+  },
+  "decision": {
+    "decision": "CONTEXT_SIGNAL",
+    "rationale": "Контекстная модель ожидаемой награды улучшает validation reward над заранее выбранной fixed-схемой на предзарегистрированный порог, а non-heldout oracle gap подтверждает гетерогенность; переходить к ограниченному contextual-bandit replay.",
+    "primary_gate": {
+      "scope": "combined",
+      "nonheldout_oracle_gap": 0.105106875,
+      "validation_oracle_gap": 0.04782285714285714,
+      "validation_oracle_gap_ci95": [
+        0.04782285714285714,
+        0.013048428571428572,
+        0.11607847771236328
+      ],
+      "context_reward_effect": 0.030671428571428554,
+      "context_reward_effect_ci95": [
+        0.030671428571428554,
+        -0.004653756467110148,
+        0.10055685483870964
+      ],
+      "context_success_effect": 0.02857142857142857,
+      "required_reward_effect": 0.02,
+      "required_oracle_gap": 0.05,
+      "allowed_success_drop": 0.01
+    },
+    "caveats": [
+      "model_artifact_hash is missing for both domains",
+      "Python has only one task_template and cannot support within-domain GroupKFold",
+      "temperature=0 repeats may not be independent stochastic replications",
+      "transfer adaptation at 5/10/25/50 target observations was not run"
+    ]
+  },
+  "inputs": {
+    "python": "runs\\python_signal_20261008_retry\\outcomes.jsonl",
+    "sql": "runs\\sql_signal_20261008\\outcomes.jsonl"
+  },
+  "reproduction": [
+    "python -m pytest analysis/tests -q",
+    "python analysis/generate_signal_report.py"
+  ]
+}

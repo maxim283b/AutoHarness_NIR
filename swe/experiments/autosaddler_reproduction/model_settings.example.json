@@ -1,0 +1,9 @@
+{
+  "target": {"provider": "opencode-go", "model": null},
+  "optimizer": {"provider": "opencode-go", "model": null},
+  "judge": {"provider": null, "model": "meta-llama/llama-3.3-70b-instruct"},
+  "credentials": "Environment or OpenCode's own auth store; never commit keys",
+  "test_repetitions": 3,
+  "max_concurrent": 1,
+  "status": "Template only: model IDs and judge endpoint must be configured before real execution"
+}

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GEPA Candidate Tree</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; width: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f8f9fa; display: flex; flex-direction: column; }
+  #header { background: #fff; border-bottom: 1px solid #dee2e6; padding: 12px 20px; display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
+  #header h1 { font-size: 18px; font-weight: 600; color: #212529; }
+  .legend { display: flex; gap: 14px; font-size: 13px; color: #495057; }
+  .legend-item { display: flex; align-items: center; gap: 4px; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 50%; border: 1px solid #adb5bd; }
+  #graph-container { flex: 1 1 auto; width: 100%; overflow: auto; padding: 20px; text-align: center; }
+  #graph-container svg { width: 100%; height: 100%; }
+  #tooltip {
+    display: none; position: fixed; background: #fff; border: 1px solid #dee2e6;
+    border-radius: 8px; padding: 14px 16px; max-width: 560px; max-height: 70vh; overflow-y: auto;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18); z-index: 1000; font-size: 13px; line-height: 1.5;
+  }
+  #tooltip .tt-header { font-weight: 700; font-size: 15px; margin-bottom: 6px; color: #212529; }
+  #tooltip .tt-meta { color: #6c757d; margin-bottom: 4px; }
+  #tooltip .tt-hint { color: #adb5bd; font-size: 11px; font-style: italic; margin-bottom: 10px; }
+  #tooltip .tt-comp-name { font-weight: 600; color: #495057; margin-top: 10px; border-bottom: 1px solid #e9ecef; padding-bottom: 2px; }
+  #tooltip .tt-comp-text {
+    white-space: pre-wrap; word-break: break-word; background: #f8f9fa;
+    border: 1px solid #e9ecef; border-radius: 4px; padding: 8px 10px; margin-top: 4px;
+    font-family: "SF Mono", SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px;
+    max-height: 200px; overflow-y: auto;
+  }
+  .role-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; margin-left: 6px; }
+  .role-best { background: #00e5ff33; color: #006064; }
+  .role-pareto { background: #ff980033; color: #e65100; }
+  .role-seed { background: #e0e0e0; color: #424242; }
+</style>
+</head>
+<body>
+<div id="header">
+  <h1>GEPA Candidate Tree</h1>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:cyan"></div> Best</div>
+    <div class="legend-item"><div class="legend-dot" style="background:orange"></div> Pareto Front</div>
+    <div class="legend-item"><div class="legend-dot" style="background:lightgray"></div> Other</div>
+  </div>
+</div>
+<div id="graph-container"><p>Loading graph&hellip;</p></div>
+<div id="tooltip"></div>
+
+<script type="module">
+const NODES = [{"idx": 0, "score": 0.8, "parents": "seed", "role": "Best", "components": {"repair_prompt": "The previous solution failed a test. Read the error, fix the function, and return only one corrected ```python``` code block.", "solver_prompt": "You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block."}},
+{"idx": 1, "score": 0.8, "parents": "0", "role": "Pareto Front", "components": {"repair_prompt": "# New Instructions\n\n## Task Description\nYou are provided with a task and a previous solution that failed a test. Your job is to read the error message, identify the issue in the code, fix the function, and return only one corrected ```python``` code block.\n\n## Input Format\nThe input will include:\n1. The previous solution code block.\n2. The error message indicating what test failed and the expected and actual outputs.\n3. (Optional) Any additional context or feedback related to the task.\n\n## Example\n```plaintext\n# Example 1\n## Outcome\nFAILED\n\n## Inputs\nTask:\nWrite a function to find the lateral surface area of a cone given radius r and the height h.\nYour code should pass this test:\nassert lateralsurface_cone(5,12)==204.20352248333654\n\nPrevious solution:\n```python\nimport math\n\ndef lateralsurface_cone(r, h):\n    # Calculate the lateral surface area of a cone\n    lateral_surface = math.pi * r * h\n    return lateral_surface\n```\n\nError:\nassert lateralsurface_cone(5,12)==204.20352248333654\n-> AssertionError: expected 204.20352248333654, got 188.49555921538757\n\n## Expected Output\nA corrected ```python``` code block that passes the given test.\n```\n\n## Domain Specific Factual Information\n- The task involves calculating the lateral surface area of a cone.\n- The formula for the lateral surface area of a cone is \\( \\text{Lateral Surface Area} = \\pi r l \\), where \\( r \\) is the radius, \\( h \\) is the height, and \\( l \\) is the slant height.\n- The slant height \\( l \\) can be calculated using the Pythagorean theorem: \\( l = \\sqrt{r^2 + h^2} \\).\n\n## Generalizable Strategy\n1. Identify the mathematical formula needed for the task.\n2. Calculate any additional values required by the formula.\n3. Ensure the function returns the correct value based on the given inputs.\n4. Test the corrected function with the provided test case to verify it works as expected.\n\n## Instructions\n- Read the inputs carefully to understand the task and the provided code.\n- Identify the error message and the test that failed.\n- Calculate the slant height using the Pythagorean theorem.\n- Update the function to use the correct formula and calculate.\n- Return only the corrected ```python``` code block.\n- Ensure the corrected function passes the provided test case.", "solver_prompt": "You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block."}},
+{"idx": 2, "score": 0.7, "parents": "1", "role": "", "components": {"repair_prompt": "# New Instructions\n\n## Task Description\nYou are provided with a task and a previous solution that failed a test. Your job is to read the error message, identify the issue in the code, fix the function, and return only one corrected ```python``` code block.\n\n## Input Format\nThe input will include:\n1. The previous solution code block.\n2. The error message indicating what test failed and the expected and actual outputs.\n3. (Optional) Any additional context or feedback related to the task.\n\n## Example\n```plaintext\n# Example 1\n## Outcome\nFAILED\n\n## Inputs\nTask:\nWrite a function to find the lateral surface area of a cone given radius r and the height h.\nYour code should pass this test:\nassert lateralsurface_cone(5,12)==204.20352248333654\n\nPrevious solution:\n```python\nimport math\n\ndef lateralsurface_cone(r, h):\n    # Calculate the lateral surface area of a cone\n    lateral_surface = math.pi * r * h\n    return lateral_surface\n```\n\nError:\nassert lateralsurface_cone(5,12)==204.20352248333654\n-> AssertionError: expected 204.20352248333654, got 188.49555921538757\n\n## Expected Output\nA corrected ```python``` code block that passes the given test.\n```\n\n## Domain Specific Factual Information\n- The task involves calculating the lateral surface area of a cone.\n- The formula for the lateral surface area of a cone is \\( \\text{Lateral Surface Area} = \\pi r l \\), where \\( r \\) is the radius, \\( h \\) is the height, and \\( l \\) is the slant height.\n- The slant height \\( l \\) can be calculated using the Pythagorean theorem: \\( l = \\sqrt{r^2 + h^2} \\).\n\n## Generalizable Strategy\n1. Identify the mathematical formula needed for the task.\n2. Calculate any additional values required by the formula.\n3. Ensure the function returns the correct value based on the given inputs.\n4. Test the corrected function with the provided test case to verify it works as expected.\n\n## Instructions\n- Read the inputs carefully to understand the task and the provided code.\n- Identify the error message and the test that failed.\n- Calculate the slant height using the Pythagorean theorem.\n- Update the function to use the correct formula and calculate.\n- Return only the corrected ```python``` code block.\n- Ensure the corrected function passes the provided test case.", "solver_prompt": "You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.\n\n## Task Description\nYou are given a list of integers. Write a function that returns the sum of all even numbers in the list.\n\n## Input Format\nThe input to the function will be a list of integers.\n\n## Output Format\nThe function should return an integer representing the sum of all even numbers in the input list.\n\n## Example\nFor the input list [1, 2, 3, 4, 5, 6], the function should return 12, as 2 + 4 + 6 = 12.\n\n## Constraints\nThe input list will contain at least one integer and no more than 100 integers. Each integer will be in the range of -1000 to 1000.\n\n## Instructions\n- Write a function named `sum_of_evens` that takes one parameter: a list of integers.\n- Use a list comprehension to filter out the even numbers from the input list.\n- Use the `sum` function to calculate the sum of the filtered even numbers.\n- Return the sum as an integer.\n\n## Example Code\n```python\ndef sum_of_evens(numbers):\n    return sum([num for num in numbers if num % 2 == 0])\n```"}},
+{"idx": 3, "score": 0.8, "parents": "1", "role": "Pareto Front", "components": {"repair_prompt": "# New Instructions\n\n## Task Description\nYou are provided with a task and a previous solution that failed a test. Your job is to read the error message, identify the issue in the code, fix the function, and return only one corrected ```python``` code block.\n\n## Input Format\nThe input will include:\n1. The previous solution code block.\n2. The error message indicating what test failed and the expected and actual outputs.\n3. (Optional) Any additional context or feedback related to the task.\n\n## Example\n```plaintext\n# Example 1\n## Outcome\nFAILED\n\n## Inputs\nTask:\nWrite a function to find the lateral surface area of a cone given radius r and the height h.\nYour code should pass this test:\nassert lateralsurface_cone(5,12)==204.20352248333654\n\nPrevious solution:\n```python\nimport math\n\ndef lateralsurface_cone(r, h):\n    # Calculate the lateral surface area of a cone\n    lateral_surface = math.pi * r * h\n    return lateral_surface\n```\n\nError:\nassert lateralsurface_cone(5,12)==204.20352248333654\n-> AssertionError: expected 204.20352248333654, got 188.49555921538757\n\n## Expected Output\nA corrected ```python``` code block that passes the given test.\n```\n\n## Domain Specific Factual Information\n- The task involves calculating the lateral surface area of a cone.\n- The formula for the lateral surface area of a cone is \\( \\text{Lateral Surface Area} = \\pi r l \\), where \\( r \\) is the radius, \\( h \\) is the height, and \\( l \\) is the slant height.\n- The slant height \\( l \\) can be calculated using the Pythagorean theorem: \\( l = \\sqrt{r^2 + h^2} \\).\n\n## Generalizable Strategy\n1. Identify the mathematical formula needed for the task.\n2. Calculate any additional values required by the formula.\n3. Ensure the function returns the correct value based on the given inputs.\n4. Test the corrected function with the provided test case to verify it works as expected.\n\n## Instructions\n- Read the inputs carefully to understand the task and the provided code.\n- Identify the error message and the test that failed.\n- Calculate the slant height using the Pythagorean theorem.\n- Update the function to use the correct formula and calculate.\n- Return only the corrected ```python``` code block.\n- Ensure the corrected function passes the provided test case.", "solver_prompt": "{\n  \"instruction\": \"You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block. The task will involve basic arithmetic, conditional statements, and loops. The input format will be described in detail, and the output format will be specified. The assistant may utilize a generalizable strategy to solve the task, such as using functions or classes. Include any niche and domain-specific factual information about the task in the instruction to ensure the assistant can solve similar tasks in the future.\"\n}"}}];
+const DOT = `digraph G {
+    rankdir=TB;
+    node [style=filled, shape=circle, fontsize=14, width=0.6, height=0.6];
+    0 [label="0\\n(0.80)", fillcolor=cyan, tooltip="Candidate 0
+Val Score: 0.8000
+Parent(s): seed
+Role: BEST
+
+--- repair_prompt ---
+The previous solution failed a test. Read the error, fix the function, and return only one corrected \`\`\`python\`\`\` code block.
+--- solver_prompt ---
+You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one \`\`\`python\`\`\` code block."];
+    1 [label="1\\n(0.80)", fillcolor=orange, tooltip="Candidate 1
+Val Score: 0.8000
+Parent(s): 0
+Role: Pareto Front
+
+--- repair_prompt ---
+# New Instructions
+
+## Task Description
+You are provided with a task and a previous solution that failed a test. Your job is to read the error message, identify the issue in the code, fix the function, and return only one corrected \`\`\`python\`\`\` code block.
+
+## Input Format
+The input will include:
+1. The previous solution code block.
+2. The error message indicating what test failed and the expected and actual outputs.
+3. (Optional) Any additional context or feedback related to the task.
+
+## Example
+\`\`\`plaintext
+# Example 1
+## Outcome
+FAILED
+
+## Inputs
+Task:
+Write a function to find the lateral surface area of a cone given radius r and the height h.
+Your code should pass this test:
+assert lateralsurface_cone(5,12)==204.20352248333654
+
+Previous solution:
+\`\`\`python
+import math
+
+def lateralsurface_cone(r, h):
+    # Calculate the lateral surface area of a cone
+    lateral_surface = math.pi * r * h
+    return lateral_surface
+\`\`\`
+
+Error:
+assert lateralsurface_cone(5,12)==204.20352248333654
+-&gt; AssertionError: expected 204.20352248333654, got 188.49555921538757
+
+## Expected Output
+A corrected \`\`\`python\`\`\` code block that passes the given test.
+\`\`\`
+
+## Domain Specific Factual Information
+- The task involves calculating the lateral surface area of a cone.
+- The formula for the lateral surface area of a cone is \\( \\text{Lateral Surface Area} = \\pi r l \\), where \\( r \\) is the radius, \\( h \\) is the height, and \\( l \\) is the slant height.
+- The slant height \\( l \\) can be calculated using the Pythagorean theorem: \\( l = \\sqrt{r^2 + h^2} \\).
+
+## Generalizable Strategy
+1. Identify the mathematical formula needed for the task.
+2. Calculate any additional values required by the formula.
+3. Ensure the function returns the correct value based on the given inputs.
+4. Test the corrected function with the provided test case to verify it works as expected.
+
+## Instructions
+- Read the inputs carefully to understand the task and the provided code.
+- Identify the error message and the test that failed.
+- Calculate the slant height using the Pythagorean theorem.
+- Update the function to use the correct formula and calculate.
+- Return only the corrected \`\`\`python\`\`\` code block.
+- Ensure the corrected function passes the provided test case.
+--- solver_prompt ---
+You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one \`\`\`python\`\`\` code block."];
+    2 [label="2\\n(0.70)", fillcolor=lightgray, tooltip="Candidate 2
+Val Score: 0.7000
+Parent(s): 1
+
+--- repair_prompt ---
+# New Instructions
+
+## Task Description
+You are provided with a task and a previous solution that failed a test. Your job is to read the error message, identify the issue in the code, fix the function, and return only one corrected \`\`\`python\`\`\` code block.
+
+## Input Format
+The input will include:
+1. The previous solution code block.
+2. The error message indicating what test failed and the expected and actual outputs.
+3. (Optional) Any additional context or feedback related to the task.
+
+## Example
+\`\`\`plaintext
+# Example 1
+## Outcome
+FAILED
+
+## Inputs
+Task:
+Write a function to find the lateral surface area of a cone given radius r and the height h.
+Your code should pass this test:
+assert lateralsurface_cone(5,12)==204.20352248333654
+
+Previous solution:
+\`\`\`python
+import math
+
+def lateralsurface_cone(r, h):
+    # Calculate the lateral surface area of a cone
+    lateral_surface = math.pi * r * h
+    return lateral_surface
+\`\`\`
+
+Error:
+assert lateralsurface_cone(5,12)==204.20352248333654
+-&gt; AssertionError: expected 204.20352248333654, got 188.49555921538757
+
+## Expected Output
+A corrected \`\`\`python\`\`\` code block that passes the given test.
+\`\`\`
+
+## Domain Specific Factual Information
+- The task involves calculating the lateral surface area of a cone.
+- The formula for the lateral surface area of a cone is \\( \\text{Lateral Surface Area} = \\pi r l \\), where \\( r \\) is the radius, \\( h \\) is the height, and \\( l \\) is the slant height.
+- The slant height \\( l \\) can be calculated using the Pythagorean theorem: \\( l = \\sqrt{r^2 + h^2} \\).
+
+## Generalizable Strategy
+1. Identify the mathematical formula needed for the task.
+2. Calculate any additional values required by the formula.
+3. Ensure the function returns the correct value based on the given inputs.
+4. Test the corrected function with the provided test case to verify it works as expected.
+
+## Instructions
+- Read the inputs carefully to understand the task and the provided code.
+- Identify the error message and the test that failed.
+- Calculate the slant height using the Pythagorean theorem.
+- Update the function to use the correct formula and calculate.
+- Return only the corrected \`\`\`python\`\`\` code block.
+- Ensure the corrected function passes the provided test case.
+--- solver_prompt ---
+You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one \`\`\`python\`\`\` code block.
+
+## Task Description
+You are given a list of integers. Write a function that returns the sum of all even numbers in the list.
+
+## Input Format
+The input to the function will be a list of integers.
+
+## Output Format
+The function should return an integer representing the sum of all even numbers in the input list.
+
+## Example
+For the input list [1, 2, 3, 4, 5, 6], the function should return 12, as 2 + 4 + 6 = 12.
+
+## Constraints
+The input list will contain at least one integer and no more than 100 integers. Each integer will be in the range of -1000 to 1000.
+
+## Instructions
+- Write a function named \`sum_of_evens\` that takes one parameter: a list of integers.
+- Use a list comprehension to filter out the even numbers from the input list.
+- Use the \`sum\` function to calculate the sum of the filtered even numbers.
+- Return the sum as an integer.
+
+## Example Code
+\`\`\`python
+def sum_of_evens(numbers):
+    return sum([num for num in numbers if num % 2 == 0])
+\`\`\`"];
+    3 [label="3\\n(0.80)", fillcolor=orange, tooltip="Candidate 3
+Val Score: 0.8000
+Parent(s): 1
+Role: Pareto Front
+
+--- repair_prompt ---
+# New Instructions
+
+## Task Description
+You are provided with a task and a previous solution that failed a test. Your job is to read the error message, identify the issue in the code, fix the function, and return only one corrected \`\`\`python\`\`\` code block.
+
+## Input Format
+The input will include:
+1. The previous solution code block.
+2. The error message indicating what test failed and the expected and actual outputs.
+3. (Optional) Any additional context or feedback related to the task.
+
+## Example
+\`\`\`plaintext
+# Example 1
+## Outcome
+FAILED
+
+## Inputs
+Task:
+Write a function to find the lateral surface area of a cone given radius r and the height h.
+Your code should pass this test:
+assert lateralsurface_cone(5,12)==204.20352248333654
+
+Previous solution:
+\`\`\`python
+import math
+
+def lateralsurface_cone(r, h):
+    # Calculate the lateral surface area of a cone
+    lateral_surface = math.pi * r * h
+    return lateral_surface
+\`\`\`
+
+Error:
+assert lateralsurface_cone(5,12)==204.20352248333654
+-&gt; AssertionError: expected 204.20352248333654, got 188.49555921538757
+
+## Expected Output
+A corrected \`\`\`python\`\`\` code block that passes the given test.
+\`\`\`
+
+## Domain Specific Factual Information
+- The task involves calculating the lateral surface area of a cone.
+- The formula for the lateral surface area of a cone is \\( \\text{Lateral Surface Area} = \\pi r l \\), where \\( r \\) is the radius, \\( h \\) is the height, and \\( l \\) is the slant height.
+- The slant height \\( l \\) can be calculated using the Pythagorean theorem: \\( l = \\sqrt{r^2 + h^2} \\).
+
+## Generalizable Strategy
+1. Identify the mathematical formula needed for the task.
+2. Calculate any additional values required by the formula.
+3. Ensure the function returns the correct value based on the given inputs.
+4. Test the corrected function with the provided test case to verify it works as expected.
+
+## Instructions
+- Read the inputs carefully to understand the task and the provided code.
+- Identify the error message and the test that failed.
+- Calculate the slant height using the Pythagorean theorem.
+- Update the function to use the correct formula and calculate.
+- Return only the corrected \`\`\`python\`\`\` code block.
+- Ensure the corrected function passes the provided test case.
+--- solver_prompt ---
+{
+  &quot;instruction&quot;: &quot;You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one \`\`\`python\`\`\` code block. The task will involve basic arithmetic, conditional statements, and loops. The input format will be described in detail, and the output format will be specified. The assistant may utilize a generalizable strategy to solve the task, such as using functions or classes. Include any niche and domain-specific factual information about the task in the instruction to ensure the assistant can solve similar tasks in the future.&quot;
+}"];
+    0 -> 1;
+    1 -> 2;
+    1 -> 3;
+}`;
+
+const nodeMap = {};
+NODES.forEach(n => { nodeMap[n.idx] = n; });
+
+let pinnedIdx = null;   // non-null when tooltip is click-pinned (scrollable)
+let hoverIdx = null;    // non-null when hovering over a node
+
+function renderTooltip(idx) {
+  const n = nodeMap[idx];
+  if (!n) return "";
+  let roleBadge = "";
+  if (n.role === "Best") roleBadge = '<span class="role-badge role-best">BEST</span>';
+  else if (n.role === "Pareto Front") roleBadge = '<span class="role-badge role-pareto">PARETO</span>';
+  else if (n.role === "Seed") roleBadge = '<span class="role-badge role-seed">SEED</span>';
+
+  let comps = "";
+  for (const [name, text] of Object.entries(n.components)) {
+    const escaped = text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    comps += '<div class="tt-comp-name">' + name + '</div><div class="tt-comp-text">' + escaped + '</div>';
+  }
+
+  return '<div class="tt-header">Candidate ' + n.idx + roleBadge + '</div>' +
+    '<div class="tt-meta">Score: <strong>' + n.score + '</strong>&nbsp;&nbsp;|&nbsp;&nbsp;Parent(s): ' + n.parents +
+    '</div><div class="tt-hint">' + (pinnedIdx === idx ? 'Click node again to dismiss' : 'Click to pin &amp; scroll') + '</div>' +
+    comps;
+}
+
+function positionTooltip(x, y) {
+  const tt = document.getElementById("tooltip");
+  let tx = x + 16, ty = y + 16;
+  const r = tt.getBoundingClientRect();
+  if (tx + r.width > window.innerWidth - 8) tx = x - r.width - 16;
+  if (ty + r.height > window.innerHeight - 8) ty = y - r.height - 16;
+  if (tx < 8) tx = 8;
+  if (ty < 8) ty = 8;
+  tt.style.left = tx + "px";
+  tt.style.top = ty + "px";
+}
+
+function showTooltip(idx, x, y) {
+  const tt = document.getElementById("tooltip");
+  tt.innerHTML = renderTooltip(idx);
+  tt.style.display = "block";
+  positionTooltip(x, y);
+}
+
+function hideTooltip() {
+  pinnedIdx = null;
+  hoverIdx = null;
+  document.getElementById("tooltip").style.display = "none";
+}
+
+// Click outside tooltip and outside nodes dismisses pinned tooltip
+document.addEventListener("mousedown", function(e) {
+  const tt = document.getElementById("tooltip");
+  if (pinnedIdx !== null && tt.style.display === "block"
+      && !tt.contains(e.target) && !e.target.closest(".node")) {
+    hideTooltip();
+  }
+});
+
+async function render() {
+  const { instance } = await import("https://cdn.jsdelivr.net/npm/@viz-js/viz@3.11.0/lib/viz-standalone.mjs");
+  const viz = await instance();
+  const svg = viz.renderSVGElement(DOT);
+  const container = document.getElementById("graph-container");
+  container.innerHTML = "";
+  container.appendChild(svg);
+
+  // Attach hover listeners and strip native <title> tooltips to avoid double tooltips
+  svg.querySelectorAll(".node").forEach(node => {
+    const title = node.querySelector("title");
+    if (!title) return;
+    const idx = parseInt(title.textContent, 10);
+    if (isNaN(idx)) return;
+    title.remove();  // remove native SVG tooltip
+    node.style.cursor = "pointer";
+    // Hover: show tooltip following the mouse (non-interactive)
+    node.addEventListener("mouseenter", e => {
+      if (pinnedIdx !== null) return;  // don't override a pinned tooltip
+      hoverIdx = idx;
+      showTooltip(idx, e.clientX, e.clientY);
+    });
+    node.addEventListener("mousemove", e => {
+      if (pinnedIdx !== null || hoverIdx !== idx) return;
+      positionTooltip(e.clientX, e.clientY);
+    });
+    node.addEventListener("mouseleave", () => {
+      if (pinnedIdx !== null) return;
+      hoverIdx = null;
+      document.getElementById("tooltip").style.display = "none";
+    });
+    // Click: pin the tooltip so user can scroll it
+    node.addEventListener("click", e => {
+      e.stopPropagation();
+      if (pinnedIdx === idx) { hideTooltip(); return; }
+      pinnedIdx = idx;
+      showTooltip(idx, e.clientX, e.clientY);
+    });
+  });
+  // Also strip <title> from edges and the graph itself
+  svg.querySelectorAll(".edge title").forEach(t => t.remove());
+  const graphTitle = svg.querySelector(":scope > title");
+  if (graphTitle) graphTitle.remove();
+}
+
+render().catch(err => {
+  document.getElementById("graph-container").innerHTML =
+    "<p style='color:red'>Failed to render graph: " + err.message + "</p>" +
+    "<pre>" + DOT.replace(/</g,"&lt;") + "</pre>";
+});
+</script>
+</body>
+</html>

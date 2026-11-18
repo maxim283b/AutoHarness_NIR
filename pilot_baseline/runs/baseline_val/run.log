@@ -1,0 +1,38 @@
+[1/20] task 596: PASS  repair=False  tok=106+22  7.0s
+[2/20] task 566: PASS  repair=False  tok=74+23  1.9s
+[3/20] task 597: fail  repair=True  tok=349+385  17.9s
+[4/20] task 554: PASS  repair=False  tok=88+26  8.3s
+[5/20] task 581: fail  repair=True  tok=272+213  13.4s
+[6/20] task 578: PASS  repair=False  tok=219+62  4.3s
+[7/20] task 569: PASS  repair=False  tok=112+51  2.6s
+[8/20] task 562: PASS  repair=False  tok=84+90  3.9s
+[9/20] task 576: fail  repair=False  tok=83+23  2.1s
+[10/20] task 579: PASS  repair=False  tok=107+43  2.3s
+[11/20] task 567: PASS  repair=False  tok=93+18  5.3s
+[12/20] task 560: PASS  repair=False  tok=117+70  10.4s
+[13/20] task 559: PASS  repair=False  tok=100+79  9.9s
+[14/20] task 555: PASS  repair=False  tok=86+92  8.8s
+[15/20] task 586: PASS  repair=False  tok=112+65  8.3s
+[16/20] task 572: fail  repair=True  tok=303+179  22.6s
+[17/20] task 565: PASS  repair=False  tok=78+14  3.8s
+[18/20] task 598: PASS  repair=False  tok=73+115  4.1s
+[19/20] task 585: PASS  repair=False  tok=126+56  2.8s
+[20/20] task 592: fail  repair=True  tok=321+247  12.2s
+{
+  "run_id": "baseline_val",
+  "split": "val",
+  "n_tasks": 20,
+  "pass_at_1": 0.75,
+  "n_pass": 15,
+  "visible_pass_after_solve": 0.8,
+  "repair_triggered": 4,
+  "repair_success": 0,
+  "harness_errors": 0,
+  "lm_calls": 24,
+  "prompt_tokens_total": 2903,
+  "completion_tokens_total": 1873,
+  "tokens_per_task_mean": 238.8,
+  "lm_latency_per_task_mean_s": 7.597252879997541,
+  "wall_time_s": 165.97621749999234,
+  "finished_at": "2026-10-02T13:29:25.950010+00:00"
+}

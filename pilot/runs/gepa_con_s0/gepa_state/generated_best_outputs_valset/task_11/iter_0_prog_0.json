@@ -1,0 +1,5 @@
+{
+    "task_id": 560,
+    "final_code": "def union_elements(tuple1, tuple2):\n    # Convert tuples to sets to remove duplicates and then union them\n    union_set = set(tuple1) | set(tuple2)\n    # Convert the union set back to a tuple and sort it\n    sorted_union = tuple(sorted(union_set))\n    return sorted_union",
+    "final_pass": true
+}

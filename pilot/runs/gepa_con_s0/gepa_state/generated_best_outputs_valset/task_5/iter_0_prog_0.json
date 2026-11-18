@@ -1,0 +1,5 @@
+{
+    "task_id": 578,
+    "final_code": "def interleave_lists(list1, list2, list3):\n    # Use zip to interleave the lists and then flatten the result\n    interleaved = [item for sublist in zip(list1, list2, list3) for item in sublist]\n    return interleaved",
+    "final_pass": true
+}

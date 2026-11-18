@@ -1,0 +1,5 @@
+{
+    "task_id": 596,
+    "final_code": "import sys\n\ndef tuple_size(tup):\n    return sys.getsizeof(tup)",
+    "final_pass": true
+}

@@ -1,0 +1,5 @@
+{
+    "task_id": 565,
+    "final_code": "def split(s):\n    return list(s)",
+    "final_pass": true
+}

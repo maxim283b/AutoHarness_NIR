@@ -1,0 +1,25 @@
+{
+ "run_id": "smoke",
+ "candidate_file": "seed_harness.json",
+ "candidate_hash": "dcbf6e41fcf13b08f55f59692d904a8d3e9cbfb2b2b9390c9f28aa0517ab41c5",
+ "candidate": {
+  "solver_prompt": "You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.",
+  "repair_prompt": "The previous solution failed a test. Read the error, fix the function, and return only one corrected ```python``` code block."
+ },
+ "split": "train",
+ "n": 5,
+ "pass_at_1": 0.8,
+ "repair_rate": 0.0,
+ "tokens_per_task": 140.8,
+ "ledger": {
+  "target": {
+   "calls": 5,
+   "prompt_tokens": 416,
+   "completion_tokens": 288,
+   "seconds": 9.034254789352417,
+   "total_tokens": 704
+  }
+ },
+ "wall_seconds": 10.3,
+ "no_repair": false
+}

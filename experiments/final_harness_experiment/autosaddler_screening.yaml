@@ -1,0 +1,51 @@
+schema_version: autosaddler/v2
+scenario:
+  type: sql_harness
+  settings:
+    baseline:
+      system_instruction: "Produce one correct read-only SQLite query and no prose."
+      planning_instruction: "Privately identify tables, joins, filters, grouping, and ordering before answering."
+      verification_instruction: "Check every identifier against the public schema and check that the result answers the request."
+      repair_rule: "When given a safe verifier error class, fix the root cause and return a complete replacement query."
+      tool_rule: "Use only a single read-only SELECT or WITH statement; never modify the database."
+      stop_rule: "Stop at the first verified success or when the fixed repair budget is exhausted."
+    train_case_ids: [sql-01-00, sql-01-01, sql-01-02]
+    development_case_ids: [sql-02-00, sql-02-01]
+    target:
+      model_id: ministral-3-8b-instruct-2512
+      endpoint: http://127.0.0.1:1234/v1/chat/completions
+      temperature: 0.0
+      seed: 20261012
+      context_budget: 2048
+      generation_max_tokens: 384
+      timeout_s: 180.0
+provider:
+  type: codex
+  capabilities: [read_workspace, edit_workspace, load_skills, run_commands]
+  settings:
+    executable: codex
+    model: gpt-5.5
+    reasoning_effort: low
+    sandbox_mode: danger-full-access
+optimization:
+  task_selection:
+    type: fixed
+    batch_size: 3
+    seed: 0
+  acceptance:
+    type: matched_valid_strict_improvement
+  development:
+    type: full_always
+  ranking:
+    type: mean_development_score
+  budget:
+    max_iterations: 6
+    max_rollouts: 1000
+  diagnosis_patch_timeout_seconds: 300.0
+  selection_timeout_seconds: 180.0
+  reflection_timeout_seconds: 180.0
+  session_retries: 2
+  session_retry_backoff_seconds: 0.0
+storage:
+  type: local
+  run_root: ../../results/final_harness_experiment/staged-screening-v1/method_runs

@@ -1,0 +1,5 @@
+{
+    "task_id": 586,
+    "final_code": "def split_Arr(arr, n):\n    # Split the array at the nth element\n    first_part = arr[:n]\n    second_part = arr[n:]\n    # Add the first part to the end of the second part\n    result = second_part + first_part\n    return result",
+    "final_pass": true
+}

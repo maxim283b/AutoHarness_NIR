@@ -1,0 +1,15 @@
+[project]
+name = "autoharness-pilot-baseline"
+version = "0.1.0"
+description = "Pilot baseline: frozen Qwen2.5-Coder-1.5B + GEPA adapter on MBPP-sanitized"
+requires-python = ">=3.10,<3.15"
+dependencies = [
+    "gepa[full] @ git+https://github.com/gepa-ai/gepa.git@fb1ed58",
+    "datasets",
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,44 @@
+{
+ "a": "runs/direct_test",
+ "b": "runs/seed_test",
+ "n": 50,
+ "pass_a": 0.58,
+ "pass_b": 0.66,
+ "diff_b_minus_a": 0.08000000000000007,
+ "diff_ci95_paired_bootstrap": [
+  0.019999999999999907,
+  0.16000000000000003
+ ],
+ "b_only": 4,
+ "a_only": 0,
+ "mcnemar_exact_p": 0.125,
+ "beta_posterior_a": {
+  "k": 29,
+  "n": 50,
+  "mean": 0.5769230769230769,
+  "ci95": [
+   0.44169282776746116,
+   0.7065451261594053
+  ]
+ },
+ "beta_posterior_b": {
+  "k": 33,
+  "n": 50,
+  "mean": 0.6538461538461539,
+  "ci95": [
+   0.52078744576937,
+   0.7756937966643029
+  ]
+ },
+ "tokens_per_task_a": 153.1,
+ "tokens_per_task_b": 284.04,
+ "repair_rate_a": 0.0,
+ "repair_rate_b": 0.32,
+ "flipped_to_pass": [
+  102,
+  249,
+  283,
+  429
+ ],
+ "flipped_to_fail": []
+}

@@ -1,0 +1,68 @@
+[1/50] task 98: PASS  repair=False  tok=105+34  5.2s
+[2/50] task 249: fail  repair=True  tok=346+171  4.2s
+[3/50] task 429: PASS  repair=False  tok=105+51  1.4s
+[4/50] task 12: PASS  repair=False  tok=125+68  1.5s
+[5/50] task 446: fail  repair=True  tok=352+331  8.6s
+[6/50] task 137: PASS  repair=True  tok=424+289  9.8s
+[7/50] task 68: PASS  repair=False  tok=84+29  2.9s
+[8/50] task 226: PASS  repair=False  tok=77+105  2.4s
+[9/50] task 260: fail  repair=True  tok=284+216  5.2s
+[10/50] task 439: PASS  repair=False  tok=85+37  1.1s
+[11/50] task 116: PASS  repair=False  tok=78+23  0.8s
+[12/50] task 106: PASS  repair=False  tok=97+65  1.6s
+[13/50] task 307: fail  repair=True  tok=295+274  7.4s
+[14/50] task 115: PASS  repair=False  tok=74+26  2.8s
+[15/50] task 438: fail  repair=True  tok=351+338  8.4s
+[16/50] task 93: PASS  repair=False  tok=76+17  2.6s
+[17/50] task 113: PASS  repair=False  tok=69+29  0.8s
+[18/50] task 143: fail  repair=False  tok=92+26  0.8s
+[19/50] task 398: fail  repair=False  tok=80+103  2.5s
+[20/50] task 281: PASS  repair=False  tok=78+20  0.7s
+[21/50] task 412: PASS  repair=False  tok=75+38  1.1s
+[22/50] task 126: fail  repair=True  tok=319+316  8.0s
+[23/50] task 92: fail  repair=True  tok=300+355  10.8s
+[24/50] task 305: fail  repair=True  tok=277+215  7.3s
+[25/50] task 265: PASS  repair=False  tok=166+26  0.6s
+[26/50] task 413: PASS  repair=False  tok=144+48  1.2s
+[27/50] task 124: fail  repair=True  tok=282+247  6.6s
+[28/50] task 444: fail  repair=True  tok=444+162  6.1s
+[29/50] task 473: fail  repair=True  tok=432+258  6.7s
+[30/50] task 415: PASS  repair=False  tok=92+155  5.5s
+[31/50] task 471: PASS  repair=False  tok=97+52  1.6s
+[32/50] task 290: fail  repair=True  tok=383+274  7.1s
+[33/50] task 286: fail  repair=True  tok=368+192  7.7s
+[34/50] task 411: PASS  repair=False  tok=77+45  1.3s
+[35/50] task 255: fail  repair=False  tok=111+26  0.7s
+[36/50] task 283: fail  repair=True  tok=309+439  11.3s
+[37/50] task 171: PASS  repair=False  tok=79+40  3.1s
+[38/50] task 104: PASS  repair=False  tok=112+51  1.2s
+[39/50] task 222: PASS  repair=False  tok=90+61  1.5s
+[40/50] task 238: PASS  repair=False  tok=77+62  1.7s
+[41/50] task 94: PASS  repair=False  tok=107+58  1.6s
+[42/50] task 102: PASS  repair=False  tok=75+45  1.3s
+[43/50] task 269: PASS  repair=False  tok=68+15  0.5s
+[44/50] task 62: PASS  repair=False  tok=85+15  0.8s
+[45/50] task 96: PASS  repair=False  tok=73+47  1.5s
+[46/50] task 266: PASS  repair=False  tok=76+53  1.5s
+[47/50] task 477: PASS  repair=False  tok=72+15  0.6s
+[48/50] task 479: PASS  repair=False  tok=74+57  1.6s
+[49/50] task 83: fail  repair=True  tok=225+110  2.7s
+[50/50] task 99: PASS  repair=False  tok=85+45  1.4s
+{
+  "run_id": "baseline_rep",
+  "split": "test",
+  "n_tasks": 50,
+  "pass_at_1": 0.64,
+  "n_pass": 32,
+  "visible_pass_after_solve": 0.68,
+  "repair_triggered": 16,
+  "repair_success": 1,
+  "harness_errors": 0,
+  "lm_calls": 66,
+  "prompt_tokens_total": 8451,
+  "completion_tokens_total": 5774,
+  "tokens_per_task_mean": 284.5,
+  "lm_latency_per_task_mean_s": 3.5092604220012436,
+  "wall_time_s": 191.2260920999979,
+  "finished_at": "2026-10-02T12:57:35.254268+00:00"
+}

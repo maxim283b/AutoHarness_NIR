@@ -1,0 +1,29 @@
+{
+  "mode": "real",
+  "model": "ministral-3-8b-instruct-2512",
+  "best_fixed_train": "P1",
+  "train_ids": [
+    742,
+    792
+  ],
+  "test_ids": [
+    98,
+    249
+  ],
+  "limits": {
+    "mode": "real",
+    "real_budget_approved": true,
+    "limit": 2,
+    "max_calls_per_task": 10,
+    "max_tokens_per_task": 4500,
+    "max_seconds_per_task": 150.0,
+    "max_total_calls": 280,
+    "max_total_tokens": 126000,
+    "max_total_seconds": 1800.0,
+    "out": "results\\real_paired_2",
+    "resume": false
+  },
+  "completed": true,
+  "total_calls": 48,
+  "total_tokens": 11155
+}

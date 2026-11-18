@@ -1,0 +1,56 @@
+{
+    "task_id": 598,
+    "answer": "def armstrong_number(n):\n    # Convert the number to a string to easily iterate over each digit\n    num_str = str(n)\n    # Calculate the number of digits in the number\n    num_digits = len(num_str)\n    # Calculate the sum of the digits raised to the power of the number of digits\n    sum_of_powers = sum(int(digit) ** num_digits for digit in num_str)\n    # Check if the sum of the powers is equal to the original number\n    return sum_of_powers == n",
+    "score": 1.0,
+    "verifier": {
+        "ok": true,
+        "n_passed": 3,
+        "n_total": 3,
+        "error": null,
+        "timed_out": false
+    },
+    "repair_used": false,
+    "visible_ok_first": true,
+    "prompt_tokens": 73,
+    "completion_tokens": 115,
+    "latency_s": 10.560588199994527,
+    "n_lm_calls": 1,
+    "seed": 0,
+    "candidate_hash": "80356790ad5c7d38116c22bd88443be68fe005eb50a062e11919dcba0b1ab2aa",
+    "harness_error": null,
+    "steps": [
+        {
+            "run_id": "gepa_smoke",
+            "phase": "optimize",
+            "split": "train|val",
+            "task_id": 598,
+            "candidate_hash": "80356790ad5c7d38116c22bd88443be68fe005eb50a062e11919dcba0b1ab2aa",
+            "solver_prompt_hash": "4b21c06e27d62cb912ef871b11db51a6737241f54c0c133537ce10b71fa4ab2e",
+            "repair_prompt_hash": "7d5eff122c73a44b30ae5e053412b5a45514b8ab83c747c340846f2e52ade694",
+            "model_id": "ollama_chat/qwen2.5-coder:1.5b",
+            "seed": 0,
+            "step": "solve",
+            "messages": [
+                {
+                    "role": "system",
+                    "content": "You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block."
+                },
+                {
+                    "role": "user",
+                    "content": "Write a function to check whether the given number is armstrong or not.\nYour code should pass this test:\nassert armstrong_number(153)==True"
+                }
+            ],
+            "raw_response": "```python\ndef armstrong_number(n):\n    # Convert the number to a string to easily iterate over each digit\n    num_str = str(n)\n    # Calculate the number of digits in the number\n    num_digits = len(num_str)\n    # Calculate the sum of the digits raised to the power of the number of digits\n    sum_of_powers = sum(int(digit) ** num_digits for digit in num_str)\n    # Check if the sum of the powers is equal to the original number\n    return sum_of_powers == n\n```",
+            "finish_reason": "stop",
+            "prompt_tokens": 73,
+            "completion_tokens": 115,
+            "latency_s": 10.560588199994527,
+            "extracted_code": "def armstrong_number(n):\n    # Convert the number to a string to easily iterate over each digit\n    num_str = str(n)\n    # Calculate the number of digits in the number\n    num_digits = len(num_str)\n    # Calculate the sum of the digits raised to the power of the number of digits\n    sum_of_powers = sum(int(digit) ** num_digits for digit in num_str)\n    # Check if the sum of the powers is equal to the original number\n    return sum_of_powers == n",
+            "visible_test_ok": true,
+            "visible_error": null,
+            "final_pass": true,
+            "n_asserts_passed": 3,
+            "timestamp": "2026-10-02T13:57:13.020595+00:00"
+        }
+    ]
+}

@@ -1,0 +1,57 @@
+# Python caches and local environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+.venv*/
+venv/
+
+# Local test and temporary outputs
+.test_tmp/
+.pytest_tmp*/
+pilot.test.tmp*/
+tmp/
+*.tmp
+*.lock
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials*.json
+
+# IDE and operating-system metadata
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Large, unrelated literature/demo checkouts with their own Git histories
+aaai26-demos/
+www27-demos/
+
+# Reproducible third-party checkout; pinned commit is recorded in project manifests
+third_party/
+
+# Generated test paths accidentally created by Windows temp-path handling
+pilot/Usersefr_vDocumentsChatGPTautoharnesspilot.test_tmp*/
+
+# AutoSaddler ephemeral attempt workspaces (very long Windows paths); durable
+# events, sessions, candidates, manifests and raw evaluations remain tracked.
+results/**/workspaces/
+
+# Screening session exports exceed Windows path limits. Their durable optimizer
+# event journals and manifests remain tracked; live session exports are resumable.
+results/final_harness_experiment/staged-screening-*/method_runs/**/sessions/
+
+# Personal research notes: kept on disk, not in the repository
+/0[1-6]_*.md
+/bandit_rl_pilot.md
+/improved_results.md
+/pilot_selection.md
+/research_plan_agent_harness_optimization.md
+/research_program_dynamic_agent_patterns_ru.md

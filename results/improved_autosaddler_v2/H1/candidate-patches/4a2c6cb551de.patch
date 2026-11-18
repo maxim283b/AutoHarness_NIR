@@ -1,0 +1,169 @@
+diff --git a/opencode-src/packages/opencode/src/tool/apply_patch.ts b/opencode-src/packages/opencode/src/tool/apply_patch.ts
+index 3f89a63..0938c3b 100644
+--- a/opencode-src/packages/opencode/src/tool/apply_patch.ts
++++ b/opencode-src/packages/opencode/src/tool/apply_patch.ts
+@@ -8,6 +8,7 @@ import { Patch } from "../patch"
+ import { createTwoFilesPatch, diffLines } from "diff"
+ import { assertExternalDirectoryEffect } from "./external-directory"
+ import { trimDiff } from "./edit"
++import { testIntegrityViolation } from "./test-integrity"
+ import { LSP } from "@/lsp/lsp"
+ import { FSUtil } from "@opencode-ai/core/fs-util"
+ import DESCRIPTION from "./apply_patch.txt"
+@@ -130,6 +131,11 @@ export const ApplyPatchTool = Tool.define(
+               return yield* Effect.fail(new Error(`apply_patch verification failed: ${error}`))
+             }
+ 
++            const violation = yield* testIntegrityViolation(filePath, newContent)
++            if (violation) {
++              return yield* Effect.fail(new Error(violation))
++            }
++
+             const diff = trimDiff(createTwoFilesPatch(filePath, filePath, oldContent, newContent))
+ 
+             let additions = 0
+@@ -169,6 +175,10 @@ export const ApplyPatchTool = Tool.define(
+               ),
+             )
+             const contentToDelete = source.text
++            const deleteViolation = yield* testIntegrityViolation(filePath, "")
++            if (deleteViolation) {
++              return yield* Effect.fail(new Error(deleteViolation))
++            }
+             const deleteDiff = trimDiff(createTwoFilesPatch(filePath, filePath, contentToDelete, ""))
+ 
+             const deletions = contentToDelete.split("\n").length
+diff --git a/opencode-src/packages/opencode/src/tool/edit.ts b/opencode-src/packages/opencode/src/tool/edit.ts
+index a92e472..f4deb88 100644
+--- a/opencode-src/packages/opencode/src/tool/edit.ts
++++ b/opencode-src/packages/opencode/src/tool/edit.ts
+@@ -18,6 +18,7 @@ import { Snapshot } from "@/snapshot"
+ import { assertExternalDirectoryEffect } from "./external-directory"
+ import { FSUtil } from "@opencode-ai/core/fs-util"
+ import * as Bom from "@/util/bom"
++import { testIntegrityViolation } from "./test-integrity"
+ 
+ function normalizeLineEndings(text: string): string {
+   return text.replaceAll("\r\n", "\n")
+@@ -98,6 +99,8 @@ export const EditTool = Tool.define(
+                 const desiredBom = next.bom
+                 contentOld = ""
+                 contentNew = next.text
++                const createViolation = yield* testIntegrityViolation(filePath, contentNew)
++                if (createViolation) throw new Error(createViolation)
+                 diff = trimDiff(createTwoFilesPatch(filePath, filePath, contentOld, contentNew))
+                 yield* ctx.ask({
+                   permission: "edit",
+@@ -134,6 +137,9 @@ export const EditTool = Tool.define(
+               const desiredBom = source.bom || next.bom
+               contentNew = next.text
+ 
++              const violation = yield* testIntegrityViolation(filePath, contentNew)
++              if (violation) throw new Error(violation)
++
+               diff = trimDiff(
+                 createTwoFilesPatch(
+                   filePath,
+diff --git a/opencode-src/packages/opencode/src/tool/test-integrity.ts b/opencode-src/packages/opencode/src/tool/test-integrity.ts
+new file mode 100644
+index 0000000..c6e92a0
+--- /dev/null
++++ b/opencode-src/packages/opencode/src/tool/test-integrity.ts
+@@ -0,0 +1,75 @@
++import * as path from "path"
++import { Effect, Stream } from "effect"
++import { ChildProcess, ChildProcessSpawner } from "effect/unstable/process"
++
++// Heuristic detection of test files. Deliberately broad: the guard is
++// fail-open for anything git cannot confirm as a tracked file, so a false
++// positive only triggers the additive-content rule and a false negative only
++// skips the rule on an untracked-looking path.
++export function isTestFilePath(filePath: string): boolean {
++  const normalized = filePath.replaceAll("\\", "/")
++  if (normalized.includes("node_modules/")) return false
++  const segments = normalized.split("/")
++  const base = segments[segments.length - 1] ?? ""
++  for (const segment of segments.slice(0, -1)) {
++    const lowered = segment.toLowerCase()
++    if (lowered === "test" || lowered === "tests" || lowered === "__tests__") return true
++  }
++  return (
++    (/^test_.+\.py$/.test(base) || /^conftest\.py$/.test(base)) ||
++    /^[^/]+_test\.[^/]+$/.test(base) ||
++    /^[^/]+\.test\.[^/]+$/.test(base) ||
++    /^[^/]+\.spec\.[^/]+$/.test(base) ||
++    /^[^/]+-test\.[^/]+$/.test(base)
++  )
++}
++
++function normalize(text: string): string {
++  return text.replaceAll("\r\n", "\n")
++}
++
++// Fetch the HEAD blob for the file, resolved from the file's own directory so
++// the `./` relative path is stable regardless of repo layout. Returns
++// undefined whenever anything goes wrong (not a repo, no commits, untracked
++// path, spawn failure) so callers fail open.
++function gitHeadContent(spawner: ChildProcessSpawner.ChildProcessSpawner, filePath: string) {
++  return Effect.gen(function* () {
++    const handle = yield* spawner.spawn(
++      ChildProcess.make(
++        "git",
++        ["show", `HEAD:./${path.basename(filePath)}`],
++        { cwd: path.dirname(filePath), extendEnv: true, stdin: "ignore" },
++      ),
++    )
++    const [text, stderr] = yield* Effect.all(
++      [Stream.mkString(Stream.decodeText(handle.stdout)), Stream.mkString(Stream.decodeText(handle.stderr))],
++      { concurrency: 2 },
++    )
++    const code = yield* handle.exitCode
++    return code === 0 ? text : undefined
++  }).pipe(
++    Effect.scoped,
++    Effect.catch(() => Effect.succeed(undefined)),
++  )
++}
++
++// Returns an error message when the requested final content of a git-tracked
++// test file would remove or alter original HEAD content, and undefined when
++// the change is allowed (untracked/non-test file, additive change, or any git
++// failure). The rule: normalized HEAD content must remain a substring of the
++// normalized new content, so appending and anchor-preserving insertions pass
++// while deletions, rewrites, and disabling assertions are blocked.
++export const testIntegrityViolation = (filePath: string, newContent: string) =>
++  Effect.gen(function* () {
++    if (!isTestFilePath(filePath)) return undefined
++    const spawner = yield* ChildProcessSpawner.ChildProcessSpawner
++    const head = yield* gitHeadContent(spawner, filePath)
++    if (head === undefined || head === "") return undefined
++    if (normalize(newContent).includes(normalize(head))) return undefined
++    return (
++      `Refusing to modify tracked test file ${filePath}: the change would remove or alter its ` +
++      `original content. Test files may only be modified additively — every line from the ` +
++      `original file must remain present and unmodified. Restore the original content and, ` +
++      `if needed, append new tests instead of editing, deleting, or weakening existing ones.`
++    )
++  })
+diff --git a/opencode-src/packages/opencode/src/tool/write.ts b/opencode-src/packages/opencode/src/tool/write.ts
+index 37be6d8..424aefb 100644
+--- a/opencode-src/packages/opencode/src/tool/write.ts
++++ b/opencode-src/packages/opencode/src/tool/write.ts
+@@ -12,6 +12,7 @@ import { Format } from "../format"
+ import { FSUtil } from "@opencode-ai/core/fs-util"
+ import { InstanceState } from "@/effect/instance-state"
+ import { trimDiff } from "./edit"
++import { testIntegrityViolation } from "./test-integrity"
+ import { assertExternalDirectoryEffect } from "./external-directory"
+ import * as Bom from "@/util/bom"
+ 
+@@ -50,6 +51,9 @@ export const WriteTool = Tool.define(
+           const contentOld = source.text
+           const contentNew = next.text
+ 
++          const violation = yield* testIntegrityViolation(filepath, contentNew)
++          if (violation) throw new Error(violation)
++
+           const diff = trimDiff(createTwoFilesPatch(filepath, filepath, contentOld, contentNew))
+           yield* ctx.ask({
+             permission: "edit",

@@ -1,0 +1,88 @@
+diff --git a/opencode-src/packages/opencode/src/session/prompt.ts b/opencode-src/packages/opencode/src/session/prompt.ts
+index 1613ddf..72cc817 100644
+--- a/opencode-src/packages/opencode/src/session/prompt.ts
++++ b/opencode-src/packages/opencode/src/session/prompt.ts
+@@ -111,6 +111,13 @@ Once you have made the file changes, verify them (for example by reading the mod
+   `You stopped again without making any file changes. The requested work is still not implemented. You MUST call the edit, write, or apply_patch tool now to modify the relevant files. Do not reply with a summary, a plan, an explanation, or a question, and do not ask for confirmation. Call a file editing tool on the appropriate file in this response.`,
+ ]
+ 
++// Cap the number of times we steer a session that stops immediately after
++// file edits without running any command afterwards to verify them.
++const POST_EDIT_VERIFY_STEER_LIMIT = 1
++const postEditVerifySteers = new Map<string, number>()
++
++const POST_EDIT_VERIFY_STEER_TEXT = `IMPORTANT: Do not finish yet. You made file changes but never ran any command afterwards to verify them. Continue working immediately: run the available checks or tests that cover the files you changed. If a check fails, fix the code and rerun it. Only finish once an actual command confirms your changes work. Do not describe what you would verify, do not claim the changes are correct without running a command, and do not ask for confirmation.`
++
+ function hasAnyToolPart(msgs: SessionV1.WithParts[]) {
+   return msgs.some((msg) => msg.parts.some((part) => part.type === "tool"))
+ }
+@@ -126,6 +133,24 @@ function hasCompletedFileEdit(msgs: SessionV1.WithParts[]) {
+   )
+ }
+ 
++// True when the last completed file edit has no completed shell run after it,
++// i.e. the agent edited files and then stopped without verifying the changes.
++function needsPostEditVerification(msgs: SessionV1.WithParts[]) {
++  let lastFileEdit = -1
++  let lastShell = -1
++  let idx = 0
++  for (const msg of msgs) {
++    for (const part of msg.parts) {
++      if (part.type === "tool" && part.state.status === "completed") {
++        if (FILE_EDIT_TOOLS.has(part.tool)) lastFileEdit = idx
++        else if (part.tool === ShellID.ToolID) lastShell = idx
++      }
++      idx++
++    }
++  }
++  return lastFileEdit !== -1 && lastShell < lastFileEdit
++}
++
+ export interface Interface {
+   readonly cancel: (sessionID: SessionID) => Effect.Effect<void>
+   readonly prompt: (input: PromptInput) => Effect.Effect<SessionV1.WithParts, Image.Error>
+@@ -1192,6 +1217,44 @@ const layer = Layer.effect(
+               })
+               continue
+             }
++            const verifySteerCount = postEditVerifySteers.get(sessionID) ?? 0
++            if (
++              lastAssistant.finish === "stop" &&
++              !session.parentID &&
++              lastUser.agent !== "plan" &&
++              verifySteerCount < POST_EDIT_VERIFY_STEER_LIMIT &&
++              needsPostEditVerification(msgs)
++            ) {
++              // The agent completed file edits and stopped without running
++              // any command afterwards. Persist a durable user steer so the
++              // next loop iteration reloads it from the database and the
++              // agent verifies (and, when needed, fixes) its own changes.
++              const steerMsg: SessionV1.User = {
++                id: MessageID.ascending(),
++                role: "user",
++                sessionID: lastUser.sessionID,
++                time: { created: Date.now() },
++                agent: lastUser.agent,
++                model: { ...lastUser.model },
++              }
++              const steerPart: SessionV1.TextPart = {
++                id: PartID.ascending(),
++                messageID: steerMsg.id,
++                sessionID: steerMsg.sessionID,
++                type: "text",
++                synthetic: true,
++                text: POST_EDIT_VERIFY_STEER_TEXT,
++              }
++              yield* sessions.updateMessage(steerMsg)
++              yield* sessions.updatePart(steerPart)
++              postEditVerifySteers.set(sessionID, verifySteerCount + 1)
++              yield* Effect.logInfo("post-edit verification steer", {
++                "session.id": sessionID,
++                attempt: verifySteerCount + 1,
++                messageID: steerMsg.id,
++              })
++              continue
++            }
+             yield* Effect.logInfo("exiting loop", { "session.id": sessionID })
+             break
+           }

@@ -1,0 +1,5 @@
+{
+    "task_id": 569,
+    "final_code": "def sort_sublists(list_of_lists):\n    # Use list comprehension to sort each sublist in the list of lists\n    sorted_sublists = [sorted(sublist) for sublist in list_of_lists]\n    return sorted_sublists",
+    "final_pass": true
+}

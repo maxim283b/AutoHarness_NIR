@@ -1,0 +1,5 @@
+{
+    "task_id": 576,
+    "final_code": "def is_Sub_Array(arr1, arr2):\n    # Check if the length of arr1 is greater than arr2\n    if len(arr1) > len(arr2):\n        return False\n    # Iterate through arr1\n    for i in range(len(arr1)):\n        # Check if the current element of arr1 is not in arr2\n        if arr1[i] not in arr2:\n            return False\n    # If all elements of arr1 are in arr2, return True\n    return True",
+    "final_pass": true
+}

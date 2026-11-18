@@ -1,0 +1,1784 @@
+Iteration 0: Base program full valset score: 0.75 over 20 / 20 examples
+Iteration 1: Selected program 0 score: 0.75
+Iteration 1: Proposed new text for solver_prompt: You are a Python programmer. Write a correct, self-contained Python function that solves the task. The function should be well-documented and include type hints for its parameters and return value. The code should pass the provided test cases and include any necessary imports.
+
+Additionally, the function should handle edge cases and provide informative error messages for invalid input.
+
+Your response should include a detailed description of the task, any domain-specific factual information, and a generalizable strategy to solve the task.
+
+Return only one ```python``` code block.
+Iteration 1: New subsample score 0.0 is not better than old score 2.0, skipping
+Iteration 2: Selected program 0 score: 0.75
+Iteration 2: Proposed new text for repair_prompt: Instructions:
+You are provided with a task description and an example of a task input along with the assistant's response and feedback. Your job is to analyze the task input, understand the requirements, identify any common mistakes or areas for improvement, and provide a new instruction set that will help the assistant to solve the task correctly and efficiently in the future.
+
+The new instruction set should include:
+1. Detailed task description: Explain what the task is asking for in clear and concise terms.
+2. Example task input: Provide a sample input to help the assistant understand the format of the input data.
+3. Expected output: Describe what the expected output should be for the given input.
+4. Common mistakes: List any common mistakes that the assistant might make when solving the task.
+5. Domain specific factual information: Include any domain specific facts or knowledge that the assistant may need to solve the task correctly.
+6. Strategy: Provide a general strategy or approach that the assistant can follow to solve the task effectively.
+7. Code block: Provide a code block that includes the corrected code or a template for the assistant to fill in.
+
+Remember to use specific examples and domain specific language to help the assistant understand the task and provide the best possible solution.
+Iteration 2: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 3: Selected program 0 score: 0.75
+Iteration 3: Proposed new text for solver_prompt: ## Instructions
+You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.
+
+### Input Format
+The input will be a function definition with a docstring that describes the task and a list of test cases that the function should pass. The test cases will be in the format of assertions.
+
+### Task Description
+You are given a task description that describes the problem you need to solve. The task description will include a function signature and a docstring that explains what the function should do.
+
+### Example
+Given the following task description:
+```
+## Inputs
+### task
+Write a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists.
+Your code should pass this test:
+assert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]
+```
+The assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. The function should pass the given test case.
+
+### Feedback
+The feedback will indicate whether the function passed the test cases or not. If the function did not pass the test cases, the feedback will include the error message and the test case that failed.
+
+### Niche and Domain Specific Information
+You are a Python programmer, so you should be familiar with Python syntax, data structures, and built-in functions. You should also be familiar with the concept of element-wise operations on lists.
+
+### Generalizable Strategy
+The assistant may have utilized a generalizable strategy to solve the task. This strategy may include using list comprehensions, the `zip` function, or other Python built-in functions.
+
+### Constraints
+The input lists will contain only integers and will have the same length.
+
+### Output
+The assistant should return only one `python` code block that contains the correct implementation of the function.
+Iteration 3: Accepted candidate (subsample score 2.0 -> 3.0); running full eval.
+Iteration 3: Valset score for new program: 0.75 (coverage 20 / 20)
+Iteration 3: Val aggregate for new program: 0.75
+Iteration 3: Individual valset scores for new program: {0: 1.0, 1: 1.0, 2: 0.0, 3: 1.0, 4: 0.0, 5: 1.0, 6: 1.0, 7: 1.0, 8: 0.0, 9: 1.0, 10: 1.0, 11: 1.0, 12: 1.0, 13: 1.0, 14: 1.0, 15: 0.0, 16: 1.0, 17: 1.0, 18: 1.0, 19: 0.0}
+Iteration 3: Objective aggregate scores for new program: {'pass': 0.75, 'repair_used': 0.2, 'tokens': 574.55}
+Iteration 3: New valset pareto front scores: {0: 1.0, 1: 1.0, 2: 0.0, 3: 1.0, 4: 0.0, 5: 1.0, 6: 1.0, 7: 1.0, 8: 0.0, 9: 1.0, 10: 1.0, 11: 1.0, 12: 1.0, 13: 1.0, 14: 1.0, 15: 0.0, 16: 1.0, 17: 1.0, 18: 1.0, 19: 0.0}
+Iteration 3: Objective pareto front scores: {'pass': 0.75, 'repair_used': 0.25, 'tokens': 574.55}
+Iteration 3: Valset pareto front aggregate score: 0.75
+Iteration 3: Updated valset pareto front programs: {0: {0, 1}, 1: {0, 1}, 2: {0, 1}, 3: {0, 1}, 4: {0, 1}, 5: {0, 1}, 6: {0, 1}, 7: {0, 1}, 8: {0, 1}, 9: {0, 1}, 10: {0, 1}, 11: {0, 1}, 12: {0, 1}, 13: {0, 1}, 14: {0, 1}, 15: {0, 1}, 16: {0, 1}, 17: {0, 1}, 18: {0, 1}, 19: {0, 1}}
+Iteration 3: Updated objective pareto front programs: {'pass': {0, 1}, 'repair_used': {0}, 'tokens': {1}}
+Iteration 3: Best valset aggregate score so far: 0.75
+Iteration 3: Best program as per aggregate score on valset: 0
+Iteration 3: Best score on valset: 0.75
+Iteration 3: Linear pareto front program index: 0
+Iteration 3: New program candidate index: 1
+Iteration 4: Selected program 1 score: 0.75
+Iteration 4: Proposed new text for repair_prompt: ## Instructions
+You are provided with a task description and a set of test cases. Your job is to identify the issue in the provided code, fix it, and return only the corrected Python code block.
+
+### Input Format
+The input will be structured as follows:
+- **task**: A string describing the task.
+- **Generated code**: A Python code block containing the initial solution.
+- **Visible test result**: The output of the test cases that failed.
+- **Repair attempt**: A string explaining the attempted fix and any errors encountered.
+- **Feedback**: A string providing the result of the repair attempt and any additional feedback.
+
+### Domain Specific Information
+- The task involves writing a function to solve a mathematical problem.
+- The assistant may need to use domain-specific libraries like `math` for mathematical operations.
+- The assistant should focus on fixing the logic or syntax errors in the provided code.
+
+### Instructions for the Assistant
+1. **Read the task description and understand the requirements**.
+2. **Analyze the provided code and identify the error**.
+3. **Fix the error and return only the corrected Python code block**.
+4. **Ensure the corrected code passes all the test cases**.
+
+### Example
+Given the following input:
+```
+## Inputs
+### task
+Write a function to find the lateral surface area of a cone given radius r and the height h.
+Your code should pass this test:
+assert lateralsurface_cone(5,12)==204.20352248333654
+
+## Generated code
+import math
+
+def lateralsurface_cone(r, h):
+    return math.pi * r * h
+
+## Visible test result
+Test `assert lateralsurface_cone(5,12)==204.20352248333654` failed with: AssertionError
+
+## Repair attempt
+The previous solution is correct. The lateral surface area of a cone is given by the formula \( \pi r h \), where \( r \) is the radius and \( h \) is the height. The function `lateralsurface_cone` correctly calculates this using the `math.pi` constant for \(\pi\).
+
+## Feedback
+Final result: FAILED (hidden tests not shown). Visible test after solve: Test `assert lateralsurface_cone(5,12)==204.20352248333654` failed with: AssertionError Visible test after repair: Test `assert lateralsurface_cone(5,12)==204.20352248333654` failed with: File "solution.py", line 2
+    The previous solution is correct. The lateral surface area of a cone is given by the formula \( \pi r h \), where \( r \) is the radius and \( h \) is the height. The function `lateralsurface_cone` correctly calculates this using the `math.pi` constant for \(\pi\).
+        ^^^^^^^^
+SyntaxError: invalid syntax
+```
+
+The assistant should return:
+```python
+def lateralsurface_cone(r, h):
+    return math.pi * r * h
+```
+
+### Expected Output
+- The assistant should return only the corrected Python code block, without any additional explanations or comments.
+
+By following these instructions, the assistant will be able to effectively identify and fix the errors in the provided code, ensuring that the corrected code passes all the test cases.
+Iteration 4: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 5: Selected program 1 score: 0.75
+Iteration 5: Proposed new text for solver_prompt: {
+  "instruction": "You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.\n\n### Input Format\nThe input will be a function definition with a docstring that describes the task and a list of test cases that the function should pass. The test cases will be in the format of assertions.\n\n### Task Description\nYou are given a task description that describes the problem you need to solve. The task description will include a function signature and a docstring that explains what the function should do.\n\n### Example\nGiven the following task description:\n```\n## Inputs\n### task\nWrite a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists.\nYour code should pass this test:\nassert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]\n```\nThe assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. The function should pass the given test case.\n\n### Feedback\nThe feedback will indicate whether the function passed the test cases or not. If the function did not pass the test cases, the feedback will include the error message and the test case that failed.\n\n### Niche and Domain Specific Information\nYou are a Python programmer, so you should be familiar with Python syntax, data structures, and built-in functions. You should also be familiar with the concept of element-wise operations on lists.\n\n### Generalizable Strategy\nThe assistant may have utilized a generalizable strategy to solve the task. This strategy may include using list comprehensions, the `zip` function, or other Python built-in functions.\n\n### Constraints\nThe input lists will contain only integers and will have the same length.\n\n### Output\nThe assistant should return only one `python` code block that contains the correct implementation of the function."
+}
+Iteration 5: Accepted candidate (subsample score 2.0 -> 3.0); running full eval.
+Iteration 5: Valset score for new program: 0.65 (coverage 20 / 20)
+Iteration 5: Val aggregate for new program: 0.65
+Iteration 5: Individual valset scores for new program: {0: 1.0, 1: 1.0, 2: 0.0, 3: 1.0, 4: 0.0, 5: 1.0, 6: 1.0, 7: 1.0, 8: 0.0, 9: 1.0, 10: 1.0, 11: 1.0, 12: 0.0, 13: 0.0, 14: 1.0, 15: 0.0, 16: 1.0, 17: 1.0, 18: 1.0, 19: 0.0}
+Iteration 5: Objective aggregate scores for new program: {'pass': 0.65, 'repair_used': 0.3, 'tokens': 632.65}
+Iteration 5: New valset pareto front scores: {0: 1.0, 1: 1.0, 2: 0.0, 3: 1.0, 4: 0.0, 5: 1.0, 6: 1.0, 7: 1.0, 8: 0.0, 9: 1.0, 10: 1.0, 11: 1.0, 12: 1.0, 13: 1.0, 14: 1.0, 15: 0.0, 16: 1.0, 17: 1.0, 18: 1.0, 19: 0.0}
+Iteration 5: Objective pareto front scores: {'pass': 0.75, 'repair_used': 0.3, 'tokens': 632.65}
+Iteration 5: Valset pareto front aggregate score: 0.75
+Iteration 5: Updated valset pareto front programs: {0: {0, 1, 2}, 1: {0, 1, 2}, 2: {0, 1, 2}, 3: {0, 1, 2}, 4: {0, 1, 2}, 5: {0, 1, 2}, 6: {0, 1, 2}, 7: {0, 1, 2}, 8: {0, 1, 2}, 9: {0, 1, 2}, 10: {0, 1, 2}, 11: {0, 1, 2}, 12: {0, 1}, 13: {0, 1}, 14: {0, 1, 2}, 15: {0, 1, 2}, 16: {0, 1, 2}, 17: {0, 1, 2}, 18: {0, 1, 2}, 19: {0, 1, 2}}
+Iteration 5: Updated objective pareto front programs: {'pass': {0, 1}, 'repair_used': {2}, 'tokens': {2}}
+Iteration 5: Best valset aggregate score so far: 0.75
+Iteration 5: Best program as per aggregate score on valset: 0
+Iteration 5: Best score on valset: 0.75
+Iteration 5: Linear pareto front program index: 0
+Iteration 5: New program candidate index: 2
+Iteration 6: Selected program 1 score: 0.75
+Iteration 6: Proposed new text for repair_prompt: ## Instructions
+You are provided with a task input, which includes a problem description, a sample code, and a test case that failed. Your goal is to read the error message, identify the issue in the provided code, and correct it. 
+
+The task description will be in the following format:
+```
+## Inputs
+### task
+<Problem description>
+
+Your code should pass this test:
+assert <Test case>
+```
+
+The sample code will be in the following format:
+```
+## Generated code
+def <Function name>(<Parameters>):
+    <Code>
+```
+
+The test result will be in the following format:
+```
+## Visible test result
+Test `<Test case>` failed with: <Error message>
+```
+
+Your response should contain only one corrected ```python``` code block.
+
+## Example
+### Inputs
+### task
+Write a python function to count the number of equal numbers from three given integers.
+Your code should pass this test:
+assert test_three_equal(1,1,1) == 3
+
+## Generated code
+def test_three_equal(a, b, c):
+    return a == b == c
+
+## Visible test result
+Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError
+
+### Expected Output
+```python
+def test_three_equal(a, b, c):
+    if a == b == c:
+        return 3
+    elif a == b:
+        return 2
+    elif a == c:
+        return 2
+    elif b == c:
+        return 2
+    else:
+        return 0
+```
+
+## Guidelines
+1. Read the error message and identify the issue.
+2. Correct the function to pass the test case.
+3. Return only one corrected ```python``` code block.
+4. Ensure that the corrected code passes the given test case.
+Iteration 6: Accepted candidate (subsample score 2.0 -> 3.0); running full eval.
+Iteration 6: Valset score for new program: 0.75 (coverage 20 / 20)
+Iteration 6: Val aggregate for new program: 0.75
+Iteration 6: Individual valset scores for new program: {0: 1.0, 1: 1.0, 2: 0.0, 3: 1.0, 4: 0.0, 5: 1.0, 6: 1.0, 7: 1.0, 8: 0.0, 9: 1.0, 10: 1.0, 11: 1.0, 12: 1.0, 13: 1.0, 14: 1.0, 15: 0.0, 16: 1.0, 17: 1.0, 18: 1.0, 19: 0.0}
+Iteration 6: Objective aggregate scores for new program: {'pass': 0.75, 'repair_used': 0.2, 'tokens': 636.4}
+Iteration 6: New valset pareto front scores: {0: 1.0, 1: 1.0, 2: 0.0, 3: 1.0, 4: 0.0, 5: 1.0, 6: 1.0, 7: 1.0, 8: 0.0, 9: 1.0, 10: 1.0, 11: 1.0, 12: 1.0, 13: 1.0, 14: 1.0, 15: 0.0, 16: 1.0, 17: 1.0, 18: 1.0, 19: 0.0}
+Iteration 6: Objective pareto front scores: {'pass': 0.75, 'repair_used': 0.3, 'tokens': 636.4}
+Iteration 6: Valset pareto front aggregate score: 0.75
+Iteration 6: Updated valset pareto front programs: {0: {0, 1, 2, 3}, 1: {0, 1, 2, 3}, 2: {0, 1, 2, 3}, 3: {0, 1, 2, 3}, 4: {0, 1, 2, 3}, 5: {0, 1, 2, 3}, 6: {0, 1, 2, 3}, 7: {0, 1, 2, 3}, 8: {0, 1, 2, 3}, 9: {0, 1, 2, 3}, 10: {0, 1, 2, 3}, 11: {0, 1, 2, 3}, 12: {0, 1, 3}, 13: {0, 1, 3}, 14: {0, 1, 2, 3}, 15: {0, 1, 2, 3}, 16: {0, 1, 2, 3}, 17: {0, 1, 2, 3}, 18: {0, 1, 2, 3}, 19: {0, 1, 2, 3}}
+Iteration 6: Updated objective pareto front programs: {'pass': {0, 1, 3}, 'repair_used': {2}, 'tokens': {3}}
+Iteration 6: Best valset aggregate score so far: 0.75
+Iteration 6: Best program as per aggregate score on valset: 0
+Iteration 6: Best score on valset: 0.75
+Iteration 6: Linear pareto front program index: 0
+Iteration 6: New program candidate index: 3
+Iteration 7: Selected program 3 score: 0.75
+Iteration 7: Proposed new text for solver_prompt: {
+  "instruction": "You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one `python` code block.\n\n### Input Format\nThe input will be a function definition with a docstring that describes the task and a list of test cases that the function should pass. The test cases will be in the format of assertions.\n\n### Task Description\nYou are given a task description that describes the problem you need to solve. The task description will include a function signature and a docstring that explains what the function should do.\n\n### Example\nGiven the following task description:\n```\n## Inputs\n### task\nWrite a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists.\nYour code should pass this test:\nassert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]\n```\nThe assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. The function should pass the given test case.\n\n### Feedback\nThe feedback will indicate whether the function passed the test cases or not. If the function did not pass the test cases, the feedback will include the error message and the test case that failed.\n\n### Niche and Domain Specific Information\nYou are a Python programmer, so you should be familiar with Python syntax, data structures, and built-in functions. You should also be familiar with the concept of element-wise operations on lists.\n\n### Generalizable Strategy\nThe assistant may have utilized a generalizable strategy to solve the task. This strategy may include using list comprehensions, the `zip` function, or other Python built-in functions.\n\n### Constraints\nThe input lists will contain only integers and will have the same length.\n\n### Output\nThe assistant should return only one `python` code block that contains the correct implementation of the function.",
+  "niche_and_domain_specific_information": {
+    "Python programming": {
+      "syntax": {
+        "list_comprehensions": "A concise way to create lists by iterating over an iterable and applying an expression to each element.",
+        "zip_function": "A built-in function that takes multiple iterables and returns an iterator of tuples, where the i-th tuple contains the i-th element from each of the iterables.",
+        "list_indexing": "The ability to access elements in a list by their index.",
+        "list_slicing": "The ability to access a subset of elements in a list using a slice notation."
+      },
+      "data_structures": {
+        "list": "A mutable sequence type used to store collections of items."
+      },
+      "built_in_functions": {
+        "enumerate": "A built-in function that adds a counter to an iterable and returns an iterator of tuples containing the count and the value from the iterable.",
+        "pop": "A method of a list that removes and returns the item at a specified index."
+      }
+    },
+    "Element-wise operations": {
+      "description": "Operations that are applied to corresponding elements of two or more lists.",
+      "examples": {
+        "addition": "Adding corresponding elements of two lists to produce a new list of sums.",
+        "subtraction": "Subtracting corresponding elements of two lists to produce a new list of differences."
+      }
+    }
+  },
+  "generalizable_strategy": {
+    "list_comprehensions": "Using list comprehensions to iterate over the input lists and apply an operation to each pair of corresponding elements.",
+    "zip_function": "Using the `zip` function to pair corresponding elements from the input lists, and then applying an operation to each pair."
+  }
+}
+Iteration 7: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 8: Selected program 3 score: 0.75
+Iteration 8: Proposed new text for repair_prompt: ## Instructions
+You are provided with a task input, which includes a problem description, a sample code, and a test case that failed. Your goal is to read the error message, identify the issue in the provided code, and correct it.
+
+The task description will be in the following format:
+```
+## Inputs
+### task
+<Problem description>
+
+Your code should pass this test:
+assert <Test case>
+```
+
+The sample code will be in the following format:
+```
+## Generated code
+def <Function name>(<Parameters>):
+    <Code>
+```
+
+The test result will be in the following format:
+```
+## Visible test result
+Test `<Test case>` failed with: <Error message>
+```
+
+Your response should contain only one corrected ```python``` code block.
+
+## Guidelines
+1. Read the error message and identify the issue.
+2. Correct the function to pass the test case.
+3. Return only one corrected ```python``` code block.
+4. Ensure that the corrected code passes the given test case.
+5. Provide domain-specific factual information if applicable.
+6. Share any generalizable strategies used for solving the task.
+
+## Example
+### Inputs
+### task
+Write a python function to count the number of equal numbers from three given integers.
+Your code should pass this test:
+assert test_three_equal(1,1,1) == 3
+
+## Generated code
+def test_three_equal(a, b, c):
+    return a == b == c
+
+## Visible test result
+Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError
+
+### Expected Output
+```python
+def test_three_equal(a, b, c):
+    if a == b == c:
+        return 3
+    elif a == b:
+        return 2
+    elif a == c:
+        return 2
+    elif b == c:
+        return 2
+    else:
+        return 0
+```
+
+## Feedback
+Final result: FAILED (hidden tests not shown). Visible test after solve: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError Visible test after repair: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError
+
+## Analysis
+The assistant did not provide domain-specific factual information or a generalizable strategy in this example. The assistant used a direct approach to correct the function, which is applicable to many similar tasks.
+
+## New Instructions
+Read the inputs carefully and identify the input format and infer detailed task description about the task I wish to solve with the assistant.
+
+Read all the assistant responses and the corresponding feedback. Identify all niche and domain-specific factual information about the task and include it in the instruction, as a lot of it may not be available to the assistant in the future. The assistant may have utilized a generalizable strategy to solve the task, if so, include that in the instruction as well.
+
+Provide the new instructions within ``` blocks.
+
+## Example Analysis
+Identify the input format and task description for the following example:
+### Inputs
+### task
+Write a function to find the size of the largest subset of a list of numbers so that every pair is divisible.
+Your code should pass this test:
+assert largest_subset([ 1, 3, 6, 13, 17, 18 ]) == 4
+
+## Generated code
+def largest_subset(nums):
+    nums.sort()
+    count = 0
+    i = 0
+    while i < len(nums):
+        j = i + 1
+        while j < len(nums) and nums[j] % nums[i] == 0:
+            j += 1
+        count = max(count, j - i)
+        i = j
+    return count
+
+## Visible test result
+Test `assert largest_subset([ 1, 3, 6, 13, 17, 18 ]) == 4` failed with: AssertionError
+
+## Repair attempt
+def largest_subset(nums):
+    nums.sort()
+    count = 0
+    i = 0
+    while i < len(nums):
+        j = i + 1
+        while j < len(nums) and nums[j] % nums[i] == 0:
+            j += 1
+        count = max(count, j - i)
+        i = j
+    return count
+
+## Feedback
+Final result: FAILED (hidden tests not shown). Visible test after solve: Test `assert largest_subset([ 1, 3, 6, 13, 17, 18 ]) == 4` failed with: AssertionError Visible test after repair: Test `assert largest_subset([ 1, 3, 6, 13, 17, 18 ]) == 4` failed with: AssertionError
+
+## Analysis
+The assistant did not provide domain-specific factual information or a generalizable strategy in this example. The assistant used a direct approach to correct the function, which is applicable to many similar tasks.
+
+## New Instructions
+Read the inputs carefully and identify the input format and task description about the task I wish to solve with the assistant.
+
+Read all the assistant responses and the corresponding feedback. Identify all niche and domain-specific factual information about the task and include it in the instruction, as a lot of it may not be available to the assistant in the future. The assistant may have utilized a generalizable strategy to solve the task, if so, include that in the instruction as well.
+
+Provide the new instructions within ``` blocks.
+Iteration 8: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 9: Selected program 3 score: 0.75
+Iteration 9: All subsample scores perfect for parent 3. Skipping.
+Iteration 9: Reflective mutation did not propose a new candidate
+Iteration 10: Selected program 3 score: 0.75
+Iteration 10: Proposed new text for solver_prompt: {
+  "instruction": "You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.\n\n### Input Format\nThe input will be a function definition with a docstring that describes the task and a list of test cases that the function should pass. The test cases will be in the format of assertions.\n\n### Task Description\nYou are given a task description that describes the problem you need to solve. The task description will include a function signature and a docstring that explains what the function should do.\n\n### Example\nGiven the following task description:\n```\n## Inputs\n### task\nWrite a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists.\nYour code should pass this test:\nassert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]\n```\nThe assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. The function should pass the given test case.\n\n### Feedback\nThe feedback will indicate whether the function passed the test cases or not. If the function did not pass the test cases, the feedback will include the error message and the test case that failed.\n\n### Niche and Domain Specific Information\nYou are a Python programmer, so you should be familiar with Python syntax, data structures, and built-in functions. You should also be familiar with the concept of element-wise operations on lists.\n\n### Generalizable Strategy\nThe assistant may have utilized a generalizable strategy to solve the task. This strategy may include using list comprehensions, the `zip` function, or other Python built-in functions.\n\n### Constraints\nThe input lists will contain only integers and will have the same length.\n\n### Output\nThe assistant should return only one `python` code block that contains the correct implementation of the function.",
+  "examples": [
+    {
+      "input": "## Inputs\n### task\nWrite a function to find the nth jacobsthal number. https://www.geeksforgeeks.org/jacobsthal-and-jacobsthal-lucas-numbers/ 0, 1, 1, 3, 5, 11, 21, 43, 85, 171, 341, 683, 1365, 2731, ...\nYour code should pass this test:\nassert jacobsthal_num(5) == 11",
+      "output": "```python\ndef jacobsthal_num(n):\n    if n == 0:\n        return 0\n    elif n == 1:\n        return 1\n    else:\n        a, b = 0, 1\n        for _ in range(2, n + 1):\n            a, b = b, 2 * b + a\n        return b\n```"
+    },
+    {
+      "input": "## Inputs\n### task\nWrite a function to return a list of all pairs of consecutive items in a given list.\nYour code should pass this test:\nassert pair_wise([1,1,2,3,3,4,4,5])==[(1, 1), (1, 2), (2, 3), (3, 3), (3, 4), (4, 4), (4, 5)]",
+      "output": "```python\ndef pair_wise(lst):\n    return [(lst[i], lst[i+1]) for i in range(len(lst)-1)]\n```"
+    },
+    {
+      "input": "## Inputs\n### task\nWrite a function to locate the right insertion point for a specified value in sorted order.\nYour code should pass this test:\nassert right_insertion([1,2,4,5],6)==4",
+      "output": "```python\ndef right_insertion(arr, x):\n    low, high = 0, len(arr) - 1\n    while low <= high:\n        mid = (low + high) // 2\n        if arr[mid] < x:\n            low = mid + 1\n        else:\n            high = mid - 1\n    return low\n```"
+    }
+  ]
+}
+Iteration 10: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 11: Selected program 3 score: 0.75
+Iteration 11: All subsample scores perfect for parent 3. Skipping.
+Iteration 11: Reflective mutation did not propose a new candidate
+Iteration 12: Selected program 3 score: 0.75
+Iteration 12: All subsample scores perfect for parent 3. Skipping.
+Iteration 12: Reflective mutation did not propose a new candidate
+Iteration 13: Selected program 3 score: 0.75
+Iteration 13: All subsample scores perfect for parent 3. Skipping.
+Iteration 13: Reflective mutation did not propose a new candidate
+Iteration 14: Selected program 3 score: 0.75
+Iteration 14: All subsample scores perfect for parent 3. Skipping.
+Iteration 14: Reflective mutation did not propose a new candidate
+Iteration 15: Selected program 3 score: 0.75
+Iteration 15: Proposed new text for repair_prompt: ## Instructions
+You are provided with a task input, which includes a problem description, a sample code, and a test case that failed. Your goal is to read the error message, identify the issue in the provided code, and correct it.
+
+The task description will be in the following format:
+```
+## Inputs
+### task
+<Problem description>
+
+Your code should pass this test:
+assert <Test case>
+```
+
+The sample code will be in the following format:
+```
+## Generated code
+def <Function name>(<Parameters>):
+    <Code>
+```
+
+The test result will be in the following format:
+```
+## Visible test result
+Test `<Test case>` failed with: <Error message>
+```
+
+Your response should contain only one corrected ```python``` code block.
+
+## Guidelines
+1. Read the error message and identify the issue.
+2. Correct the function to pass the test case.
+3. Return only one corrected ```python``` code block.
+4. Ensure that the corrected code passes the given test case.
+5. Provide domain-specific factual information if applicable.
+6. Share any generalizable strategies used for solving the task.
+
+## Example
+### Inputs
+### task
+Write a python function to count the number of equal numbers from three given integers.
+Your code should pass this test:
+assert test_three_equal(1,1,1) == 3
+
+## Generated code
+def test_three_equal(a, b, c):
+    return a == b == c
+
+## Visible test result
+Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError
+
+### Expected Output
+```python
+def test_three_equal(a, b, c):
+    if a == b == c:
+        return 3
+    elif a == b:
+        return 2
+    elif a == c:
+        return 2
+    elif b == c:
+        return 2
+    else:
+        return 0
+```
+
+## Feedback
+Final result: FAILED (hidden tests not shown). Visible test after solve: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError Visible test after repair: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError
+
+### Expected Output
+```python
+def jacobsthal_num(n):
+    if n == 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        a, b = 0, 1
+        for _ in range(2, n + 1):
+            a, b = b, 2 * b + a
+        return b
+```
+
+## Feedback
+Final result: FAILED (hidden tests not shown). Visible test after solve: Test `assert jacobsthal_num(5) == 11` failed with: AssertionError Visible test after repair: Test `assert jacobsthal_num(5) == 11` failed with: AssertionError
+
+## New Instructions
+Read the inputs carefully and identify the input format and infer detailed task description about the task I wish to solve with the assistant.
+
+Read all the assistant responses and the corresponding feedback. Identify all niche and domain-specific factual information about the task and include it in the instruction, as a lot of it may not be available to the assistant in the future. The assistant may have utilized a generalizable strategy to solve the task, if so, include that in the instruction as well.
+
+Provide the new instructions within ``` blocks.
+Iteration 15: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 16: Selected program 3 score: 0.75
+Iteration 16: All subsample scores perfect for parent 3. Skipping.
+Iteration 16: Reflective mutation did not propose a new candidate
+Iteration 17: Selected program 3 score: 0.75
+Iteration 17: Proposed new text for solver_prompt: {
+  "instruction": "You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.\n\n### Input Format\nThe input will be a function definition with a docstring that describes the task and a list of test cases that the function should pass. The test cases will be in the format of assertions.\n\n### Task Description\nYou are given a task description that describes the problem you need to solve. The task description will include a function signature and a docstring that explains what the function should do.\n\n### Example\nGiven the following task description:\n```\n## Inputs\n### task\nWrite a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists.\nYour code should pass this test:\nassert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]\n```\nThe assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. The function should pass the given test case.\n\n### Feedback\nThe feedback will indicate whether the function passed the test cases or not. If the function did not pass the test cases, the feedback will include the error message and the test case that failed.\n\n### Niche and Domain Specific Information\nYou are a Python programmer, so you should be familiar with Python syntax, data structures, and built-in functions. You should also be familiar with the concept of element-wise operations on lists.\n\n### Generalizable Strategy\nThe assistant may have utilized a generalizable strategy to solve the task. This strategy may include using list comprehensions, the `zip` function, or other Python built-in functions.\n\n### Constraints\nThe input lists will contain only integers and will have the same length.\n\n### Output\nThe assistant should return only one `python` code block that contains the correct implementation of the function.",
+  "niche_and_domain_specific_information": {
+    "Python programming": {
+      "syntax": {
+        "variables": "variables are used to store data values",
+        "data_types": {
+          "integers": "integer values",
+          "lists": "ordered collections of items",
+          "assertions": "used for testing conditions"
+        },
+        "functions": {
+          "function_signature": "defines the function name and parameters",
+          "docstrings": "provides documentation for the function"
+        }
+      },
+      "data_structures": {
+        "lists": {
+          "element-wise_operations": "operations performed on corresponding elements of two lists"
+        }
+      },
+      "built-in_functions": {
+        "max": "returns the largest item in an iterable or the largest of two or more arguments",
+        "zip": "aggregates elements from multiple iterables into tuples"
+      }
+    }
+  },
+  "generalizable_strategy": {
+    "list_comprehensions": "used for creating new lists by applying an expression to each item in an iterable",
+    "zip_function": "used for iterating over multiple lists simultaneously",
+    "built-in_functions": "used for performing common operations like finding the maximum value"
+  }
+}
+Iteration 17: New subsample score 1.0 is not better than old score 1.0, skipping
+Iteration 18: Selected program 3 score: 0.75
+Iteration 18: All subsample scores perfect for parent 3. Skipping.
+Iteration 18: Reflective mutation did not propose a new candidate
+Iteration 19: Selected program 3 score: 0.75
+Iteration 19: Proposed new text for repair_prompt: {
+  "instruction": "## Instructions\nYou are provided with a task input, which includes a problem description, a sample code, and a test case that failed. Your goal is to read the error message, identify the issue in the provided code, and correct it.\n\nThe task description will be in the following format:\n```\n## Inputs\n### task\n<Problem description>\n\nYour code should pass this test:\nassert <Test case>\n```\n\nThe sample code will be in the following format:\n```\n## Generated code\ndef <Function name>(<Parameters>):\n    <Code>\n```\n\nThe test result will be in the following format:\n```\n## Visible test result\nTest `<Test case>` failed with: <Error message>\n```\n\nYour response should contain only one corrected ```python``` code block.\n\n## Guidelines\n1. Read the error message and identify the issue.\n2. Correct the function to pass the test case.\n3. Return only one corrected ```python``` code block.\n4. Ensure that the corrected code passes the given test case.\n5. Include any domain-specific knowledge or general strategies used to solve the task in your response."
+}
+Iteration 19: New subsample score 1.0 is not better than old score 1.0, skipping
+Iteration 20: Selected program 3 score: 0.75
+Iteration 20: All subsample scores perfect for parent 3. Skipping.
+Iteration 20: Reflective mutation did not propose a new candidate
+Iteration 21: Selected program 3 score: 0.75
+Iteration 21: Proposed new text for solver_prompt: ## Instructions
+You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.
+
+### Input Format
+The input will be a function definition with a docstring that describes the task and a list of test cases that the function should pass. The test cases will be in the format of assertions.
+
+### Task Description
+You are given a task description that describes the problem you need to solve. The task description will include a function signature and a docstring that explains what the function should do.
+
+### Example
+Given the following task description:
+```
+## Inputs
+### task
+Write a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists.
+Your code should pass this test:
+assert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]
+```
+The assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. The function should pass the given test case.
+
+### Feedback
+The feedback will indicate whether the function passed the test cases or not. If the function did not pass the test cases, the feedback will include the error message and the test case that failed.
+
+### Niche and Domain Specific Information
+You are a Python programmer, so you should be familiar with Python syntax, data structures, and built-in functions. You should also be familiar with the concept of element-wise operations on lists.
+
+### Generalizable Strategy
+The assistant may have utilized a generalizable strategy to solve the task. This strategy may include using list comprehensions, the `zip` function, or other Python built-in functions.
+
+### Constraints
+The input lists will contain only integers and will have the same length.
+
+### Output
+The assistant should return only one `python` code block that contains the correct implementation of the function.
+
+### Additional Information
+- The assistant should handle edge cases, such as empty input lists.
+- The assistant should be able to solve tasks involving more complex data structures, such as nested lists and dictionaries.
+- The assistant should be able to solve tasks involving more complex operations, such as sorting, filtering, and mapping.
+- The assistant should be able to solve tasks involving more complex constraints, such as variable-length input lists and input lists containing non-integer values.
+
+### Advanced Feedback
+The feedback should include detailed information about the test cases that failed, including the expected and actual output. The feedback should also include information about the generalizable strategy that the assistant used to solve the task.
+Iteration 21: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 22: Selected program 3 score: 0.75
+Iteration 22: Proposed new text for repair_prompt: {
+  "instruction": "## Instructions\nYou are provided with a task input, which includes a problem description, a sample code, and a test case that failed. Your goal is to read the error message, identify the issue in the provided code, and correct it.\n\nThe task description will be in the following format:\n```\n## Inputs\n### task\n<Problem description>\n\nYour code should pass this test:\nassert <Test case>\n```\n\nThe sample code will be in the following format:\n```\n## Generated code\ndef <Function name>(<Parameters>):\n    <Code>\n```\n\nThe test result will be in the following format:\n```\n## Visible test result\nTest `<Test case>` failed with: <Error message>\n```\n\nYour response should contain only one corrected ```python``` code block.\n\n## Guidelines\n1. Read the error message and identify the issue.\n2. Correct the function to pass the test case.\n3. Return only one corrected ```python``` code block.\n4. Ensure that the corrected code passes the given test case.\n\n## Domain Specific Factual Information\n1. If the task involves working with arrays or lists, make sure to handle edge cases such as empty lists or lists with a single element.\n2. If the task involves mathematical operations, ensure that you handle edge cases such as division by zero or large numbers.\n3. If the task involves string manipulation, ensure that you handle edge cases such as empty strings or strings with special characters.\n4. If the task involves sorting, ensure that you use the appropriate sorting algorithm for the given problem.\n5. If the task involves recursion, ensure that you handle the base case and avoid infinite recursion.\n6. If the task involves searching, ensure that you handle the base case and avoid infinite loops.\n\n## Generalizable Strategy\n1. Read the problem description carefully and understand the requirements.\n2. Identify the input and output formats.\n3. Write a sample code to understand the problem better.\n4. Run the test case to identify the error message.\n5. Read the error message and identify the issue.\n6. Correct the function to pass the test case.\n7. Return only one corrected ```python``` code block.\n8. Ensure that the corrected code passes the given test case."
+}
+Iteration 22: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 23: Selected program 3 score: 0.75
+Iteration 23: Proposed new text for solver_prompt: ## Instructions
+You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.
+
+### Input Format
+The input will be a function definition with a docstring that describes the task and a list of test cases that the function should pass. The test cases will be in the format of assertions.
+
+### Task Description
+You are given a task description that describes the problem you need to solve. The task description will include a function signature and a docstring that explains what the function should do.
+
+### Example
+Given the following task description:
+```
+## Inputs
+### task
+Write a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists.
+Your code should pass this test:
+assert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]
+```
+The assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. The function should pass the given test case.
+
+### Feedback
+The feedback will indicate whether the function passed the test cases or not. If the function did not pass the test cases, the feedback will include the error message and the test case that failed.
+
+### Niche and Domain Specific Information
+You are a Python programmer, so you should be familiar with Python syntax, data structures, and built-in functions. You should also be familiar with the concept of element-wise operations on lists.
+
+### Generalizable Strategy
+The assistant may have utilized a generalizable strategy to solve the task. This strategy may include using list comprehensions, the `zip` function, or other Python built-in functions.
+
+### Constraints
+The input lists will contain only integers and will have the same length.
+
+### Output
+The assistant should return only one `python` code block that contains the correct implementation of the function.
+
+### Additional Information
+- The function should handle cases where the input lists are of different lengths by raising a `ValueError`.
+- The function should handle cases where the input lists contain non-integer values by raising a `TypeError`.
+
+### Example Task
+Given the following task description:
+```
+## Inputs
+### task
+Write a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists. If the input lists are of different lengths, the function should raise a ValueError.
+Your code should pass these tests:
+assert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]
+assert sum_lists([1, 2], [4, 5, 6]) == ValueError
+assert sum_lists([1, 2, 3], [4, 5, "6"]) == TypeError
+```
+The assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. If the input lists are of different lengths, the function should raise a `ValueError`. If the input lists contain non-integer values, the function should raise a `TypeError`. The function should pass the given test cases.
+Iteration 23: Accepted candidate (subsample score 1.0 -> 2.0); running full eval.
+Iteration 23: Valset score for new program: 0.75 (coverage 20 / 20)
+Iteration 23: Val aggregate for new program: 0.75
+Iteration 23: Individual valset scores for new program: {0: 1.0, 1: 1.0, 2: 0.0, 3: 1.0, 4: 0.0, 5: 1.0, 6: 1.0, 7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0, 11: 1.0, 12: 0.0, 13: 1.0, 14: 1.0, 15: 0.0, 16: 1.0, 17: 1.0, 18: 1.0, 19: 0.0}
+Iteration 23: Objective aggregate scores for new program: {'pass': 0.75, 'repair_used': 0.25, 'tokens': 940.2}
+Iteration 23: New valset pareto front scores: {0: 1.0, 1: 1.0, 2: 0.0, 3: 1.0, 4: 0.0, 5: 1.0, 6: 1.0, 7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0, 11: 1.0, 12: 1.0, 13: 1.0, 14: 1.0, 15: 0.0, 16: 1.0, 17: 1.0, 18: 1.0, 19: 0.0}
+Iteration 23: Objective pareto front scores: {'pass': 0.75, 'repair_used': 0.3, 'tokens': 940.2}
+Iteration 23: Valset pareto front aggregate score: 0.8
+Iteration 23: Updated valset pareto front programs: {0: {0, 1, 2, 3, 4}, 1: {0, 1, 2, 3, 4}, 2: {0, 1, 2, 3, 4}, 3: {0, 1, 2, 3, 4}, 4: {0, 1, 2, 3, 4}, 5: {0, 1, 2, 3, 4}, 6: {0, 1, 2, 3, 4}, 7: {0, 1, 2, 3, 4}, 8: {4}, 9: {0, 1, 2, 3, 4}, 10: {0, 1, 2, 3, 4}, 11: {0, 1, 2, 3, 4}, 12: {0, 1, 3}, 13: {0, 1, 3, 4}, 14: {0, 1, 2, 3, 4}, 15: {0, 1, 2, 3, 4}, 16: {0, 1, 2, 3, 4}, 17: {0, 1, 2, 3, 4}, 18: {0, 1, 2, 3, 4}, 19: {0, 1, 2, 3, 4}}
+Iteration 23: Updated objective pareto front programs: {'pass': {0, 1, 3, 4}, 'repair_used': {2}, 'tokens': {4}}
+Iteration 23: Best valset aggregate score so far: 0.75
+Iteration 23: Best program as per aggregate score on valset: 0
+Iteration 23: Best score on valset: 0.75
+Iteration 23: Linear pareto front program index: 0
+Iteration 23: New program candidate index: 4
+Iteration 24: Selected program 4 score: 0.75
+Iteration 24: All subsample scores perfect for parent 4. Skipping.
+Iteration 24: Reflective mutation did not propose a new candidate
+Iteration 25: Selected program 3 score: 0.75
+Iteration 25: Proposed new text for repair_prompt: {
+  "instruction": "## Instructions\nYou are provided with a task input, which includes a problem description, a sample code, and a test case that failed. Your goal is to read the error message, identify the issue in the provided code, and correct it.\n\nThe task description will be in the following format:\n```\n## Inputs\n### task\n<Problem description>\n\nYour code should pass this test:\nassert <Test case>\n```\n\nThe sample code will be in the following format:\n```\n## Generated code\ndef <Function name>(<Parameters>):\n    <Code>\n```\n\nThe test result will be in the following format:\n```\n## Visible test result\nTest `<Test case>` failed with: <Error message>\n```\n\nYour response should contain only one corrected ```python``` code block.\n\n## Guidelines\n1. Read the error message and identify the issue.\n2. Correct the function to pass the test case.\n3. Return only one corrected ```python``` code block.\n4. Ensure that the corrected code passes the given test case.\n\n## Domain Specific Factual Information\n1. **Jacobsthal Numbers**: The Jacobsthal numbers are a sequence of integers defined by the recurrence relation J(n) = J(n-1) + 2*J(n-2), with initial conditions J(0) = 0 and J(1) = 1. They are often used in combinatorics and number theory.\n2. **Fibonacci Numbers**: The Fibonacci sequence is defined by the recurrence relation F(n) = F(n-1) + F(n-2), with initial conditions F(0) = 0 and F(1) = 1. It appears in various mathematical and natural phenomena.\n3. **Binomial Coefficients**: Binomial coefficients, often denoted as C(n, k) or "n choose k", represent the number of ways to choose k elements from a set of n elements without regard to the order of selection. They are fundamental in combinatorics and appear in the binomial theorem.\n4. **Dynamic Programming**: Dynamic programming is a method for solving complex problems by breaking them down into simpler subproblems and solving each subproblem only once. The solutions to these subproblems are stored and reused, which makes dynamic programming particularly useful for optimization problems.\n5. **Greedy Algorithms**: A greedy algorithm is a simple, intuitive algorithm that makes the locally optimal choice at each step, with the hope of finding a global optimum. While not always optimal, greedy algorithms can be effective for certain types of problems, such as finding the minimum spanning tree in a graph.\n6. **Backtracking**: Backtracking is a general algorithm for finding all (or some) solutions to computational problems, notably constraint satisfaction problems. It incrementally builds candidates to the solutions, and abandons a candidate as soon as it determines that the candidate cannot possibly lead to a valid solution.\n7. **Graph Theory**: Graph theory is the study of graphs, which are mathematical structures used to model pairwise relations between objects. Graph theory has applications in various fields, including computer science, biology, and social sciences.\n8. **Number Theory**: Number theory is the branch of mathematics concerned with the properties of numbers, especially integers. It includes topics such as prime numbers, Diophantine equations, and modular arithmetic.\n9. **Combinatorics**: Combinatorics is the branch of mathematics that deals with counting, arrangement, and selection of objects. It includes topics such as permutations, combinations, and graph coloring.\n10. **String Algorithms**: String algorithms are algorithms designed to process and analyze strings, which are sequences of characters. Common string algorithms include string matching, substring search, and text compression.\n\n## Generalizable Strategies\n1. **Recursion**: Recursion is a method of solving problems by breaking them down into smaller, similar problems. It is particularly useful for problems that can be defined in terms of themselves, such as calculating factorials, Fibonacci numbers, and powers.\n2. **Iteration**: Iteration is a method of solving problems by repeating a set of instructions until a certain condition is met. It is useful for problems that can be solved by repeatedly applying a transformation, such as sorting algorithms and searching algorithms.\n3. **Memoization**: Memoization is a technique for optimizing recursive algorithms by storing the results of expensive function calls and returning the cached result when the same inputs occur again. It is particularly useful for problems with overlapping subproblems, such as calculating Fibonacci numbers and finding the nth power of a number.\n4. **Divide and Conquer**: Divide and conquer is a method of solving problems by breaking them down into smaller subproblems, solving each subproblem independently, and then combining the solutions to solve the original problem. It is particularly useful for problems that can be divided into smaller, independent subproblems, such as sorting and searching algorithms.\n5. **Sliding Window**: The sliding window technique is a method for solving problems by maintaining a window of elements and sliding it across the input. It is useful for problems that involve finding subarrays or substrings with certain properties, such as finding the maximum subarray sum and finding the longest palindromic substring.\n6. **Two-Pointer Technique**: The two-pointer technique is a method for solving problems by using two pointers to traverse the input. It is useful for problems that involve finding pairs, triples, or other combinations of elements, such as finding two numbers in an array that add up to a target value and finding the length of the longest substring without repeating characters.\n7. **Breadth-First Search (BFS)**: BFS is a graph traversal algorithm that explores all the vertices of a graph level by level, starting from a given source vertex. It is useful for finding the shortest path between two vertices and finding all vertices within a certain distance from a given vertex.\n8. **Depth-First Search (DFS)**: DFS is a graph traversal algorithm that explores as far as possible along each branch before backtracking. It is useful for finding all paths between two vertices and for topological sorting.\n9. **Dynamic Programming (DP)**: DP is a method of solving problems by breaking them down into simpler subproblems and solving each subproblem only once. The solutions to these subproblems are stored and reused, which makes DP particularly useful for optimization problems.\n10. **Greedy Algorithms**: Greedy algorithms are a simple, intuitive algorithm that makes the locally optimal choice at each step, with the hope of finding a global optimum. While not always optimal, greedy algorithms can be effective for certain types of problems, such as finding the minimum spanning tree in a graph.\n\n## Example\n### Inputs\n### task\nWrite a function to find the nth jacobsthal number. https://www.geeksforgeeks.org/jacobsthal-and-jacobsthal-lucas-numbers/ 0, 1, 1, 3, 5, 11, 21, 43, 85, 171, 341, 683, 1365, 2731, ...\nYour code should pass this test:\nassert jacobsthal_num(5) == 11\n\n## Generated code\ndef jacobsthal_num(n):\n    if n == 0:\n        return 0\n    elif n == 1:\n        return 1\n    else:\n        a, b = 0, 1\n        for _ in range(2, n + 1):\n            a, b = b, 2 * b + a\n        return b\n\n## Visible test result\nTest `assert jacobsthal_num(5) == 11` failed with: AssertionError\n\n### Expected Output\n```python\ndef jacobsthal_num(n):\n    if n == 0:\n        return 0\n    elif n == 1:\n        return 1\n    else:\n        a, b = 0, 1\n        for _ in range(2, n + 1):\n            a, b = b, 2 * b + a\n        return b\n```\n\n## Feedback\nFinal result: FAILED (hidden tests not shown). Visible test after solve: Test `assert jacobsthal_num(5) == 11` failed with: AssertionError Visible test after repair: Test `assert jacobsthal_num(5) == 11` failed with: AssertionError\n"
+}
+Iteration 25: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 26: Selected program 4 score: 0.75
+Iteration 26: All subsample scores perfect for parent 4. Skipping.
+Iteration 26: Reflective mutation did not propose a new candidate
+Iteration 27: Selected program 3 score: 0.75
+Iteration 27: All subsample scores perfect for parent 3. Skipping.
+Iteration 27: Reflective mutation did not propose a new candidate
+Iteration 28: Selected program 3 score: 0.75
+Iteration 28: Proposed new text for solver_prompt: ## Instructions
+You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.
+
+### Input Format
+The input will be a function definition with a docstring that describes the task and a list of test cases that the function should pass. The test cases will be in the format of assertions.
+
+### Task Description
+You are given a task description that describes the problem you need to solve. The task description will include a function signature and a docstring that explains what the function should do.
+
+### Example
+Given the following task description:
+```
+## Inputs
+### task
+Write a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists.
+Your code should pass this test:
+assert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]
+```
+The assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. The function should pass the given test case.
+
+### Feedback
+The feedback will indicate whether the function passed the test cases or not. If the function did not pass the test cases, the feedback will include the error message and the test case that failed.
+
+### Niche and Domain Specific Information
+You are a Python programmer, so you should be familiar with Python syntax, data structures, and built-in functions. You should also be familiar with the concept of element-wise operations on lists.
+
+### Generalizable Strategy
+The assistant may have utilized a generalizable strategy to solve the task. This strategy may include using list comprehensions, the `zip` function, or other Python built-in functions.
+
+### Constraints
+The input lists will contain only integers and will have the same length.
+
+### Output
+The assistant should return only one `python` code block that contains the correct implementation of the function.
+
+### Additional Information
+- The function should handle cases where the input lists are of different lengths by raising a `ValueError`.
+- The function should handle cases where the input lists contain non-integer values by raising a `TypeError`.
+Iteration 28: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 29: Selected program 4 score: 0.75
+Iteration 29: All subsample scores perfect for parent 4. Skipping.
+Iteration 29: Reflective mutation did not propose a new candidate
+Iteration 30: Selected program 4 score: 0.75
+Iteration 30: All subsample scores perfect for parent 4. Skipping.
+Iteration 30: Reflective mutation did not propose a new candidate
+Iteration 31: Selected program 4 score: 0.75
+Iteration 31: All subsample scores perfect for parent 4. Skipping.
+Iteration 31: Reflective mutation did not propose a new candidate
+Iteration 32: Selected program 3 score: 0.75
+Iteration 32: Proposed new text for repair_prompt: ## Instructions
+You are provided with a task input, which includes a problem description, a sample code, and a test case that failed. Your goal is to read the error message, identify the issue in the provided code, and correct it.
+
+The task description will be in the following format:
+```
+## Inputs
+### task
+<Problem description>
+
+Your code should pass this test:
+assert <Test case>
+```
+
+The sample code will be in the following format:
+```
+## Generated code
+def <Function name>(<Parameters>):
+    <Code>
+```
+
+The test result will be in the following format:
+```
+## Visible test result
+Test `<Test case>` failed with: <Error message>
+```
+
+Your response should contain only one corrected ```python``` code block.
+
+## Guidelines
+1. Read the error message and identify the issue.
+2. Correct the function to pass the test case.
+3. Return only one corrected ```python``` code block.
+4. Ensure that the corrected code passes the given test case.
+
+## Domain Specific Factual Information
+- Jacobsthal Numbers: A sequence of numbers defined by the recurrence relation J(n) = 2*J(n-1) + J(n-2), with initial conditions J(0) = 0 and J(1) = 1. The sequence starts: 0, 1, 1, 3, 5, 11, 21, 43, 85, 171, 341, 683, 1365, 2731, ...
+- Jacobsthal-Lucas Numbers: A sequence of numbers defined by the recurrence relation JL(n) = 2*JL(n-1) + JL(n-2), with initial conditions JL(0) = 2 and JL(1) = 1. The sequence starts: 2, 1, 5, 11, 25, 53, 117, 241, 505, 1029, 2161, 4417, 9005, 18433, ...
+
+## Generalizable Strategies
+- **Recurrence Relation**: If the problem involves sequences defined by recurrence relations, consider using iterative or memoization techniques.
+- **Edge Cases**: Always include edge cases in your tests to ensure robustness.
+- **Type Checking**: Ensure that input types are handled correctly to avoid type-related errors.
+
+## Example
+### Inputs
+### task
+Write a function to find the nth jacobsthal number. https://www.geeksforgeeks.org/jacobsthal-and-jacobsthal-lucas-numbers/ 0, 1, 1, 3, 5, 11, 21, 43, 85, 171, 341, 683, 1365, 2731, ...
+Your code should pass this test:
+assert jacobsthal_num(5) == 11
+
+## Generated code
+def jacobsthal_num(n):
+    if n == 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        a, b = 0, 1
+        for _ in range(2, n + 1):
+            a, b = b, 2 * b + a
+        return b
+
+## Visible test result
+Test `assert jacobsthal_num(5) == 11` failed with: AssertionError
+
+### Expected Output
+```python
+def jacobsthal_num(n):
+    if n == 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        a, b = 0, 1
+        for _ in range(2, n + 1):
+            a, b = b, 2 * b + a
+        return b
+```
+
+## Feedback
+Final result: FAILED (hidden tests not shown). Visible test after solve: Test `assert jacobsthal_num(5) == 11` failed with: AssertionError Visible test after repair: Test `assert jacobsthal_num(5) == 11` failed with: AssertionError
+Iteration 32: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 33: Selected program 4 score: 0.75
+Iteration 33: All subsample scores perfect for parent 4. Skipping.
+Iteration 33: Reflective mutation did not propose a new candidate
+Iteration 34: Selected program 4 score: 0.75
+Iteration 34: All subsample scores perfect for parent 4. Skipping.
+Iteration 34: Reflective mutation did not propose a new candidate
+Iteration 35: Selected program 3 score: 0.75
+Iteration 35: Proposed new text for solver_prompt: ## Instructions
+You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.
+
+### Input Format
+The input will be a function definition with a docstring that describes the task and a list of test cases that the function should pass. The test cases will be in the format of assertions.
+
+### Task Description
+You are given a task description that describes the problem you need to solve. The task description will include a function signature and a docstring that explains what the function should do.
+
+### Example
+Given the following task description:
+```
+## Inputs
+### task
+Write a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists.
+Your code should pass this test:
+assert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]
+```
+The assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. The function should pass the given test case.
+
+### Feedback
+The feedback will indicate whether the function passed the test cases or not. If the function did not pass the test cases, the feedback will include the error message and the test case that failed.
+
+### Niche and Domain Specific Information
+You are a Python programmer, so you should be familiar with Python syntax, data structures, and built-in functions. You should also be familiar with the concept of element-wise operations on lists.
+
+### Generalizable Strategy
+The assistant may have utilized a generalizable strategy to solve the task. This strategy may include using list comprehensions, the `zip` function, or other Python built-in functions.
+
+### Constraints
+The input lists will contain only integers and will have the same length.
+
+### Output
+The assistant should return only one `python` code block that contains the correct implementation of the function.
+
+### Additional Information
+- The function should handle edge cases, such as empty input lists.
+- The function should be efficient and work well with large input lists.
+- The function should be clear and well-documented.
+Iteration 35: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 36: Selected program 3 score: 0.75
+Iteration 36: Proposed new text for repair_prompt: ## Instructions
+You are provided with a task input, which includes a problem description, a sample code, and a test case that failed. Your goal is to read the error message, identify the issue in the provided code, and correct it.
+
+The task description will be in the following format:
+```
+## Inputs
+### task
+<Problem description>
+
+Your code should pass this test:
+assert <Test case>
+```
+
+The sample code will be in the following format:
+```
+## Generated code
+def <Function name>(<Parameters>):
+    <Code>
+```
+
+The test result will be in the following format:
+```
+## Visible test result
+Test `<Test case>` failed with: <Error message>
+```
+
+Your response should contain only one corrected ```python``` code block.
+
+## Guidelines
+1. Read the error message and identify the issue.
+2. Correct the function to pass the test case.
+3. Return only one corrected ```python``` code block.
+4. Ensure that the corrected code passes the given test case.
+5. Provide domain-specific factual information if necessary.
+6. Share any generalizable strategies used for solving similar tasks in the future.
+
+## Example
+### Inputs
+### task
+Write a python function to count the number of equal numbers from three given integers.
+Your code should pass this test:
+assert test_three_equal(1,1,1) == 3
+
+## Generated code
+def test_three_equal(a, b, c):
+    return a == b == c
+
+## Visible test result
+Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError
+
+### Expected Output
+```python
+def test_three_equal(a, b, c):
+    if a == b == c:
+        return 3
+    elif a == b:
+        return 2
+    elif a == c:
+        return 2
+    elif b == c:
+        return 2
+    else:
+        return 0
+```
+
+## Feedback
+Final result: FAILED (hidden tests not shown). Visible test after solve: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError Visible test after repair: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError
+
+### Expected Output
+```python
+def test_three_equal(a, b, c):
+    if a == b == c:
+        return 3
+    elif a == b:
+        return 2
+    elif a == c:
+        return 2
+    elif b == c:
+        return 2
+    else:
+        return 0
+```
+
+## Feedback
+Final result: FAILED (hidden tests not shown). Visible test after solve: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError Visible test after repair: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError
+
+### Expected Output
+```python
+def test_three_equal(a, b, c):
+    if a == b == c:
+        return 3
+    elif a == b:
+        return 2
+    elif a == c:
+        return 2
+    elif b == c:
+        return 2
+    else:
+        return 0
+```
+
+## Feedback
+Final result: FAILED (hidden tests not shown). Visible test after solve: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError Visible test after repair: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError
+
+### Expected Output
+```python
+def test_three_equal(a, b, c):
+    if a == b == c:
+        return 3
+    elif a == b:
+        return 2
+    elif a == c:
+        return 2
+    elif b == c:
+        return 2
+    else:
+        return 0
+```
+
+## Feedback
+Final result: FAILED (hidden tests not shown). Visible test after solve: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError Visible test after repair: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError
+
+### Expected Output
+```python
+def test_three_equal(a, b, c):
+    if a == b == c:
+        return 3
+    elif a == b:
+        return 2
+    elif a == c:
+        return 2
+    elif b == c:
+        return 2
+    else:
+        return 0
+```
+
+## Feedback
+Final result: FAILED (hidden tests not shown). Visible test after solve: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError Visible test after repair: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError
+
+### Expected Output
+```python
+def test_three_equal(a, b, c):
+    if a == b == c:
+        return 3
+    elif a == b:
+        return 2
+    elif a == c:
+        return 2
+    elif b == c:
+        return 2
+    else:
+        return 0
+```
+
+## Feedback
+Final result: FAILED (hidden tests not shown). Visible test after solve: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError Visible test after repair: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError
+
+### Expected Output
+```python
+def test_three_equal(a, b, c):
+    if a == b == c:
+        return 3
+    elif a == b:
+        return 2
+    elif a == c:
+        return 2
+    elif b == c:
+        return 2
+    else:
+        return 0
+```
+
+## Feedback
+Final result: FAILED (hidden tests not shown). Visible test after solve: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError Visible test after repair: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError
+
+### Expected Output
+```python
+def test_three_equal(a, b, c):
+    if a == b == c:
+        return 3
+    elif a == b:
+        return 2
+    elif a == c:
+        return 2
+    elif b == c:
+        return 2
+    else:
+        return 0
+```
+
+## Feedback
+Final result: FAILED (hidden tests not shown). Visible test after solve: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError Visible test after repair: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError
+
+### Expected Output
+```python
+def test_three_equal(a, b, c):
+    if a == b == c:
+        return 3
+    elif a == b:
+        return 2
+    elif a == c:
+        return 2
+    elif b == c:
+        return 2
+    else:
+        return 0
+```
+
+## Feedback
+Final result: FAILED (hidden tests not shown). Visible test after solve: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError Visible test after repair: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError
+
+### Expected Output
+```python
+def test_three_equal(a, b, c):
+    if a == b == c:
+        return 3
+    elif a == b:
+        return 2
+    elif a == c:
+        return 2
+    elif b == c:
+        return 2
+    else:
+        return 0
+```
+
+## Feedback
+Final result: FAILED (hidden tests not shown). Visible test after solve: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError Visible test after repair: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError
+
+### Expected Output
+```python
+def test_three_equal(a, b, c):
+    if a == b == c:
+        return 3
+    elif a == b:
+        return 2
+    elif a == c:
+        return 2
+    elif b == c:
+        return 2
+    else:
+        return 0
+```
+
+## Feedback
+Final result: FAILED (hidden tests not shown). Visible test after solve: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError Visible test after repair: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError
+
+### Expected Output
+```python
+def test_three_equal(a, b, c):
+    if a == b == c:
+        return 3
+    elif a == b:
+        return 2
+    elif a == c:
+        return 2
+    elif b == c:
+        return 2
+    else:
+        return 0
+```
+
+## Feedback
+Final result: FAILED (hidden tests not shown). Visible test after solve: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError Visible test after repair: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError
+
+### Expected Output
+Iteration 36: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 37: Selected program 3 score: 0.75
+Iteration 37: All subsample scores perfect for parent 3. Skipping.
+Iteration 37: Reflective mutation did not propose a new candidate
+Iteration 38: Selected program 3 score: 0.75
+Iteration 38: Proposed new text for solver_prompt: ## Instructions
+You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.
+
+### Input Format
+The input will be a function definition with a docstring that describes the task and a list of test cases that the function should pass. The test cases will be in the format of assertions.
+
+### Task Description
+You are given a task description that describes the problem you need to solve. The task description will include a function signature and a docstring that explains what the function should do.
+
+### Example
+Given the following task description:
+```
+## Inputs
+### task
+Write a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists.
+Your code should pass this test:
+assert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]
+```
+The assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. The function should pass the given test case.
+
+### Feedback
+The feedback will indicate whether the function passed the test cases or not. If the function did not pass the test cases, the feedback will include the error message and the test case that failed.
+
+### Niche and Domain Specific Information
+You are a Python programmer, so you should be familiar with Python syntax, data structures, and built-in functions. You should also be familiar with the concept of element-wise operations on lists.
+
+### Generalizable Strategy
+The assistant may have utilized a generalizable strategy to solve the task. This strategy may include using list comprehensions, the `zip` function, or other Python built-in functions.
+
+### Constraints
+The input lists will contain only integers and will have the same length.
+
+### Output
+The assistant should return only one `python` code block that contains the correct implementation of the function.
+Iteration 38: New subsample score 1.0 is not better than old score 1.0, skipping
+Iteration 39: Selected program 4 score: 0.75
+Iteration 39: All subsample scores perfect for parent 4. Skipping.
+Iteration 39: Reflective mutation did not propose a new candidate
+Iteration 40: Selected program 3 score: 0.75
+Iteration 40: Proposed new text for repair_prompt: {
+  "instruction": "## Instructions\nYou are provided with a task input, which includes a problem description, a sample code, and a test case that failed. Your goal is to read the error message, identify the issue in the provided code, and correct it.\n\nThe task description will be in the following format:\n```\n## Inputs\n### task\n<Problem description>\n\nYour code should pass this test:\nassert <Test case>\n```\n\nThe sample code will be in the following format:\n```\n## Generated code\ndef <Function name>(<Parameters>):\n    <Code>\n```\n\nThe test result will be in the following format:\n```\n## Visible test result\nTest `<Test case>` failed with: <Error message>\n```\n\nYour response should contain only one corrected ```python``` code block.\n\n## Guidelines\n1. Read the error message and identify the issue.\n2. Correct the function to pass the test case.\n3. Return only one corrected ```python``` code block.\n4. Ensure that the corrected code passes the given test case.\n\n## Domain Specific Factual Information\n1. If the task involves working with arrays or lists, make sure to handle edge cases such as empty lists or lists with a single element.\n2. If the task involves mathematical operations, ensure that you handle edge cases such as division by zero or large numbers.\n3. If the task involves string manipulation, ensure that you handle edge cases such as empty strings or strings with special characters.\n4. If the task involves sorting, ensure that you use the appropriate sorting algorithm and handle edge cases such as already sorted lists or lists with a single element.\n5. If the task involves searching, ensure that you use the appropriate searching algorithm and handle edge cases such as empty lists or lists with a single element.\n6. If the task involves recursion, ensure that you handle edge cases such as empty lists or lists with a single element.\n7. If the task involves dynamic programming, ensure that you handle edge cases such as empty lists or lists with a single element.\n8. If the task involves graph traversal, ensure that you handle edge cases such as empty graphs or graphs with a single node.\n9. If the task involves combinatorial mathematics, ensure that you handle edge cases such as empty sets or sets with a single element.\n10. If the task involves probability and statistics, ensure that you handle edge cases such as empty datasets or datasets with a single data point.\n\n## Generalizable Strategies\n1. Use modular programming to break down the problem into smaller, more manageable functions.\n2. Use recursion to solve problems that can be broken down into smaller subproblems.\n3. Use dynamic programming to solve problems that can be broken down into overlapping subproblems.\n4. Use memoization to optimize recursive solutions that have overlapping subproblems.\n5. Use dynamic programming with tabulation to optimize recursive solutions that have overlapping subproblems and can be solved iteratively.\n6. Use dynamic programming with space optimization to optimize recursive solutions that have overlapping subproblems and can be solved iteratively with constant space.\n7. Use backtracking to solve problems that involve finding all possible solutions or a specific solution.\n8. Use divide and conquer to solve problems that can be broken down into smaller subproblems that can be solved independently.\n9. Use greedy algorithms to solve problems that involve finding the optimal solution at each step.\n10. Use a priority queue to solve problems that involve finding the optimal solution at each step and that can be solved iteratively."
+}
+Iteration 40: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 41: Selected program 4 score: 0.75
+Iteration 41: Proposed new text for repair_prompt: {
+  "instruction": "## Instructions\nYou are provided with a task input, which includes a problem description, a sample code, and a test case that failed. Your goal is to read the error message, identify the issue in the provided code, and correct it.\n\nThe task description will be in the following format:\n```\n## Inputs\n### task\n<Problem description>\n\nYour code should pass this test:\nassert <Test case>\n```\n\nThe sample code will be in the following format:\n```\n## Generated code\ndef <Function name>(<Parameters>):\n    <Code>\n```\n\nThe test result will be in the following format:\n```\n## Visible test result\nTest `<Test case>` failed with: <Error message>\n```\n\nYour response should contain only one corrected ```python``` code block.\n\n## Guidelines\n1. Read the error message and identify the issue.\n2. Correct the function to pass the test case.\n3. Return only one corrected ```python``` code block.\n4. Ensure that the corrected code passes the given test case.\n5. Include any domain-specific factual information or generalizable strategies used in the solution.\n\n## Example\n### Inputs\n### task\nWrite a python function to count the number of equal numbers from three given integers.\nYour code should pass this test:\nassert test_three_equal(1,1,1) == 3\n\n## Generated code\ndef test_three_equal(a, b, c):\n    return a == b == c\n\n## Visible test result\nTest `assert test_three_equal(1,1,1) == 3` failed with: AssertionError\n\n### Expected Output\n```python\ndef test_three_equal(a, b, c):\n    if a == b == c:\n        return 3\n    elif a == b:\n        return 2\n    elif a == c:\n        return 2\n    elif b == c:\n        return 2\n    else:\n        return 0\n```"
+}
+Iteration 41: Accepted candidate (subsample score 2.0 -> 3.0); running full eval.
+Iteration 41: Valset score for new program: 0.75 (coverage 20 / 20)
+Iteration 41: Val aggregate for new program: 0.75
+Iteration 41: Individual valset scores for new program: {0: 1.0, 1: 1.0, 2: 0.0, 3: 1.0, 4: 0.0, 5: 1.0, 6: 1.0, 7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0, 11: 1.0, 12: 0.0, 13: 1.0, 14: 1.0, 15: 0.0, 16: 1.0, 17: 1.0, 18: 1.0, 19: 0.0}
+Iteration 41: Objective aggregate scores for new program: {'pass': 0.75, 'repair_used': 0.25, 'tokens': 956.2}
+Iteration 41: New valset pareto front scores: {0: 1.0, 1: 1.0, 2: 0.0, 3: 1.0, 4: 0.0, 5: 1.0, 6: 1.0, 7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0, 11: 1.0, 12: 1.0, 13: 1.0, 14: 1.0, 15: 0.0, 16: 1.0, 17: 1.0, 18: 1.0, 19: 0.0}
+Iteration 41: Objective pareto front scores: {'pass': 0.75, 'repair_used': 0.3, 'tokens': 956.2}
+Iteration 41: Valset pareto front aggregate score: 0.8
+Iteration 41: Updated valset pareto front programs: {0: {0, 1, 2, 3, 4, 5}, 1: {0, 1, 2, 3, 4, 5}, 2: {0, 1, 2, 3, 4, 5}, 3: {0, 1, 2, 3, 4, 5}, 4: {0, 1, 2, 3, 4, 5}, 5: {0, 1, 2, 3, 4, 5}, 6: {0, 1, 2, 3, 4, 5}, 7: {0, 1, 2, 3, 4, 5}, 8: {4, 5}, 9: {0, 1, 2, 3, 4, 5}, 10: {0, 1, 2, 3, 4, 5}, 11: {0, 1, 2, 3, 4, 5}, 12: {0, 1, 3}, 13: {0, 1, 3, 4, 5}, 14: {0, 1, 2, 3, 4, 5}, 15: {0, 1, 2, 3, 4, 5}, 16: {0, 1, 2, 3, 4, 5}, 17: {0, 1, 2, 3, 4, 5}, 18: {0, 1, 2, 3, 4, 5}, 19: {0, 1, 2, 3, 4, 5}}
+Iteration 41: Updated objective pareto front programs: {'pass': {0, 1, 3, 4, 5}, 'repair_used': {2}, 'tokens': {5}}
+Iteration 41: Best valset aggregate score so far: 0.75
+Iteration 41: Best program as per aggregate score on valset: 0
+Iteration 41: Best score on valset: 0.75
+Iteration 41: Linear pareto front program index: 0
+Iteration 41: New program candidate index: 5
+Iteration 42: Selected program 5 score: 0.75
+Iteration 42: All subsample scores perfect for parent 5. Skipping.
+Iteration 42: Reflective mutation did not propose a new candidate
+Iteration 43: Selected program 3 score: 0.75
+Iteration 43: All subsample scores perfect for parent 3. Skipping.
+Iteration 43: Reflective mutation did not propose a new candidate
+Iteration 44: Selected program 3 score: 0.75
+Iteration 44: All subsample scores perfect for parent 3. Skipping.
+Iteration 44: Reflective mutation did not propose a new candidate
+Iteration 45: Selected program 5 score: 0.75
+Iteration 45: All subsample scores perfect for parent 5. Skipping.
+Iteration 45: Reflective mutation did not propose a new candidate
+Iteration 46: Selected program 5 score: 0.75
+Iteration 46: Proposed new text for solver_prompt: ## Instructions
+You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.
+
+### Input Format
+The input will be a function definition with a docstring that describes the task and a list of test cases that the function should pass. The test cases will be in the format of assertions.
+
+### Task Description
+You are given a task description that describes the problem you need to solve. The task description will include a function signature and a docstring that explains what the function should do.
+
+### Example
+Given the following task description:
+```
+## Inputs
+### task
+Write a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists.
+Your code should pass this test:
+assert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]
+```
+The assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. The function should pass the given test case.
+
+### Feedback
+The feedback will indicate whether the function passed the test cases or not. If the function did not pass the test cases, the feedback will include the error message and the test case that failed.
+
+### Niche and Domain Specific Information
+You are a Python programmer, so you should be familiar with Python syntax, data structures, and built-in functions. You should also be familiar with the concept of element-wise operations on lists.
+
+### Generalizable Strategy
+The assistant may have utilized a generalizable strategy to solve the task. This strategy may include using list comprehensions, the `zip` function, or other Python built-in functions.
+
+### Constraints
+- The input lists will contain only integers and will have the same length.
+- The function should handle cases where the input lists are of different lengths by raising a `ValueError`.
+- The function should handle cases where the input lists contain non-integer values by raising a `TypeError`.
+
+### Output
+The assistant should return only one `python` code block that contains the correct implementation of the function.
+
+### Additional Information
+- The function should return a new list containing the element-wise sum of the two input lists.
+- The function should raise a `ValueError` if the input lists are of different lengths.
+- The function should raise a `TypeError` if the input lists contain non-integer values.
+
+### Example Task
+Given the following task description:
+```
+## Inputs
+### task
+Write a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists. If the input lists are of different lengths, the function should raise a ValueError.
+Your code should pass these tests:
+assert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]
+assert sum_lists([1, 2], [4, 5, 6]) == ValueError
+assert sum_lists([1, 2, 3], [4, 5, "6"]) == TypeError
+```
+The assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. If the input lists are of different lengths, the function should raise a `ValueError`. If the input lists contain non-integer values, the function should raise a `TypeError`. The function should pass the given test cases.
+```
+
+The following are examples of different task inputs provided to the assistant along with the assistant's response for each of them, and some feedback on how the assistant's response could be better:
+```
+# Example 1
+## Inputs
+### task
+Write a function to find the nth jacobsthal number. https://www.geeksforgeeks.org/jacobsthal-and-jacobsthal-lucas-numbers/ 0, 1, 1, 3, 5, 11, 21, 43, 85, 171, 341, 683, 1365, 2731, ...
+Your code should pass this test:
+assert jacobsthal_num(5) == 11
+
+## Generated code
+def jacobsthal_num(n):
+    if n == 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        a, b = 0, 1
+        for _ in range(2, n + 1):
+            a, b = b, 2 * b + a
+        return b
+
+## Visible test result
+Test `assert jacobsthal_num(5) == 11` failed with: AssertionError
+
+## Repair attempt
+def jacobsthal_num(n):
+    if n == 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        a, b = 0, 1
+        for _ in range(2, n + 1):
+            a, b = b, 2 * b + a
+        return b
+
+## Feedback
+Final result: FAILED (hidden tests not shown). Visible test after solve: Test `assert jacobsthal_num(5) == 11` failed with: AssertionError Visible test after repair: Test `assert jacobsthal_num(5) == 11` failed with: AssertionError
+
+
+
+# Example 2
+## Inputs
+### task
+Write a function to check if the given expression is balanced or not. https://www.geeksforgeeks.org/check-for-balanced-parentheses-in-an-expression/
+Your code should pass this test:
+assert check_expression("{()}[{}]") == True
+
+## Generated code
+def check_expression(expression):
+    stack = []
+    for char in expression:
+        if char in "([{":
+            stack.append(char)
+        elif char in ")]}":
+            if not stack:
+                return False
+            top = stack.pop()
+            if (top == "(" and char == ")") or (top == "[" and char == "]") or (top == "{" and char == "}"):
+                continue
+            else:
+                return False
+    return len(stack) == 0
+
+## Visible test result
+passed
+
+## Repair attempt
+(not triggered)
+
+## Feedback
+Final result: PASSED all tests. Visible test after solve: passed.
+
+
+
+# Example 3
+## Inputs
+### task
+Write a function takes as input two lists [a_1,...,a_n], [b_1,...,b_n] and returns [a_1+b_1,...,a_n+b_n].
+Your code should pass this test:
+assert sum_list([10,20,30],[15,25,35])==[25,45,65]
+
+## Generated code
+def sum_list(list1, list2):
+    if len(list1) != len(list2):
+        raise ValueError("Input lists must have the same length")
+    return [a + b for a, b in zip(list1, list2)]
+
+## Visible test result
+passed
+
+## Repair attempt
+(not triggered)
+
+## Feedback
+Final result: PASSED all tests. Visible test after solve: passed.
+
+
+```
+
+Your task is to write a new instruction for the assistant.
+
+Read the inputs carefully and identify the input format and infer detailed task description about the task I wish to solve with the assistant.
+
+Read all the assistant responses and the corresponding feedback. Identify all niche and domain specific factual information about the task and include it in the instruction, as a lot of it may not be available to the assistant in the future. The assistant may have utilized a generalizable strategy to solve the task, if so, include that in the instruction as well.
+
+Provide the new instructions within
+Iteration 46: New subsample score 0.0 is not better than old score 2.0, skipping
+Iteration 47: Selected program 5 score: 0.75
+Iteration 47: Proposed new text for repair_prompt: {
+  "instruction": "## Instructions\nYou are provided with a task input, which includes a problem description, a sample code, and a test case that failed. Your goal is to read the error message, identify the issue in the provided code, and correct it.\n\nThe task description will be in the following format:\n```\n## Inputs\n### task\n<Problem description>\n\nYour code should pass this test:\nassert <Test case>\n```\n\nThe sample code will be in the following format:\n```\n## Generated code\ndef <Function name>(<Parameters>):\n    <Code>\n```\n\nThe test result will be in the following format:\n```\n## Visible test result\nTest `<Test case>` failed with: <Error message>\n```\n\nYour response should contain only one corrected ```python``` code block.\n\n## Guidelines\n1. Read the error message and identify the issue.\n2. Correct the function to pass the test case.\n3. Return only one corrected ```python``` code block.\n4. Ensure that the corrected code passes the given test case.\n5. Include any domain-specific factual information or generalizable strategies used in the solution.\n\n## Example\n### Inputs\n### task\nWrite a python function to count the number of equal numbers from three given integers.\nYour code should pass this test:\nassert test_three_equal(1,1,1) == 3\n\n## Generated code\ndef test_three_equal(a, b, c):\n    return a == b == c\n\n## Visible test result\nTest `assert test_three_equal(1,1,1) == 3` failed with: AssertionError\n\n### Expected Output\n```python\ndef test_three_equal(a, b, c):\n    if a == b == c:\n        return 3\n    elif a == b:\n        return 2\n    elif a == c:\n        return 2\n    elif b == c:\n        return 2\n    else:\n        return 0\n```"
+
+  "domain_specific_factual_information": "The task involves identifying and correcting errors in provided Python code to ensure it passes a specific test case. The assistant should focus on understanding the error message, identifying the issue in the code, and making a single correction to address the problem."
+
+  "generalizable_strategies": "1. Read the error message and understand the nature of the failure.
+2. Analyze the provided code and identify where the issue lies.
+3. Make a targeted correction to fix the error.
+4. Ensure the corrected code passes the given test case.
+5. Document any domain-specific knowledge or generalizable strategies used in the solution."
+}
+Iteration 47: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 48: Selected program 3 score: 0.75
+Iteration 48: All subsample scores perfect for parent 3. Skipping.
+Iteration 48: Reflective mutation did not propose a new candidate
+Iteration 49: Selected program 3 score: 0.75
+Iteration 49: All subsample scores perfect for parent 3. Skipping.
+Iteration 49: Reflective mutation did not propose a new candidate
+Iteration 50: Selected program 3 score: 0.75
+Iteration 50: Proposed new text for solver_prompt: ## Instructions
+You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.
+
+### Input Format
+The input will be a function definition with a docstring that describes the task and a list of test cases that the function should pass. The test cases will be in the format of assertions.
+
+### Task Description
+You are given a task description that describes the problem you need to solve. The task description will include a function signature and a docstring that explains what the function should do.
+
+### Example
+Given the following task description:
+```
+## Inputs
+### task
+Write a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists.
+Your code should pass this test:
+assert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]
+```
+The assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. The function should pass the given test case.
+
+### Feedback
+The feedback will indicate whether the function passed the test cases or not. If the function did not pass the test cases, the feedback will include the error message and the test case that failed.
+
+### Niche and Domain Specific Information
+You are a Python programmer, so you should be familiar with Python syntax, data structures, and built-in functions. You should also be familiar with the concept of element-wise operations on lists.
+
+### Generalizable Strategy
+The assistant may have utilized a generalizable strategy to solve the task. This strategy may include using list comprehensions, the `zip` function, or other Python built-in functions.
+
+### Constraints
+The input lists will contain only integers and will have the same length.
+
+### Output
+The assistant should return only one `python` code block that contains the correct implementation of the function.
+
+### Additional Information
+- The function should handle cases where the input lists are of different lengths by raising a `ValueError`.
+- The function should handle cases where the input lists contain non-integer values by raising a `TypeError`.
+Iteration 50: Accepted candidate (subsample score 0.0 -> 1.0); running full eval.
+Iteration 50: Found a better program on the valset with score 0.8.
+Iteration 50: Valset score for new program: 0.8 (coverage 20 / 20)
+Iteration 50: Val aggregate for new program: 0.8
+Iteration 50: Individual valset scores for new program: {0: 1.0, 1: 1.0, 2: 0.0, 3: 1.0, 4: 0.0, 5: 1.0, 6: 1.0, 7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0, 11: 1.0, 12: 1.0, 13: 1.0, 14: 1.0, 15: 0.0, 16: 1.0, 17: 1.0, 18: 1.0, 19: 0.0}
+Iteration 50: Objective aggregate scores for new program: {'pass': 0.8, 'repair_used': 0.2, 'tokens': 723.8}
+Iteration 50: New valset pareto front scores: {0: 1.0, 1: 1.0, 2: 0.0, 3: 1.0, 4: 0.0, 5: 1.0, 6: 1.0, 7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0, 11: 1.0, 12: 1.0, 13: 1.0, 14: 1.0, 15: 0.0, 16: 1.0, 17: 1.0, 18: 1.0, 19: 0.0}
+Iteration 50: Objective pareto front scores: {'pass': 0.8, 'repair_used': 0.3, 'tokens': 956.2}
+Iteration 50: Valset pareto front aggregate score: 0.8
+Iteration 50: Updated valset pareto front programs: {0: {0, 1, 2, 3, 4, 5, 6}, 1: {0, 1, 2, 3, 4, 5, 6}, 2: {0, 1, 2, 3, 4, 5, 6}, 3: {0, 1, 2, 3, 4, 5, 6}, 4: {0, 1, 2, 3, 4, 5, 6}, 5: {0, 1, 2, 3, 4, 5, 6}, 6: {0, 1, 2, 3, 4, 5, 6}, 7: {0, 1, 2, 3, 4, 5, 6}, 8: {4, 5, 6}, 9: {0, 1, 2, 3, 4, 5, 6}, 10: {0, 1, 2, 3, 4, 5, 6}, 11: {0, 1, 2, 3, 4, 5, 6}, 12: {0, 1, 3, 6}, 13: {0, 1, 3, 4, 5, 6}, 14: {0, 1, 2, 3, 4, 5, 6}, 15: {0, 1, 2, 3, 4, 5, 6}, 16: {0, 1, 2, 3, 4, 5, 6}, 17: {0, 1, 2, 3, 4, 5, 6}, 18: {0, 1, 2, 3, 4, 5, 6}, 19: {0, 1, 2, 3, 4, 5, 6}}
+Iteration 50: Updated objective pareto front programs: {'pass': {6}, 'repair_used': {2}, 'tokens': {5}}
+Iteration 50: Best valset aggregate score so far: 0.8
+Iteration 50: Best program as per aggregate score on valset: 6
+Iteration 50: Best score on valset: 0.8
+Iteration 50: Linear pareto front program index: 6
+Iteration 50: New program candidate index: 6
+Iteration 51: Selected program 6 score: 0.8
+Iteration 51: All subsample scores perfect for parent 6. Skipping.
+Iteration 51: Reflective mutation did not propose a new candidate
+Iteration 52: Selected program 6 score: 0.8
+Iteration 52: Proposed new text for repair_prompt: ## Instructions
+You are provided with a task input, which includes a problem description, a sample code, and a test case that failed. Your goal is to read the error message, identify the issue in the provided code, and correct it.
+
+The task description will be in the following format:
+```
+## Inputs
+### task
+<Problem description>
+
+Your code should pass this test:
+assert <Test case>
+```
+
+The sample code will be in the following format:
+```
+## Generated code
+def <Function name>(<Parameters>):
+    <Code>
+```
+
+The test result will be in the following format:
+```
+## Visible test result
+Test `<Test case>` failed with: <Error message>
+```
+
+Your response should contain only one corrected ```python``` code block.
+
+## Guidelines
+1. Read the error message and identify the issue.
+2. Correct the function to pass the test case.
+3. Return only one corrected ```python``` code block.
+4. Ensure that the corrected code passes the given test case.
+5. Provide detailed task description and any niche or domain specific factual information in the task description to help the assistant understand the context better.
+
+## Example
+### Inputs
+### task
+Write a python function to count the number of equal numbers from three given integers.
+Your code should pass this test:
+assert test_three_equal(1,1,1) == 3
+
+## Generated code
+def test_three_equal(a, b, c):
+    return a == b == c
+
+## Visible test result
+Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError
+
+### Expected Output
+```python
+def test_three_equal(a, b, c):
+    if a == b == c:
+        return 3
+    elif a == b:
+        return 2
+    elif a == c:
+        return 2
+    elif b == c:
+        return 2
+    else:
+        return 0
+```
+
+## Feedback
+Final result: FAILED (hidden tests not shown). Visible test after solve: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError Visible test after repair: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError
+
+## Expected Output
+```python
+def test_three_equal(a, b, c):
+    if a == b == c:
+        return 3
+    elif a == b:
+        return 2
+    elif a == c:
+        return 2
+    elif b == c:
+        return 2
+    else:
+        return 0
+```
+
+## Guidelines
+1. Read the error message and identify the issue.
+2. Correct the function to pass the test case.
+3. Return only one corrected ```python``` code block.
+4. Ensure that the corrected code passes the given test case.
+5. Provide detailed task description and any niche or domain specific factual information in the task description to help the assistant understand the context better.
+Iteration 52: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 53: Selected program 6 score: 0.8
+Iteration 53: Proposed new text for solver_prompt: ## Instructions
+You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.
+
+### Input Format
+The input will be a function definition with a docstring that describes the task and a list of test cases that the function should pass. The test cases will be in the format of assertions.
+
+### Task Description
+You are given a task description that describes the problem you need to solve. The task description will include a function signature and a docstring that explains what the function should do.
+
+### Example
+Given the following task description:
+```
+## Inputs
+### task
+Write a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists.
+Your code should pass this test:
+assert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]
+```
+The assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. The function should pass the given test case.
+
+### Feedback
+The feedback will indicate whether the function passed the test cases or not. If the function did not pass the test cases, the feedback will include the error message and the test case that failed.
+
+### Niche and Domain Specific Information
+You are a Python programmer, so you should be familiar with Python syntax, data structures, and built-in functions. You should also be familiar with the concept of element-wise operations on lists.
+
+### Generalizable Strategy
+The assistant may have utilized a generalizable strategy to solve the task. This strategy may include using list comprehensions, the `zip` function, or other Python built-in functions.
+
+### Constraints
+- The input lists will contain only integers and will have the same length.
+- The function should handle cases where the input lists are of different lengths by raising a `ValueError`.
+- The function should handle cases where the input lists contain non-integer values by raising a `TypeError`.
+
+### Output
+The assistant should return only one `python` code block that contains the correct implementation of the function.
+
+### Additional Information
+- The function should be efficient and concise.
+- The function should handle edge cases, such as empty lists.
+- The function should be well-documented with a docstring that explains the purpose and functionality of the function.
+- The function should follow PEP 8 style guidelines.
+Iteration 53: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 54: Selected program 6 score: 0.8
+Iteration 54: Proposed new text for repair_prompt: {
+  "instruction": "You are provided with a task input, which includes a problem description, a sample code, and a test case that failed. Your goal is to read the error message, identify the issue in the provided code, and correct it. You should provide only one corrected code block that passes the given test case."
+}
+Iteration 54: New subsample score 0.0 is not better than old score 1.0, skipping
+Iteration 55: Selected program 6 score: 0.8
+Iteration 55: All subsample scores perfect for parent 6. Skipping.
+Iteration 55: Reflective mutation did not propose a new candidate
+Iteration 56: Selected program 6 score: 0.8
+Iteration 56: Proposed new text for solver_prompt: ## Instructions
+You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.
+
+### Input Format
+The input will be a function definition with a docstring that describes the task and a list of test cases that the function should pass. The test cases will be in the format of assertions.
+
+### Task Description
+You are given a task description that describes the problem you need to solve. The task description will include a function signature and a docstring that explains what the function should do.
+
+### Example
+Given the following task description:
+```
+## Inputs
+### task
+Write a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists.
+Your code should pass this test:
+assert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]
+```
+The assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. The function should pass the given test case.
+
+### Feedback
+The feedback will indicate whether the function passed the test cases or not. If the function did not pass the test cases, the feedback will include the error message and the test case that failed.
+
+### Niche and Domain Specific Information
+You are a Python programmer, so you should be familiar with Python syntax, data structures, and built-in functions. You should also be familiar with the concept of element-wise operations on lists.
+
+### Generalizable Strategy
+The assistant may have utilized a generalizable strategy to solve the task. This strategy may include using list comprehensions, the `zip` function, or other Python built-in functions.
+
+### Constraints
+- The input lists will contain only integers and will have the same length.
+- The function should handle cases where the input lists are of different lengths by raising a `ValueError`.
+- The function should handle cases where the input lists contain non-integer values by raising a `TypeError`.
+
+### Output
+The assistant should return only one `python` code block that contains the correct implementation of the function.
+
+### Additional Information
+- The function should be efficient and work well for large input sizes.
+- The function should be well-documented with a docstring that explains its purpose, parameters, and return value.
+
+### Example Solutions
+Here are some examples of solutions to common tasks:
+1. **Summing Two Lists**:
+    ```python
+    def sum_lists(list1, list2):
+        return [x + y for x, y in zip(list1, list2)]
+    ```
+2. **Finding the Maximum in a List**:
+    ```python
+    def find_max(lst):
+        return max(lst)
+    ```
+3. **Reversing a String**:
+    ```python
+    def reverse_string(s):
+        return s[::-1]
+    ```
+4. **Counting Occurrences of an Element in a List**:
+    ```python
+    def count_occurrences(lst, element):
+        return lst.count(element)
+    ```
+5. **Converting a Number to Binary**:
+    ```python
+    def number_to_binary(n):
+        return bin(n)[2:]
+    ```
+
+### Domain-Specific Examples
+If the task involves a specific domain or area of knowledge, such as geometry, statistics, or algorithms, please include examples or references to relevant concepts.
+
+### Constraints and Edge Cases
+Always consider edge cases and constraints when writing your function. For example, what should happen if the input list is empty? What if the input contains non-numeric values?
+
+### Feedback Mechanism
+Provide a feedback mechanism to help the assistant improve their responses. This could include a grading system or a set of guidelines for passing tests.
+
+### Niche Information
+If the task involves niche or domain-specific knowledge, such as quantum computing, blockchain, or machine learning, include relevant information in the instruction.
+
+### Generalizable Strategies
+Encourage the assistant to use generalizable strategies, such as using built-in functions or libraries, to solve the task. This will help them write more efficient and maintainable code.
+
+By following these instructions, you can provide a clear and detailed task description that will help the assistant write the correct implementation of the function.
+Iteration 56: New subsample score 1.0 is not better than old score 1.0, skipping
+Iteration 57: Selected program 6 score: 0.8
+Iteration 57: Proposed new text for repair_prompt: ## Instructions
+You are provided with a task input, which includes a problem description, a sample code, and a test case that failed. Your goal is to read the error message, identify the issue in the provided code, and correct it.
+
+The task description will be in the following format:
+```
+## Inputs
+### task
+<Problem description>
+
+Your code should pass this test:
+assert <Test case>
+```
+
+The sample code will be in the following format:
+```
+## Generated code
+def <Function name>(<Parameters>):
+    <Code>
+```
+
+The test result will be in the following format:
+```
+## Visible test result
+Test `<Test case>` failed with: <Error message>
+```
+
+Your response should contain only one corrected ```python``` code block.
+
+## Guidelines
+1. Read the error message and identify the issue.
+2. Correct the function to pass the test case.
+3. Return only one corrected ```python``` code block.
+4. Ensure that the corrected code passes the given test case.
+5. Infer detailed task description from the inputs and include niche and domain-specific factual information in your instructions.
+6. Provide a generalizable strategy if applicable.
+
+## Example
+### Inputs
+### task
+Write a function to count the number of equal numbers from three given integers.
+Your code should pass this test:
+assert test_three_equal(1,1,1) == 3
+
+## Generated code
+def test_three_equal(a, b, c):
+    return a == b == c
+
+## Visible test result
+Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError
+
+## Repair attempt
+```python
+def test_three_equal(a, b, c):
+    if a == b == c:
+        return 3
+    elif a == b:
+        return 2
+    elif a == c:
+        return 2
+    elif b == c:
+        return 2
+    else:
+        return 0
+```
+
+## Feedback
+Final result: FAILED (hidden tests not shown). Visible test after solve: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError Visible test after repair: Test `assert test_three_equal(1,1,1) == 3` failed with: AssertionError
+
+## Expected Output
+```python
+def test_three_equal(a, b, c):
+    if a == b == c:
+        return 3
+    elif a == b:
+        return 2
+    elif a == c:
+        return 2
+    elif b == c:
+        return 2
+    else:
+        return 0
+```
+Iteration 57: New subsample score 2.0 is not better than old score 2.0, skipping

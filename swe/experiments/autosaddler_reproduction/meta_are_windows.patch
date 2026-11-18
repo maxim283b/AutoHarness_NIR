@@ -1,0 +1,160 @@
+diff --git a/are/simulation/apps/utils/fallback_file_system.py b/are/simulation/apps/utils/fallback_file_system.py
+index 8de3164..0e28365 100644
+--- a/are/simulation/apps/utils/fallback_file_system.py
++++ b/are/simulation/apps/utils/fallback_file_system.py
+@@ -81,7 +81,7 @@ class FallbackFileSystem(AbstractFileSystem):
+         :param path: Path to convert
+         :return: Relative path
+         """
+-        return ("/" + os.path.relpath(path, self.base_root)).replace("//", "/")
++        return ("/" + os.path.relpath(path, self.base_root)).replace("\\", "/").replace("//", "/")
+ 
+     def _get_fallback_stats_for_item(
+         self, path: str, item: dict[str, Any]
+@@ -218,7 +218,7 @@ class FallbackFileSystem(AbstractFileSystem):
+                     self.fallback_root, withdirs=True, detail=False
+                 ):
+                     # Get the path relative to fallback_root
+-                    rel_path = os.path.relpath(path_info, self.fallback_root)
++                    rel_path = os.path.relpath(path_info, self.fallback_root).replace("\\", "/")
+                     if rel_path == ".":
+                         continue
+                     rel_path = "/" + rel_path
+@@ -284,7 +284,7 @@ class FallbackFileSystem(AbstractFileSystem):
+             existing_files = set()
+ 
+             for path_info in all_paths:
+-                rel_path = "/" + os.path.relpath(path_info, self.fallback_root)
++                rel_path = "/" + os.path.relpath(path_info, self.fallback_root).replace("\\", "/")
+                 if rel_path != "/.":
+                     existing_files.add(rel_path)
+ 
+diff --git a/are/simulation/utils/context_utils.py b/are/simulation/utils/context_utils.py
+index dcf285e..0bf5fa8 100644
+--- a/are/simulation/utils/context_utils.py
++++ b/are/simulation/utils/context_utils.py
+@@ -6,7 +6,9 @@
+ 
+ 
+ import contextlib
++import ctypes
+ import signal
++import threading
+ 
+ 
+ def conditional_context_manager(cond, context_manager):
+@@ -39,9 +41,53 @@ def time_limit(seconds):
+     def signal_handler(signum, frame):
+         raise TimeoutError
+ 
+-    signal.signal(signal.SIGALRM, signal_handler)
++    if not _can_use_sigalrm():
++        # Windows (no SIGALRM) or non-main thread: fall back to a watchdog timer.
++        with _watchdog_time_limit(seconds):
++            yield
++        return
++
++    old_handler = signal.signal(signal.SIGALRM, signal_handler)
+     signal.alarm(seconds)
+     try:
+         yield
+     finally:
+         signal.alarm(0)
++        signal.signal(signal.SIGALRM, old_handler)
++
++
++def _can_use_sigalrm() -> bool:
++    """SIGALRM exists only on Unix and handlers can only be set from the main thread."""
++    return hasattr(signal, "SIGALRM") and (
++        threading.current_thread() is threading.main_thread()
++    )
++
++
++@contextlib.contextmanager
++def _watchdog_time_limit(seconds):
++    """
++    Portable fallback for time_limit: a timer thread raises TimeoutError in the
++    calling thread. The exception is delivered when the thread next executes Python
++    bytecode, so it cannot interrupt a single blocking C call.
++    """
++    target_thread_id = threading.get_ident()
++    fired = threading.Event()
++
++    def fire():
++        fired.set()
++        ctypes.pythonapi.PyThreadState_SetAsyncExc(
++            ctypes.c_ulong(target_thread_id), ctypes.py_object(TimeoutError)
++        )
++
++    timer = threading.Timer(seconds, fire)
++    timer.daemon = True
++    timer.start()
++    try:
++        yield
++    finally:
++        timer.cancel()
++        if fired.is_set():
++            # Clear a pending async exception that was never delivered.
++            ctypes.pythonapi.PyThreadState_SetAsyncExc(
++                ctypes.c_ulong(target_thread_id), None
++            )
+diff --git a/are/simulation/utils/streaming_utils.py b/are/simulation/utils/streaming_utils.py
+index c0fef89..28a8f93 100644
+--- a/are/simulation/utils/streaming_utils.py
++++ b/are/simulation/utils/streaming_utils.py
+@@ -11,12 +11,13 @@ import logging
+ import multiprocessing
+ import multiprocessing.context
+ import os
+-import signal
+ import threading
+ import time
+ from contextlib import contextmanager
+ from typing import Callable, Iterator, TypeVar
+ 
++from are.simulation.utils.context_utils import time_limit
++
+ logger = logging.getLogger(__name__)
+ 
+ T = TypeVar("T")  # Input item type
+@@ -55,32 +56,20 @@ class SequentialExecutor:
+ 
+         try:
+             if self._timeout_seconds:
+-                # Set up timeout handler for sequential processing
+-                def timeout_handler(signum, frame):
+-                    raise TimeoutError(
+-                        f"Operation timed out after {self._timeout_seconds} seconds"
+-                    )
+-
+-                # Set up the timeout alarm
+-                old_handler = signal.signal(signal.SIGALRM, timeout_handler)
+-                signal.alarm(self._timeout_seconds)
+-
++                # time_limit uses SIGALRM where available and a watchdog thread
++                # elsewhere (e.g. Windows).
+                 try:
+-                    result = fn(*args, **kwargs)
+-                    # Cancel the alarm on successful completion
+-                    signal.alarm(0)
++                    with time_limit(self._timeout_seconds):
++                        result = fn(*args, **kwargs)
+                     future.set_result(result)
+                 except TimeoutError as e:
+-                    # Cancel the alarm on timeout
+-                    signal.alarm(0)
++                    if not e.args:
++                        e = TimeoutError(
++                            f"Operation timed out after {self._timeout_seconds} seconds"
++                        )
+                     future.set_exception(e)
+                 except Exception as e:
+-                    # Cancel the alarm on any other exception
+-                    signal.alarm(0)
+                     future.set_exception(e)
+-                finally:
+-                    # Restore the previous signal handler
+-                    signal.signal(signal.SIGALRM, old_handler)
+             else:
+                 # No timeout - execute normally
+                 result = fn(*args, **kwargs)

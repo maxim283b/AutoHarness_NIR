@@ -1,0 +1,74 @@
+{
+  "kind": "exploratory_H2_alternative",
+  "tasks": 40,
+  "candidate_ids": {
+    "H0": "sha256:beefdebde99054cc120706fbb41568c68d017ff940c75c6d1a5fbbc30c8b122e",
+    "H1": "sha256:0e3d5ac260d07c48d98e3093d4e35061622dc785c85f968b2d18587eff8503fc",
+    "H2_original": "sha256:beefdebde99054cc120706fbb41568c68d017ff940c75c6d1a5fbbc30c8b122e",
+    "H2_alternative": "sha256:fa214efe0698bf2ee2c953fe30b2aa5b15098c9f29912805f252f7d39370b64e"
+  },
+  "scores": {
+    "H0": 16,
+    "H1": 15,
+    "H2_alternative": 19
+  },
+  "pass_at_1": {
+    "H0": 0.4,
+    "H1": 0.375,
+    "H2_alternative": 0.475
+  },
+  "usage": {
+    "H0": {
+      "calls": 2157,
+      "input_tokens": 35745312,
+      "output_tokens": 869847,
+      "total_tokens": 36615159
+    },
+    "H1": {
+      "calls": 1978,
+      "input_tokens": 32922264,
+      "output_tokens": 736212,
+      "total_tokens": 33658476
+    },
+    "H2_alternative": {
+      "calls": 2040,
+      "input_tokens": 33188926,
+      "output_tokens": 779162,
+      "total_tokens": 33968088
+    }
+  },
+  "paired": {
+    "H1_minus_H0": {
+      "delta_pp": -2.5,
+      "better": 3,
+      "worse": 4,
+      "mcnemar_exact_two_sided_p": 1.0,
+      "bootstrap_95_pp": [
+        -15.0,
+        10.0
+      ]
+    },
+    "H2_alternative_minus_H0": {
+      "delta_pp": 7.5,
+      "better": 6,
+      "worse": 3,
+      "mcnemar_exact_two_sided_p": 0.5078125,
+      "bootstrap_95_pp": [
+        -7.5,
+        22.5
+      ]
+    },
+    "H2_alternative_minus_H1": {
+      "delta_pp": 10.0,
+      "better": 6,
+      "worse": 2,
+      "mcnemar_exact_two_sided_p": 0.2890625,
+      "bootstrap_95_pp": [
+        -2.5,
+        25.0
+      ]
+    }
+  },
+  "note": "H2 alternative tied H0 on development (4/16). The owner changed the final arm after development scores and three original H2 test results were available. Original H2 selection and those results remain archived in final/results/H2. Alternative is exploratory, not the frozen selector's H2 winner.",
+  "limits": "One optimization run per arm; H2 alternative chosen after seeing Dev and three original H2 test outcomes. Confidence intervals describe the sampled tasks and do not establish a general improvement."
+}

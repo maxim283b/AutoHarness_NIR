@@ -1,0 +1,34 @@
+diff --git a/opencode-src/packages/opencode/src/tool/shell.ts b/opencode-src/packages/opencode/src/tool/shell.ts
+index 1e4423e..27effa9 100644
+--- a/opencode-src/packages/opencode/src/tool/shell.ts
++++ b/opencode-src/packages/opencode/src/tool/shell.ts
+@@ -25,6 +25,18 @@ import { BashArity } from "@/permission/arity"
+ export { Parameters } from "./shell/prompt"
+ 
+ const MAX_METADATA_LENGTH = 30_000
++const TEST_RUN = new RegExp(
++  [
++    "(?:^|[\\s;&|])(?:npm|pnpm|yarn|bun)\\s+(?:run\\s+)?test",
++    "(?:^|[\\s;&|])(?:pytest|py\\.test|jest|vitest|mocha)\\b",
++    "python3?\\s+-m\\s+(?:pytest|unittest)",
++    "(?:^|[\\s;&|])go\\s+test\\b",
++    "(?:^|[\\s;&|])(?:make\\s+(?:test|check)|\\./gradlew\\s+test|cargo\\s+test|dotnet\\s+test)",
++  ].join("|"),
++)
++const TEST_NOTE_SESSIONS = new Set<string>()
++const TEST_NOTE =
++  "note: a passing run of the existing test suite only shows that pre-existing behavior is intact; it does not confirm the new behavior required by your task. Evaluation may include hidden tests for the task's required new behavior. Before finishing: (1) enumerate each behavior the task requires, (2) for each one, either confirm an existing repo test already exercises it, or append a test derived from the task requirements to the repo's own test suite (additive edits only) and run it with the repo's test command - the repo harness provides fixtures that ad-hoc scripts lack, and (3) never assume an existing component already implements a required behavior; read its code and exercise it directly."
+ const CWD = new Set(["cd", "chdir", "popd", "pushd", "push-location", "set-location"])
+ const FILES = new Set([
+   ...CWD,
+@@ -565,6 +577,10 @@ export const ShellTool = Tool.define(
+         )
+       }
+       if (aborted) meta.push("User aborted the command")
++      if (code === 0 && TEST_RUN.test(input.command) && !TEST_NOTE_SESSIONS.has(ctx.sessionID)) {
++        TEST_NOTE_SESSIONS.add(ctx.sessionID)
++        meta.push(TEST_NOTE)
++      }
+       const raw = list.map((item) => item.text).join("")
+       const end = tail(raw, limits.maxLines, limits.maxBytes)
+       if (end.cut) cut = true

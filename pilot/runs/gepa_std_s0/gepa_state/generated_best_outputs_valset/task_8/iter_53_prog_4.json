@@ -1,0 +1,5 @@
+{
+    "task_id": 576,
+    "final_code": "def is_Sub_Array(main_list, sub_list):\n    # Check if the sub_list is empty\n    if not sub_list:\n        return True\n    # Check if the main_list is empty\n    if not main_list:\n        return False\n    # Iterate through the main_list\n    for i in range(len(main_list)):\n        # Check if the current element matches the first element of the sub_list\n        if main_list[i] == sub_list[0]:\n            # Check if the remaining elements of the sub_list match the remaining elements of the main_list\n            if main_list[i:i+len(sub_list)] == sub_list:\n                return True\n    # If no match is found, return False\n    return False",
+    "final_pass": true
+}

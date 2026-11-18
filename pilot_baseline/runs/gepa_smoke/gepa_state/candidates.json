@@ -1,0 +1,6 @@
+[
+  {
+    "solver_prompt": "You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.",
+    "repair_prompt": "The previous solution failed a test. Read the error, fix the function, and return only one corrected ```python``` code block."
+  }
+]

@@ -1,0 +1,93 @@
+{
+  "schema_version": "final-harness-preregistration-amendment/v1",
+  "created_at": "2026-10-12T15:20:00+03:00",
+  "status": "registered_before_any_new_validation_calls",
+  "amends_without_rewriting": {
+    "path": "experiments/final_harness_experiment/preregistered_protocol.json",
+    "sha256": "5e0c0b58fb111517b636742cfb7566f064684cc25547d3d4647d179f8c22a3cb"
+  },
+  "reason": {
+    "finding": "The original 4 optimizer x 3 seed x 15 candidate design requires at least 540 official sessions and approximately 39.5 million proposer input tokens.",
+    "decision": "Replace the unexecuted mass run with a staged pilot while preserving the original preregistration unchanged."
+  },
+  "terminology": {
+    "baseline": "official AutoSaddler V2 through CodexAgentProvider",
+    "tail_method": "tail_aware_rl_variant",
+    "forbidden_claim": "Tail-Likelihood RL reproduction",
+    "tailrl_difference": "The variant retains the same tabular RL policy and changes only a preregistered lower-tail reward/advantage; official TailRL is a distinct algorithm and is not reproduced."
+  },
+  "official_loop_invariant": {
+    "sessions_per_candidate": ["evolve", "diagnose_patch", "reflect"],
+    "provider": "CodexAgentProvider",
+    "patch_application": "official AutoSaddler V2",
+    "rule": "Every optimizer uses the same official proposer and patch loop; only pre-session optimizer action/mutation-strategy selection may differ."
+  },
+  "stage_0_artifact_eligibility": {
+    "gate_a_run_id": "codex-official-smoke-v5",
+    "gate_a_candidate_id": "sha256:5d0e7a13ddb80fcc79da12351da558001a94c120b8cf4fc1036327ae1139b4b3",
+    "gate_a_candidate_file_sha256": "2b06bdae6803d64c358ef7bcb3455bb5466a0aa160572b478996f4f44e4f11ca",
+    "classification": "official infrastructure smoke",
+    "scientific_eligibility": false,
+    "reason": "The official scenario is fake and the complete patch is {\"instruction\":\"improved\"}; neither LM Studio nor the SQL task stream was evaluated.",
+    "anti_leakage_rule": "A fake-scenario score may not be relabelled as Ministral or SQL validation evidence."
+  },
+  "stage_1_official_baseline_validation": {
+    "prerequisite": "A target-task AutoSaddler candidate must already exist and be frozen before validation. The Gate A fake candidate does not satisfy this prerequisite.",
+    "steps": [
+      "Freeze the target-task AutoSaddler patch and SHA-256.",
+      "Perform no further optimization of that candidate.",
+      "Evaluate the seed harness and frozen AutoSaddler harness on the identical validation stream.",
+      "Do not return validation feedback to AutoSaddler.",
+      "Measure whether development score 1.0 transfers to validation.",
+      "Keep held-out closed."
+    ],
+    "current_status": "not_started_no_scientifically_eligible_frozen_candidate",
+    "held_out_opened": false
+  },
+  "stage_2_optimizer_feasibility_screening": {
+    "methods": ["original_autosaddler_optimizer", "random_search", "tabular_rl_optimizer", "tail_aware_rl_variant"],
+    "algorithm_seeds": [0],
+    "sequential_candidates_per_method": 6,
+    "official_sessions_per_candidate": 3,
+    "official_session_cap_per_method": 18,
+    "equal_caps": ["proposer_input_tokens", "proposer_output_tokens", "target_evaluations"],
+    "same_development_task_stream": true,
+    "validation_closed_until_all_four_finalists_frozen": true,
+    "interpretation": "feasibility screening only; no claim of RL superiority"
+  },
+  "stage_3_confirmation": {
+    "versioning": "new run version, never pooled into the screening table",
+    "methods": "original AutoSaddler plus at most one alternative selected using development only",
+    "selection_order": ["highest mean reward", "highest tail reward", "fewest proposer tokens", "fewest target calls"],
+    "algorithm_seeds": [0, 1, 2],
+    "sequential_candidates_per_seed": 8,
+    "official_sessions_per_candidate": 3,
+    "total_official_sessions": 144,
+    "requirements": ["equal official-session budget", "equal proposer-token budget", "equal target-evaluation budget", "freeze each seed finalist", "one validation evaluation without update"]
+  },
+  "rl_definition": {
+    "state": ["current harness", "safe score/cost history", "search state"],
+    "action_timing": "mutation/patch strategy selected before the AutoSaddler call",
+    "reward_timing": "after development evaluation",
+    "online_update": "policy updates after every candidate and the next action depends on the updated policy",
+    "logging": "policy state after every step",
+    "tail_aware_difference": "same policy implementation; only the preregistered lower-tail reward/advantage differs"
+  },
+  "candidate_log_required": [
+    "optimizer", "seed", "candidate_index", "three official session ids", "session type",
+    "proposer input tokens", "proposer output tokens", "target evaluations", "parent hash",
+    "child hash", "proposed patch", "patch acceptance", "development reward", "tail reward",
+    "policy state", "cumulative session budget", "cumulative token budget", "cumulative evaluation budget"
+  ],
+  "cost_table_required": [
+    "improvement per official session", "improvement per 100k proposer input tokens",
+    "improvement per 1k proposer output tokens", "improvement per target call",
+    "development-to-validation generalization gap"
+  ],
+  "budget_stop_rule": {
+    "condition": "confirmation exceeds available Codex budget",
+    "required_completed_work": ["Stage 1", "complete Stage 2 screening"],
+    "verdict": "partially_tested_with_caveats"
+  },
+  "held_out_opened": false
+}

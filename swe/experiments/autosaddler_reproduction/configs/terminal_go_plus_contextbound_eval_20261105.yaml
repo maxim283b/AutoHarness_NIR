@@ -1,0 +1,69 @@
+schema_version: autosaddler/v2
+scenario:
+  type: shared_opencode
+  settings:
+    mode: real
+    launch_ready: true
+    require_go_guard: true
+    benchmarks:
+    - terminal_bench_2
+    case_selection_seed: 42
+    capability_phase_iterations: 2
+    batch_per_benchmark: 2
+    train_per_benchmark: 4
+    development_per_benchmark: 3
+    target_model: opencode-go/qwen3.7-plus
+    require_cleanup_proof: true
+    budget_prior_runs:
+    - go-terminal-pilot-20261103
+    - go-terminal-recovery-20261104
+    - go-terminal-gitfix-20261104
+    - go-terminal-context-20261104
+    - go-terminal-exportfix-20261104
+    - go-terminal-accessfix-20261104
+    - go-terminal-instructionfix-20261104
+    - go-terminal-scratchfix-20261104
+    - go-terminal-nativefix-20261104
+    - go-terminal-reservefix-eval-20261105
+    - go-terminal-streamfix-eval-20261105
+    - go-terminal-timeoutfix-eval-20261105
+    context_policy_version: native-compaction-v1
+    lifecycle_version: 2
+    git_stdin_compat_version: 1
+    native_export_version: 2
+    context_output_access_version: 1
+    optimizer_instruction_path_version: 1
+    optimizer_scratch_access_version: 2
+    request_guard_version: 3
+    optimizer_timeout_export_version: 1
+    reservation_version: 2
+    stream_transport_version: 1
+    request_timeout_version: 1
+optimization:
+  task_selection:
+    type: balanced_benchmarks
+    batch_size: 2
+    seed: 42
+  acceptance:
+    type: matched_valid_strict_improvement
+  development:
+    type: full_on_accept
+  ranking:
+    type: macro_benchmark_development
+  budget:
+    max_rollouts: 31
+    max_iterations: 4
+  diagnosis_patch_timeout_seconds: 3600
+  session_retries: 0
+provider:
+  type: opencode_acp
+  capabilities:
+  - read_workspace
+  - edit_workspace
+  - run_commands
+  - load_skills
+  settings:
+    model: opencode-go/kimi-k2.7-code
+storage:
+  type: local
+  run_root: ../../../results/autosaddler_reproduction/runs

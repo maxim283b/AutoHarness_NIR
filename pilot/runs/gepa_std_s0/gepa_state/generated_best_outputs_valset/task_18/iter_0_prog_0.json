@@ -1,0 +1,5 @@
+{
+    "task_id": 585,
+    "final_code": "def expensive_items(data, n):\n    # Sort the data by price in descending order\n    sorted_data = sorted(data, key=lambda x: x['price'], reverse=True)\n    # Return the top n items\n    return sorted_data[:n]",
+    "final_pass": true
+}

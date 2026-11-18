@@ -1,0 +1,4 @@
+task_id,pass,n_asserts_passed,n_asserts,repair_used,repair_success,prompt_tokens,completion_tokens,latency_s
+742,1,3,3,0,0,82,130,29.85
+792,1,3,3,0,0,96,17,5.3
+787,1,4,4,0,0,67,48,12.42

@@ -1,0 +1,93 @@
+{
+  "task_id": 742,
+  "success": true,
+  "hidden_error": "",
+  "error": "",
+  "initial_protocol": "P1",
+  "final_protocol": "P1",
+  "attempts": 1,
+  "switch_count": 0,
+  "errors": 0,
+  "tool_calls": 1,
+  "switches": [],
+  "events": [
+    {
+      "kind": "executor",
+      "attempt": 0,
+      "protocol": "P1",
+      "content": "def area_tetrahedron(edge_length):\n    # Area of a regular tetrahedron = sqrt(3) * edge_length^2\n    import math\n    return math.sqrt(3) * edge_length ** 2\n\nassert area_tetrahedron(3) == 15.588457268119894",
+      "usage": {
+        "prompt_tokens": 127,
+        "completion_tokens": 80,
+        "calls": 1,
+        "latency_s": 64.4123415999984,
+        "estimated_tokens": false
+      }
+    },
+    {
+      "kind": "visible_check",
+      "attempt": 0,
+      "protocol": "P1",
+      "content": "True: ",
+      "usage": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "calls": 0,
+        "latency_s": 0.0,
+        "estimated_tokens": false
+      }
+    }
+  ],
+  "state": {
+    "task_id": 742,
+    "attempt": 1,
+    "code": "def area_tetrahedron(edge_length):\n    # Area of a regular tetrahedron = sqrt(3) * edge_length^2\n    import math\n    return math.sqrt(3) * edge_length ** 2\n\nassert area_tetrahedron(3) == 15.588457268119894",
+    "plan": "",
+    "critique": "",
+    "feedback": "",
+    "visible_pass": true,
+    "failed_attempts": 0,
+    "event_count": 2,
+    "event_history": [
+      {
+        "kind": "executor",
+        "attempt": 0,
+        "protocol": "P1",
+        "content": "def area_tetrahedron(edge_length):\n    # Area of a regular tetrahedron = sqrt(3) * edge_length^2\n    import math\n    return math.sqrt(3) * edge_length ** 2\n\nassert area_tetrahedron(3) == 15.588457268119894",
+        "usage": {
+          "prompt_tokens": 127,
+          "completion_tokens": 80,
+          "calls": 1,
+          "latency_s": 64.4123415999984,
+          "estimated_tokens": false
+        }
+      },
+      {
+        "kind": "visible_check",
+        "attempt": 0,
+        "protocol": "P1",
+        "content": "True: ",
+        "usage": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "calls": 0,
+          "latency_s": 0.0,
+          "estimated_tokens": false
+        }
+      }
+    ]
+  },
+  "prompt_tokens": 127,
+  "completion_tokens": 80,
+  "tokens": 207,
+  "calls": 1,
+  "controller_tokens": 0,
+  "controller_calls": 0,
+  "controller_latency_s": 0.0,
+  "llm_latency_s": 64.4123415999984,
+  "wall_s": 64.83734100000038,
+  "cost_usd": null,
+  "controller_cost_usd": null,
+  "estimated_tokens": false,
+  "mock": false
+}

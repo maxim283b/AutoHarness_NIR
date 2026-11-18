@@ -1,0 +1,14 @@
+{
+  "run_id": "gepa_smoke",
+  "n_candidates": 1,
+  "best_idx": 0,
+  "best_val_score": 0.7,
+  "seed_val_score": 0.7,
+  "best_candidate_hash": "80356790ad5c7d38116c22bd88443be68fe005eb50a062e11919dcba0b1ab2aa",
+  "total_metric_calls": 32,
+  "reflection_calls": 2,
+  "reflection_prompt_tokens": 1318,
+  "reflection_completion_tokens": 538,
+  "wall_time_s": 752.9020278000098,
+  "finished_at": "2026-10-02T14:04:40.578047+00:00"
+}

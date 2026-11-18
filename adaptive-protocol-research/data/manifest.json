@@ -1,0 +1,51 @@
+{
+  "source": "google-research-datasets/mbpp sanitized; local pilot/data",
+  "source_manifest": "pilot/splits_manifest.json",
+  "visible_tests": "first public assert only",
+  "hidden_tests": "remaining asserts, evaluator only",
+  "selection": "first 12 train and first 20 test in pre-existing seeded split",
+  "train": {
+    "count": 12,
+    "task_ids": [
+      742,
+      792,
+      787,
+      605,
+      801,
+      744,
+      758,
+      627,
+      637,
+      630,
+      732,
+      754
+    ],
+    "sha256": "f7d414f4b5e1602117bb780781e3180a7f139e20c4e99d9cdacda11709aed7ad"
+  },
+  "test": {
+    "count": 20,
+    "task_ids": [
+      98,
+      249,
+      429,
+      12,
+      446,
+      137,
+      68,
+      226,
+      260,
+      439,
+      116,
+      106,
+      307,
+      115,
+      438,
+      93,
+      113,
+      143,
+      398,
+      281
+    ],
+    "sha256": "e57cee0464146002229fbb621962149e3ec1ab9c9f5fddd433bf05123002a9be"
+  }
+}

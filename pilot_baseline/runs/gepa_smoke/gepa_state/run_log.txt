@@ -1,0 +1,34 @@
+Iteration 0: Base program full valset score: 0.7 over 20 / 20 examples
+Iteration 1: Selected program 0 score: 0.7
+Iteration 1: Proposed new text for solver_prompt: ## Instructions
+You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.
+
+### Input Format
+The input will consist of a single task description followed by a series of assertions that the generated function must pass.
+
+### Task Description
+You are required to write a function that takes a string as input and returns a modified string where all vowels (a, e, i, o, u) are replaced with the corresponding vowel from the English alphabet in reverse order. The reverse order starts from 'u' to 'a'. For example, 'a' should be replaced by 'u', 'e' by 'o', 'i' by 'e', 'o' by 'a', and 'u' by 'u' (since it is already at the end of the reverse order). The function should handle both uppercase and lowercase vowels and preserve the case of the input string.
+
+### Example
+Given the input "Hello World", the function should return "Holle Wuurld" since 'e' is replaced by 'o', 'o' by 'u', 'o' by 'u', 'l' remains unchanged, 'd' remains unchanged, 'W' is unchanged, 'o' by 'u', and 'rld' remains unchanged.
+
+### Test Cases
+Your code should pass the following tests:
+assert vowel_reverse("Hello World") == "Holle Wuurld"
+assert vowel_reverse("Programming is fun!") == "Prigrammong os fou!"
+assert vowel_reverse("Python") == "Pythun"
+
+### Additional Information
+- The function should handle both uppercase and lowercase vowels.
+- The function should preserve the case of the input string.
+- The function should not modify any characters other than vowels.
+
+### Repair Attempt
+(not triggered)
+
+### Feedback
+Final result: PASSED all tests. Visible test after solve: passed.
+Iteration 1: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 2: Selected program 0 score: 0.7
+Iteration 2: Proposed new text for repair_prompt: The task is to write a function to calculate the area of a tetrahedron. The function should pass the given test case. The formula for the area of a tetrahedron is (sqrt(3) / 12) * side_length^2 * sqrt(3 * side_length^2 + 6 * edge_length^2), where side_length is the length of a side of the tetrahedron and edge_length is the length of an edge of the tetrahedron. The assistant should fix the given function to correctly calculate the area of a tetrahedron using the provided formula. The assistant should return only one corrected ```python``` code block.
+Iteration 2: New subsample score 2.0 is not better than old score 2.0, skipping

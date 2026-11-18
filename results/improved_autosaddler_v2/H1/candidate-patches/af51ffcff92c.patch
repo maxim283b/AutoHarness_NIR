@@ -1,0 +1,178 @@
+diff --git a/opencode-src/packages/opencode/src/session/prompt.ts b/opencode-src/packages/opencode/src/session/prompt.ts
+index 0f85d44..601f821 100644
+--- a/opencode-src/packages/opencode/src/session/prompt.ts
++++ b/opencode-src/packages/opencode/src/session/prompt.ts
+@@ -18,6 +18,7 @@ import { Instruction } from "./instruction"
+ import { Plugin } from "../plugin"
+ import { MAX_STEPS_PROMPT } from "@opencode-ai/core/session/runner/max-steps"
+ import { ToolRegistry } from "@/tool/registry"
++import { needsSelfVerify } from "@/tool/test-guard"
+ import { MCP } from "../mcp"
+ import { LSP } from "@/lsp/lsp"
+ import { ulid } from "ulid"
+@@ -1083,6 +1084,7 @@ const layer = Layer.effect(
+         const ctx = yield* InstanceState.context
+         let structured: unknown
+         let step = 0
++        let selfVerifyPrompted = false
+         const session = yield* sessions.get(sessionID).pipe(Effect.orDie)
+ 
+         while (true) {
+@@ -1126,6 +1128,36 @@ const layer = Layer.effect(
+               })
+             }
+             yield* Effect.logInfo("exiting loop", { "session.id": sessionID })
++            // Self-verify guard: if edits were made but no test-like command ran
++            // after the last edit, inject a bounded synthetic user turn asking the
++            // model to verify its work instead of exiting silently.
++            if (!selfVerifyPrompted && needsSelfVerify(msgs)) {
++              selfVerifyPrompted = true
++              yield* Effect.logInfo("injecting self-verify prompt", { "session.id": sessionID })
++              const verifyMsg = yield* sessions.updateMessage({
++                id: MessageID.ascending(),
++                role: "user",
++                sessionID,
++                time: { created: Date.now() },
++                agent: lastUser.agent,
++                model: lastUser.model,
++              })
++              yield* sessions.updatePart({
++                id: PartID.ascending(),
++                messageID: verifyMsg.id,
++                sessionID,
++                type: "text",
++                synthetic: true,
++                metadata: { self_verify: true },
++                text:
++                  "Before finishing: you edited files in this session. Run the project's test suite (or the most relevant verification commands) and address any failures caused by your changes. If tests are unavailable or too expensive to run, state what you verified and what remains unverified, then summarize the final result.",
++                time: {
++                  start: Date.now(),
++                  end: Date.now(),
++                },
++              })
++              continue
++            }
+             break
+           }
+ 
+diff --git a/opencode-src/packages/opencode/src/tool/apply_patch.ts b/opencode-src/packages/opencode/src/tool/apply_patch.ts
+index 3f89a63..70c73b7 100644
+--- a/opencode-src/packages/opencode/src/tool/apply_patch.ts
++++ b/opencode-src/packages/opencode/src/tool/apply_patch.ts
+@@ -14,6 +14,7 @@ import DESCRIPTION from "./apply_patch.txt"
+ import { FileSystem } from "@opencode-ai/core/filesystem"
+ import { Format } from "../format"
+ import * as Bom from "@/util/bom"
++import { TEST_GUARD_SUFFIX } from "./test-guard"
+ 
+ export const Parameters = Schema.Struct({
+   patchText: Schema.String.annotate({ description: "The full patch text that describes all changes to be made" }),
+@@ -291,6 +292,7 @@ export const ApplyPatchTool = Tool.define(
+         const rel = path.relative(instance.worktree, target).replaceAll("\\", "/")
+         output += `\n\nLSP errors detected in ${rel}, please fix:\n${block}`
+       }
++      output += `\n\n${TEST_GUARD_SUFFIX}`
+ 
+       return {
+         title: output,
+diff --git a/opencode-src/packages/opencode/src/tool/edit.ts b/opencode-src/packages/opencode/src/tool/edit.ts
+index a92e472..81b5330 100644
+--- a/opencode-src/packages/opencode/src/tool/edit.ts
++++ b/opencode-src/packages/opencode/src/tool/edit.ts
+@@ -18,6 +18,7 @@ import { Snapshot } from "@/snapshot"
+ import { assertExternalDirectoryEffect } from "./external-directory"
+ import { FSUtil } from "@opencode-ai/core/fs-util"
+ import * as Bom from "@/util/bom"
++import { TEST_GUARD_SUFFIX } from "./test-guard"
+ 
+ function normalizeLineEndings(text: string): string {
+   return text.replaceAll("\r\n", "\n")
+@@ -199,6 +200,7 @@ export const EditTool = Tool.define(
+           const normalizedFilePath = FSUtil.normalizePath(filePath)
+           const block = LSP.Diagnostic.report(filePath, diagnostics[normalizedFilePath] ?? [])
+           if (block) output += `\n\nLSP errors detected in this file, please fix:\n${block}`
++          output += `\n\n${TEST_GUARD_SUFFIX}`
+ 
+           return {
+             metadata: {
+diff --git a/opencode-src/packages/opencode/src/tool/test-guard.ts b/opencode-src/packages/opencode/src/tool/test-guard.ts
+new file mode 100644
+index 0000000..e0f504a
+--- /dev/null
++++ b/opencode-src/packages/opencode/src/tool/test-guard.ts
+@@ -0,0 +1,55 @@
++import * as MessageV2 from "@/session/message-v2"
++
++// Tool IDs of the file-editing tools. Kept as plain strings to avoid
++// import cycles with the tool modules themselves.
++export const EDIT_TOOLS: ReadonlySet<string> = new Set(["write", "edit", "apply_patch"])
++
++// Shell tool ID.
++export const SHELL_TOOL = "bash"
++
++const TEST_COMMAND_PATTERNS: readonly RegExp[] = [
++  /pytest|\bunittest\b|\bnose2?\b/,
++  /\bjest\b|\bvitest\b|\bmocha\b|\bkarma\b|\bcypress\b|playwright/,
++  /\brspec\b|\bminitest\b|\bcucumber\b/,
++  /\bphpunit\b|\bpest\b|\bcodecept/,
++  /\btox\b|\bnox\b/,
++  /\bgo\s+test\b|\bcargo\s+test\b|\bmix\s+test\b|\bmvn\s+test\b|gradle\b[^\n]*\btest\b|\bdotnet\s+test\b/,
++  /\bmake\s+(?:test|check)\b/,
++  /(?:npm|yarn|pnpm|bun)\s+(?:run\s+)?test/,
++  /(?:^|[\s/=.:_-])(?:tests?|specs?)(?:[\s/=.:_-]|$)/,
++]
++
++// Heuristic: does this shell command look like it runs a project's tests?
++export function looksLikeTestCommand(command: string): boolean {
++  if (!command) return false
++  const cmd = command.toLowerCase()
++  return TEST_COMMAND_PATTERNS.some((re) => re.test(cmd))
++}
++
++// Short reminder appended to successful edit-tool outputs.
++export const TEST_GUARD_SUFFIX =
++  "Reminder: verify this change by running the project's tests before declaring the task complete."
++
++// True when the conversation contains completed edit-tool calls but no
++// test-like shell command ran after the most recent edit.
++export function needsSelfVerify(msgs: MessageV2.WithParts[]): boolean {
++  let sawEdit = false
++  let verified = false
++  for (const msg of msgs) {
++    for (const part of msg.parts) {
++      if (part.type !== "tool") continue
++      const state = part.state
++      if (state.status !== "completed") continue
++      if (EDIT_TOOLS.has(part.tool)) {
++        sawEdit = true
++        verified = false
++        continue
++      }
++      if (part.tool === SHELL_TOOL) {
++        const command = typeof state.input?.command === "string" ? state.input.command : ""
++        if (looksLikeTestCommand(command)) verified = true
++      }
++    }
++  }
++  return sawEdit && !verified
++}
+diff --git a/opencode-src/packages/opencode/src/tool/write.ts b/opencode-src/packages/opencode/src/tool/write.ts
+index 37be6d8..5fd7393 100644
+--- a/opencode-src/packages/opencode/src/tool/write.ts
++++ b/opencode-src/packages/opencode/src/tool/write.ts
+@@ -14,6 +14,7 @@ import { InstanceState } from "@/effect/instance-state"
+ import { trimDiff } from "./edit"
+ import { assertExternalDirectoryEffect } from "./external-directory"
+ import * as Bom from "@/util/bom"
++import { TEST_GUARD_SUFFIX } from "./test-guard"
+ 
+ const MAX_PROJECT_DIAGNOSTICS_FILES = 5
+ 
+@@ -88,6 +89,7 @@ export const WriteTool = Tool.define(
+             projectDiagnosticsCount++
+             output += `\n\nLSP errors detected in other files:\n${block}`
+           }
++          output += `\n\n${TEST_GUARD_SUFFIX}`
+ 
+           return {
+             title: path.relative(instance.worktree, filepath),

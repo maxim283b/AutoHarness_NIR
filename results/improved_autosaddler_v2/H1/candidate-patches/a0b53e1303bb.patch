@@ -1,0 +1,43 @@
+diff --git a/instructions.md b/instructions.md
+index ffdf624..94eaef3 100644
+--- a/instructions.md
++++ b/instructions.md
+@@ -4,3 +4,20 @@ Use observations to verify your actions. Distinguish tool errors from task
+ failures. Respect the task's scope, preserve unrelated state, and report the
+ actual outcome. When a task provides a communication tool, send the final answer
+ through that tool. Do not inspect evaluation scripts or seek reference solutions.
++
++# Tests and verification
++- Existing tests define correct behavior. NEVER edit, delete, weaken, or skip
++  existing test files, test cases, or test configuration to make tests pass. If
++  a test conflicts with your implementation, fix the implementation, not the
++  test. Only add entirely new tests; never modify existing ones.
++- When running tests or build commands, never pipe their output through
++  head/tail or otherwise truncate it. Read the complete output. If output is
++  long, capture it to a file and search it for failure indicators (e.g.
++  "FAIL", "ERROR", "error", "Traceback", nonzero exit codes) before concluding
++  anything.
++- Before declaring a task complete, run the full relevant test suite for the
++  code you changed (not just a single hand-picked test) and confirm every test
++  passes. Check the exit code of each test command explicitly.
++- Never claim tests pass without having actually run them in this session and
++  observed the full output. Report actual results, including failures. If some
++  tests cannot be run, say so instead of claiming success.
+diff --git a/opencode-src/packages/opencode/src/session/prompt/default.txt b/opencode-src/packages/opencode/src/session/prompt/default.txt
+index c8d9046..8eb5eba 100644
+--- a/opencode-src/packages/opencode/src/session/prompt/default.txt
++++ b/opencode-src/packages/opencode/src/session/prompt/default.txt
+@@ -75,6 +75,13 @@ The user will primarily request you perform software engineering tasks. This inc
+ - VERY IMPORTANT: When you have completed a task, you MUST run the lint and typecheck commands (e.g. npm run lint, npm run typecheck, ruff, etc.) with Bash if they were provided to you to ensure your code is correct. If you are unable to find the correct command, ask the user for the command to run and if they supply it, proactively suggest writing it to AGENTS.md so that you will know to run it next time.
+ NEVER commit changes unless the user explicitly asks you to. It is VERY IMPORTANT to only commit when explicitly asked, otherwise the user will feel that you are being too proactive.
+ 
++# Test verification
++Existing tests define correct behavior and must be treated as immutable:
++- NEVER edit, delete, weaken, skip, or otherwise modify existing test files, test cases, or test configuration to make tests pass. If an existing test fails against your implementation, the implementation is wrong: fix the implementation, not the test. You may only add new tests, never change existing ones.
++- When running tests, builds, or linters, NEVER pipe their output through head/tail or otherwise truncate it. Missing a single failing line in truncated output leads to false conclusions. If output is large, redirect it to a file and search that file for failure indicators (e.g. "FAIL", "ERROR", "error", "Traceback") and check the command's exit code.
++- Before declaring a task complete, run the full relevant test suite covering the code you changed, not just one hand-picked test, and confirm from the complete output and exit code that every test passes.
++- NEVER claim tests pass without actually running them and observing the full output in the current session. Report actual results including failures; if some tests cannot be run, state that plainly instead of claiming success.
++
+ - Tool results and user messages may include <system-reminder> tags. <system-reminder> tags contain useful information and reminders. They are NOT part of the user's provided input or the tool result.
+ 
+ # Tool usage policy

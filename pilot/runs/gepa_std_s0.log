@@ -1,0 +1,634 @@
+Loading gepa state from run dir
+Iteration 44: Base program full valset score: 0.8 over 20 / 20 examples
+Iteration 45: Selected program 2 score: 0.75
+Iteration 45: All subsample scores perfect for parent 2. Skipping.
+Iteration 45: Reflective mutation did not propose a new candidate
+Iteration 46: Selected program 2 score: 0.75
+Iteration 46: Proposed new text for solver_prompt: ## Instructions
+You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.
+
+### Input Format
+The input will be a description of a task, typically in the form of a function specification or a problem statement. The task description may include:
+- A docstring or comment block explaining the purpose and requirements of the function.
+- Specific test cases or assertions that the function must pass.
+
+### Task Description
+The task description will be a detailed problem statement or function specification that outlines the requirements for the function to be implemented. The assistant should infer the following from the input:
+- The name and parameters of the function.
+- The logic or algorithm that the function should implement.
+- Any constraints or edge cases that must be handled.
+
+### Domain-Specific Information
+The assistant should be aware of domain-specific information that may be relevant to the task, such as:
+- Mathematical formulas or algorithms.
+- Programming patterns or best practices.
+- Libraries or frameworks that may be useful.
+
+### Example
+Here is an example of a task description and the corresponding function implementation:
+```
+## Inputs
+Write a function to calculate the area of a rectangle.
+The function should take two parameters: length and width.
+The function should return the area of the rectangle.
+The area of a rectangle is calculated as length * width.
+Your code should pass this test:
+assert rectangle_area(5, 3) == 15
+
+## Generated code
+def rectangle_area(length, width):
+    return length * width
+
+## Visible test result
+passed
+```
+
+### Feedback
+The assistant should provide feedback on the function implementation, including:
+- Whether the function passed all tests.
+- Any issues or bugs in the function.
+- Suggestions for improvement or optimization.
+
+By following these instructions, the assistant will be able to correctly implement the function and provide feedback on its implementation.
+Iteration 46: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 47: Selected program 0 score: 0.8
+Iteration 47: All subsample scores perfect for parent 0. Skipping.
+Iteration 47: Reflective mutation did not propose a new candidate
+Iteration 48: Selected program 0 score: 0.8
+Iteration 48: Proposed new text for solver_prompt: ## Instructions
+
+You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.
+
+### Input Format
+The input will be a list of integers.
+
+### Task Description
+Given a list of integers, write a function to find the length of the longest subarray that contains only one distinct element.
+
+### Example
+```python
+assert longest_subarray([1, 2, 2, 3, 3, 3]) == 3
+assert longest_subarray([1, 1, 1, 1, 1, 1]) == 6
+assert longest_subarray([1, 2, 3, 4, 5]) == 1
+```
+
+### Domain Specific Factual Information
+- A subarray is a contiguous part of an array.
+- A distinct element in a subarray means that no other element in the subarray is the same.
+
+### Generalizable Strategy
+1. Initialize variables to keep track of the current subarray length and the maximum subarray length.
+2. Iterate through the list while keeping track of the current element and its count.
+3. If the current element is the same as the previous one, increment the count.
+4. If the current element is different, update the maximum subarray length and reset the count.
+5. Return the maximum subarray length.
+
+### Example Solution
+```python
+def longest_subarray(nums):
+    if not nums:
+        return 0
+    
+    max_length = 1
+    current_length = 1
+    
+    for i in range(1, len(nums)):
+        if nums[i] == nums[i - 1]:
+            current_length += 1
+        else:
+            max_length = max(max_length, current_length)
+            current_length = 1
+    
+    return max(max_length, current_length)
+```
+
+### Feedback
+The assistant should include the domain specific factual information about subarrays and distinct elements, and provide a generalizable strategy to solve the task. The function should be self-contained and pass all the provided test cases.
+Iteration 48: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 49: Selected program 2 score: 0.75
+Iteration 49: All subsample scores perfect for parent 2. Skipping.
+Iteration 49: Reflective mutation did not propose a new candidate
+Iteration 50: Selected program 2 score: 0.75
+Iteration 50: Proposed new text for repair_prompt: # Instructions
+
+## Task Description
+You are provided with a task that requires you to fix a function to pass a specific test case. The function should calculate the lateral surface area of a cone given the radius \( r \) and the height \( h \). The formula for the lateral surface area of a cone is \( \pi r l \), where \( l \) is the slant height of the cone, calculated as \( \sqrt{r^2 + h^2} \).
+
+## Input Format
+The input will consist of a task description, a previous solution, an error message, and a test case that the previous solution failed.
+
+## Assistant's Responsibilities
+1. **Identify the Error**: Carefully read the error message to understand why the previous solution failed the test case.
+2. **Correct the Function**: Modify the previous solution to fix the error and ensure it passes the test case.
+3. **Return Only One Corrected Code Block**: Provide the corrected function as a single, properly formatted Python code block.
+
+## Domain-Specific Information
+- The lateral surface area of a cone is calculated using the formula \( \pi r l \), where \( l \) is the slant height.
+- The slant height \( l \) can be calculated using the Pythagorean theorem: \( l = \sqrt{r^2 + h^2} \).
+- The input parameters \( r \) and \( h \) are the radius and height of the cone, respectively.
+- The expected output should be a floating-point number representing the lateral surface area of the cone.
+
+## Example Input and Output
+### Example 1
+**Inputs**
+Task:
+Write a function to find the lateral surface area of a cone given radius \( r \) and the height \( h \).
+Your code should pass this test:
+```python
+assert lateralsurface_cone(5,12)==204.20352248333654
+```
+
+Previous solution:
+```python
+import math
+
+def lateralsurface_cone(r, h):
+    return math.pi * r * h
+```
+
+Error:
+```python
+assert lateralsurface_cone(5,12)==204.20352248333654
+-> AssertionError: expected 204.20352248333654, got 188.49555921538757
+```
+
+**Generated Code**
+```python
+import math
+
+def lateralsurface_cone(r, h):
+    l = math.sqrt(r**2 + h**2)
+    return math.pi * r * l
+```
+
+### Example 2
+**Inputs**
+Task:
+Write a function to calculate the area of a rectangle given its length and width.
+Your code should pass this test:
+```python
+assert rectangle_area(4, 5) == 20
+```
+
+Previous solution:
+```python
+def rectangle_area(length, width):
+    return length * width + length + width
+```
+
+Error:
+```python
+assert rectangle_area(4, 5) == 20
+-> AssertionError: expected 20, got 18
+```
+
+**Generated Code**
+```python
+def rectangle_area(length, width):
+    return length * width
+```
+
+## Feedback
+- The assistant should ensure that the function is correctly implemented to pass the test case.
+- The assistant should return only the corrected code block without any additional text or explanations.
+
+## General Strategy
+- Read the error message carefully to identify the issue.
+- Modify the function to include the correct formula for the lateral surface area of a cone.
+- Ensure that the function returns a floating-point number.
+
+## Your Next Task
+Please provide the corrected code block for the given task and test case.
+```
+Iteration 50: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 51: Selected program 0 score: 0.8
+Iteration 51: Proposed new text for repair_prompt: Task:
+You are required to write a Python function that identifies the smallest missing number from a sorted list of natural numbers. The function should return the smallest missing number that is not present in the given list but should be present if the list were continuous. 
+
+Your code should pass the following test:
+assert find_first_missing([0, 1, 2, 3]) == 4
+
+Previous solution:
+```python
+def find_first_missing(nums):
+    expected = 0
+    for num in nums:
+        if num == expected:
+            expected += 1
+        elif num > expected:
+            return expected
+    return len(nums) + 1
+```
+
+Error:
+assert find_first_missing([0, 1, 2, 3]) == 4
+-> AssertionError: expected 4, got 5
+
+## Generated code
+```python
+def find_first_missing(nums):
+    expected = 0
+    for num in nums:
+        if num == expected:
+            expected += 1
+        elif num > expected:
+            return expected
+    return len(nums) + 1
+```
+
+## Visible test result
+failed: assert find_first_missing([0, 1, 2, 3]) == 4
+-> AssertionError: expected 4, got 5
+
+## Repair attempt
+this record IS the repair attempt
+
+## Feedback
+FAIL: the final code passed 2 of 3 tests (the other tests are hidden). Visible test failed with: assert find_first_missing([0, 1, 2, 3]) == 4
+-> AssertionError: expected 4, got 5.
+
+Instructions:
+1. Analyze the error message to understand why the test case failed.
+2. Review the previous solution and identify the mistake that caused the failure.
+3. Correct the mistake in the code and ensure the function now passes the test.
+4. Return only the corrected Python code block.
+5. Ensure that the function works correctly for other test cases as well.
+
+Domain-specific knowledge:
+- The function must handle a sorted list of natural numbers.
+- The function must return the smallest missing number that is not present in the list but should be present if the list were continuous.
+- The function must handle edge cases, such as an empty list or a list with all consecutive numbers.
+
+Generalizable strategy:
+- Iterate through the list of numbers.
+- Keep track of the expected next number in the sequence.
+- If the current number matches the expected number, increment the expected number.
+- If the current number is greater than the expected number, return the expected number as the smallest missing number.
+- If all numbers are present in the list, return the length of the list plus one as the smallest missing number.
+
+Note: The assistant may have utilized a generalizable strategy to solve the task. If so, include that in the instruction as well.
+Iteration 51: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 52: Selected program 2 score: 0.75
+Iteration 52: All subsample scores perfect for parent 2. Skipping.
+Iteration 52: Reflective mutation did not propose a new candidate
+Iteration 53: Selected program 0 score: 0.8
+Iteration 53: Proposed new text for solver_prompt: You are a Python programmer. Write a correct, self-contained Python function to solve the given task. Your function should handle various input formats and edge cases as described in the task description. Ensure your code is well-documented and follows best practices. Include any necessary imports at the beginning of your code block. 
+
+**Task Description:**
+
+Write a function to calculate the sum of all even numbers in a given list.
+
+Your code should pass the following tests:
+assert sum_of_evens([1, 2, 3, 4, 5, 6]) == 12
+assert sum_of_evens([10, 23, 45, 68]) == 178
+assert sum_of_evens([2, 4, 6, 8, 10]) == 30
+
+**Note:** The function should handle both positive and negative integers.
+
+## Example of a Correct Response:
+
+```python
+def sum_of_evens(numbers):
+    # Initialize the sum to 0
+    total_sum = 0
+    # Iterate through each number in the list
+    for num in numbers:
+        # Check if the number is even
+        if num % 2 == 0:
+            # Add the even number to the total sum
+            total_sum += num
+    # Return the total sum of even numbers
+    return total_sum
+```
+
+**Feedback:**
+- The function correctly calculates the sum of even numbers.
+- The function handles both positive and negative integers.
+- The code is well-documented and follows best practices.
+Iteration 53: Accepted candidate (subsample score 1.0 -> 2.0); running full eval.
+Iteration 53: Valset score for new program: 0.8 (coverage 20 / 20)
+Iteration 53: Val aggregate for new program: 0.8
+Iteration 53: Individual valset scores for new program: {0: 1.0, 1: 1.0, 2: 1.0, 3: 1.0, 4: 0.0, 5: 1.0, 6: 1.0, 7: 1.0, 8: 1.0, 9: 0.0, 10: 1.0, 11: 1.0, 12: 1.0, 13: 1.0, 14: 1.0, 15: 0.0, 16: 1.0, 17: 1.0, 18: 1.0, 19: 0.0}
+Iteration 53: Objective aggregate scores for new program: {'pass': 0.8, 'repair_used': 0.2, 'tokens': 617.5}
+Iteration 53: New valset pareto front scores: {0: 1.0, 1: 1.0, 2: 1.0, 3: 1.0, 4: 1.0, 5: 1.0, 6: 1.0, 7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0, 11: 1.0, 12: 1.0, 13: 1.0, 14: 1.0, 15: 0.0, 16: 1.0, 17: 1.0, 18: 1.0, 19: 0.0}
+Iteration 53: Objective pareto front scores: {'pass': 0.8, 'repair_used': 0.25, 'tokens': 862.3}
+Iteration 53: Valset pareto front aggregate score: 0.9
+Iteration 53: Updated valset pareto front programs: {0: {0, 1, 2, 3, 4}, 1: {0, 1, 2, 3, 4}, 2: {1, 2, 4}, 3: {0, 1, 2, 3, 4}, 4: {0}, 5: {0, 1, 2, 3, 4}, 6: {0, 1, 2, 3, 4}, 7: {0, 1, 2, 3, 4}, 8: {4}, 9: {0, 1, 2, 3}, 10: {0, 1, 2, 3, 4}, 11: {0, 1, 2, 3, 4}, 12: {0, 4}, 13: {0, 1, 2, 3, 4}, 14: {0, 1, 2, 3, 4}, 15: {0, 1, 2, 3, 4}, 16: {0, 1, 2, 3, 4}, 17: {0, 1, 2, 3, 4}, 18: {0, 1, 2, 3, 4}, 19: {0, 1, 2, 3, 4}}
+Iteration 53: Updated objective pareto front programs: {'pass': {0, 4}, 'repair_used': {3}, 'tokens': {3}}
+Iteration 53: Best valset aggregate score so far: 0.8
+Iteration 53: Best program as per aggregate score on valset: 0
+Iteration 53: Best score on valset: 0.8
+Iteration 53: Linear pareto front program index: 0
+Iteration 53: New program candidate index: 4
+Iteration 54: Selected program 0 score: 0.8
+Iteration 54: All subsample scores perfect for parent 0. Skipping.
+Iteration 54: Reflective mutation did not propose a new candidate
+Iteration 55: Selected program 0 score: 0.8
+Iteration 55: All subsample scores perfect for parent 0. Skipping.
+Iteration 55: Reflective mutation did not propose a new candidate
+Iteration 56: Selected program 0 score: 0.8
+Iteration 56: All subsample scores perfect for parent 0. Skipping.
+Iteration 56: Reflective mutation did not propose a new candidate
+Iteration 57: Selected program 0 score: 0.8
+Iteration 57: Proposed new text for repair_prompt: Instructions:
+You are provided with a task that requires you to identify and correct a bug in a given Python function. The function is expected to pass a specific test case, but it currently fails. Your task is to read the error message, understand the issue, fix the function, and return only one corrected ```python``` code block.
+
+### Input Format:
+1. **Task Description**: A description of the task, typically a problem statement or a link to a problem.
+2. **Previous Solution**: The provided code block that attempts to solve the task.
+3. **Error Message**: The error message indicating the failure of the test case.
+4. **Visible Test Result**: The result of the failed test case, showing the expected and actual output.
+5. **Repair Attempt**: The assistant's attempt to fix the code.
+
+### Output Format:
+- Return only one corrected ```python``` code block.
+
+### Domain-Specific Information:
+- The task involves checking if an expression is balanced, typically involving parentheses, brackets, and braces.
+- The error message indicates a failure in the test case, specifically with an assertion error.
+
+### General Strategy:
+- Understand the error message and identify the mismatch between expected and actual behavior.
+- Review the provided code and identify the logical flaw or bug.
+- Correct the code to pass the test case.
+- Ensure that the corrected code is concise and follows best practices.
+
+### Examples:
+```plaintext
+# Example 1
+## Inputs
+Task:
+Write a function to check if the given expression is balanced or not. https://www.geeksforgeeks.org/check-for-balanced-parentheses-in-an-expression/
+Your code should pass this test:
+assert check_expression("{()}[{}]") == True
+
+Previous solution:
+```python
+def check_expression(expression):
+    stack = []
+    for char in expression:
+        if char in "([{":
+            stack.append(char)
+        elif char in ")]}":
+            if not stack or stack.pop() != char:
+                return False
+    return len(stack) == 0
+```
+
+Error:
+assert check_expression("{()}[{}]") == True
+-> AssertionError: expected True, got False
+
+## Generated code
+def check_expression(expression):
+    stack = []
+    for char in expression:
+        if char in "([{":
+            stack.append(char)
+        elif char in ")]}":
+            if not stack or stack.pop() != char:
+                return False
+    return len(stack) == 0
+
+## Visible test result
+failed: assert check_expression("{()}[{}]") == True
+-> AssertionError: expected True, got False
+
+## Repair attempt
+this record IS the repair attempt
+
+## Feedback
+FAIL: the final code passed 1 of 3 tests (the other tests are hidden). Visible test failed with: assert check_expression("{()}[{}]") == True
+-> AssertionError: expected True, got False.
+
+```
+
+### Feedback:
+- The final code passed 1 of 3 tests (the other tests are hidden). Visible test failed with: assert check_expression("{()}[{}]") == True
+-> AssertionError: expected True, got False.
+
+### New Instructions:
+- Understand the task, previous solution, error message, visible test result, and repair attempt.
+- Identify and correct the bug in the provided code to pass the test case.
+- Return only one corrected ```python``` code block.
+- Ensure the corrected code is concise and follows best practices.
+Iteration 57: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 58: Selected program 0 score: 0.8
+Iteration 58: All subsample scores perfect for parent 0. Skipping.
+Iteration 58: Reflective mutation did not propose a new candidate
+Iteration 59: Selected program 4 score: 0.8
+Iteration 59: Proposed new text for repair_prompt: Task:
+You are given a list of integers. Write a function to return the sum of the two largest numbers in the list.
+
+Your code should pass these tests:
+assert sum_largest_two([1, 2, 3, 4, 5]) == 9
+assert sum_largest_two([10, 20, 30, 40, 50]) == 90
+assert sum_largest_two([-10, -20, -30, -40, -50]) == -60
+
+Previous solution:
+```python
+def sum_largest_two(nums):
+    # Sort the list of numbers in ascending order
+    nums.sort()
+    # Return the sum of the two largest numbers
+    return nums[-1] + nums[-2]
+```
+
+Error:
+assert sum_largest_two([1, 2, 3, 4, 5]) == 9
+-> AssertionError: expected 9, got 10
+
+## Generated code
+def sum_largest_two(nums):
+    # Sort the list of numbers in ascending order
+    nums.sort()
+    # Return the sum of the two largest numbers
+    return nums[-1] + nums[-2]
+
+## Visible test result
+failed: AssertionError: expected 9, got 10
+
+## Repair attempt
+this record IS the repair attempt
+
+## Feedback
+FAIL: the final code failed 1 of 3 tests (the other tests are hidden). Visible test failed with: AssertionError: expected 9, got 10
+
+Instruction:
+Write a function to return the sum of the two largest numbers in a list. The function should pass the given tests. The input list will always contain at least two numbers. The function should correctly handle both positive and negative numbers.
+
+Domain-specific knowledge:
+- The list will always contain at least two numbers.
+- The function should return the sum of the two largest numbers in the list.
+- The function should handle both positive and negative numbers.
+
+Generalizable strategy:
+- Sort the list in ascending order.
+- Return the sum of the last two elements in the sorted list, which will be the two largest numbers.
+
+Please provide only one corrected python code block as the response.
+Iteration 59: New subsample score 1.0 is not better than old score 2.0, skipping
+Iteration 60: Selected program 4 score: 0.8
+Iteration 60: Proposed new text for solver_prompt: {
+  "instruction": "You are a Python programmer. Write a correct, self-contained Python function to solve the given task. Your function should handle various input formats and edge cases as described in the task description. Ensure your code is well-documented and follows best practices. Include any necessary imports at the beginning of your code block.\n\n**Task Description:**\n\nWrite a function to find the maximum product of any three numbers in a given list.\n\nYour code should pass the following tests:\nassert max_product([1, 2, 3, 4, 5]) == 60\nassert max_product([-10, -20, 5, 1]) == 1000\nassert max_product([-1, -2, -3, -4, -5]) == -10\n\n**Note:** The function should handle both positive and negative integers.\n\n## Example of a Correct Response:\n\n```python\ndef max_product(numbers):\n    # Sort the list in descending order\n    numbers.sort(reverse=True)\n    # The maximum product can be either from the three largest numbers\n    # or from the two smallest (most negative) numbers and the largest number\n    return max(numbers[0] * numbers[1] * numbers[2], numbers[0] * numbers[1] * numbers[-1])\n```\n\n**Feedback:**\n- The function correctly calculates the maximum product of any three numbers.\n- The function handles both positive and negative integers.\n- The code is well-documented and follows best practices.\n"
+}
+Iteration 60: Accepted candidate (subsample score 2.0 -> 3.0); running full eval.
+Iteration 60: Found a better program on the valset with score 0.85.
+Iteration 60: Valset score for new program: 0.85 (coverage 20 / 20)
+Iteration 60: Val aggregate for new program: 0.85
+Iteration 60: Individual valset scores for new program: {0: 1.0, 1: 1.0, 2: 0.0, 3: 1.0, 4: 1.0, 5: 1.0, 6: 1.0, 7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0, 11: 1.0, 12: 1.0, 13: 1.0, 14: 1.0, 15: 0.0, 16: 1.0, 17: 1.0, 18: 1.0, 19: 0.0}
+Iteration 60: Objective aggregate scores for new program: {'pass': 0.85, 'repair_used': 0.2, 'tokens': 621.0}
+Iteration 60: New valset pareto front scores: {0: 1.0, 1: 1.0, 2: 1.0, 3: 1.0, 4: 1.0, 5: 1.0, 6: 1.0, 7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0, 11: 1.0, 12: 1.0, 13: 1.0, 14: 1.0, 15: 0.0, 16: 1.0, 17: 1.0, 18: 1.0, 19: 0.0}
+Iteration 60: Objective pareto front scores: {'pass': 0.85, 'repair_used': 0.25, 'tokens': 862.3}
+Iteration 60: Valset pareto front aggregate score: 0.9
+Iteration 60: Updated valset pareto front programs: {0: {0, 1, 2, 3, 4, 5}, 1: {0, 1, 2, 3, 4, 5}, 2: {1, 2, 4}, 3: {0, 1, 2, 3, 4, 5}, 4: {0, 5}, 5: {0, 1, 2, 3, 4, 5}, 6: {0, 1, 2, 3, 4, 5}, 7: {0, 1, 2, 3, 4, 5}, 8: {4, 5}, 9: {0, 1, 2, 3, 5}, 10: {0, 1, 2, 3, 4, 5}, 11: {0, 1, 2, 3, 4, 5}, 12: {0, 4, 5}, 13: {0, 1, 2, 3, 4, 5}, 14: {0, 1, 2, 3, 4, 5}, 15: {0, 1, 2, 3, 4, 5}, 16: {0, 1, 2, 3, 4, 5}, 17: {0, 1, 2, 3, 4, 5}, 18: {0, 1, 2, 3, 4, 5}, 19: {0, 1, 2, 3, 4, 5}}
+Iteration 60: Updated objective pareto front programs: {'pass': {5}, 'repair_used': {3}, 'tokens': {3}}
+Iteration 60: Best valset aggregate score so far: 0.85
+Iteration 60: Best program as per aggregate score on valset: 5
+Iteration 60: Best score on valset: 0.85
+Iteration 60: Linear pareto front program index: 5
+Iteration 60: New program candidate index: 5
+Iteration 61: Selected program 5 score: 0.85
+Iteration 61: All subsample scores perfect for parent 5. Skipping.
+Iteration 61: Reflective mutation did not propose a new candidate
+Iteration 62: Selected program 5 score: 0.85
+Iteration 62: All subsample scores perfect for parent 5. Skipping.
+Iteration 62: Reflective mutation did not propose a new candidate
+Iteration 63: Selected program 4 score: 0.8
+Iteration 63: Proposed new text for repair_prompt: Task:
+You are provided with a previous solution that failed a test. The task is to read the error message, identify the issue with the function, and correct it. The goal is to return only the corrected Python code block.
+
+Input Format:
+- The input consists of a task description, a previous solution in Python code block, and an error message.
+- The error message indicates the failure of a test case.
+
+Task Description:
+The task is to calculate the area of a tetrahedron. The provided code calculates the area but fails one of the test cases.
+
+Previous Solution:
+```python
+import math
+
+def area_tetrahedron(side_length):
+    base_area = math.sqrt(3) * (side_length ** 2)
+    area = (math.sqrt(2) / 4) * base_area
+    return area
+```
+
+Error Message:
+```
+assert area_tetrahedron(3) == 15.588457268119894
+-> AssertionError: expected 15.588457268119894, got 5.5113519212621505
+```
+
+Instructions:
+1. Read the provided task description and understand the requirements.
+2. Analyze the previous solution and identify the mistake causing the error.
+3. Correct the mistake and provide the corrected Python code block.
+4. Ensure the code passes all the provided test cases.
+
+Guidelines:
+- The assistant should return only the corrected Python code block.
+- The assistant should not include any additional text or explanations unless explicitly asked.
+- The assistant should focus on fixing the provided code and not on writing new code from scratch.
+
+Example of a correct response:
+```python
+import math
+
+def area_tetrahedron(side_length):
+    base_area = (math.sqrt(3) / 4) * (side_length ** 2)
+    area = (math.sqrt(2) / 4) * base_area
+    return area
+```
+Iteration 63: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 64: Selected program 5 score: 0.85
+Iteration 64: Proposed new text for repair_prompt: Instructions:
+You are provided with a task description and previous attempts to solve the task. Your job is to analyze the provided code, understand the error, and provide a corrected version of the code. The input format will always be a task description followed by a previous solution, an error message, and a test case that failed. Your output should be a single corrected ```python``` code block that fixes the error and passes the provided test case.
+
+Example Input:
+Task:
+Write a function to locate the right insertion point for a specified value in sorted order.
+Your code should pass this test:
+assert right_insertion([1,2,4,5],6)==4
+
+Previous solution:
+```python
+def right_insertion(sorted_list, value):
+    # Use the bisect_right function to find the right insertion point
+    return bisect_right(sorted_list, value)
+```
+
+Error:
+assert right_insertion([1,2,4,5],6)==4
+-> NameError: name 'bisect_right' is not defined
+
+## Generated code
+from bisect import bisect_right
+
+def right_insertion(sorted_list, value):
+    # Use the bisect_right function to find the right insertion point
+    return bisect_right(sorted_list, value)
+
+## Visible test result
+passed
+
+## Repair attempt
+this record IS the repair attempt
+
+## Feedback
+PASS: the final code passed all 3 tests.
+
+Example Output:
+```python
+from bisect import bisect_right
+
+def right_insertion(sorted_list, value):
+    # Use the bisect_right function to find the right insertion point
+    return bisect_right(sorted_list, value)
+```
+
+Guidelines:
+1. Read the task description carefully to understand the requirements.
+2. Analyze the previous solution to identify the error.
+3. Correct the error and ensure the function passes the provided test case.
+4. Provide only one corrected ```python``` code block.
+5. Include any necessary imports at the beginning of the code block.
+6. Ensure the code is self-contained and clear.
+
+Niche and Domain Specific Factual Information:
+- The task involves working with sorted lists and using the `bisect` module in Python.
+- The `bisect_right` function from the `bisect` module is used to find the insertion point for a value in a sorted list.
+
+Generalizable Strategy:
+- The assistant should use a generalizable strategy to solve the task, such as importing the necessary module at the beginning of the code block and using the `bisect_right` function to find the insertion point.
+
+By following these instructions, the assistant will be able to correctly identify and fix the error in the previous solution, ensuring the function passes the provided test case.
+Iteration 64: New subsample score 2.0 is not better than old score 2.0, skipping
+{
+ "optimize": {
+  "target": {
+   "calls": 495,
+   "prompt_tokens": 183414,
+   "completion_tokens": 41802,
+   "seconds": 4804.572161197662,
+   "total_tokens": 225216
+  },
+  "teacher": {
+   "calls": 32,
+   "prompt_tokens": 29877,
+   "completion_tokens": 16238,
+   "seconds": 4236.6932237148285,
+   "total_tokens": 46115
+  }
+ },
+ "metric_calls": 405,
+ "wall_seconds": 3838.5,
+ "stop_reason": "max_metric_calls_or_other",
+ "n_candidates": 6,
+ "best_idx": 5,
+ "best_val_score": 0.85,
+ "seed_val_score": 0.8,
+ "usd": 0.0,
+ "usd_note": "both models run locally via Ollama on CPU; cost is reported in tokens and CPU wall time"
+}

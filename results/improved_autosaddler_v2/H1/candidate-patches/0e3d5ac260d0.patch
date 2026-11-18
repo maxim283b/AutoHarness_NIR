@@ -1,0 +1,39 @@
+diff --git a/opencode-src/packages/opencode/src/session/compaction.ts b/opencode-src/packages/opencode/src/session/compaction.ts
+index 75d6374..84a0549 100644
+--- a/opencode-src/packages/opencode/src/session/compaction.ts
++++ b/opencode-src/packages/opencode/src/session/compaction.ts
+@@ -458,6 +458,34 @@ const layer = Layer.effect(
+         return "stop"
+       }
+ 
++      // Preserve the original task statement verbatim: after compaction the
++      // first user message is summarized away with the rest of the head, so
++      // re-attach it to the summary to keep the authoritative requirements in
++      // every post-compaction model context.
++      if (result === "continue") {
++        const taskMsg = input.messages.find(
++          (m) => m.info.role === "user" && !m.parts.some((p) => p.type === "compaction"),
++        )
++        const taskText = taskMsg?.parts
++          .filter((p): p is SessionV1.TextPart => p.type === "text" && !p.ignored)
++          .map((p) => p.text)
++          .join("\n")
++          .trim()
++        if (taskText) {
++          yield* session.updatePart({
++            id: PartID.ascending(),
++            messageID: processor.message.id,
++            sessionID: input.sessionID,
++            type: "text",
++            synthetic: true,
++            text:
++              "Original task statement, preserved verbatim. It remains authoritative for the remainder of this session:\n\n" +
++              taskText.slice(0, 16000),
++            time: { start: Date.now(), end: Date.now() },
++          })
++        }
++      }
++
+       if (compactionPart && selected.tail_start_id && compactionPart.tail_start_id !== selected.tail_start_id) {
+         yield* session.updatePart({
+           ...compactionPart,

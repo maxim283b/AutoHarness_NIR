@@ -1,0 +1,156 @@
+[
+ {
+  "failed_task": 627,
+  "success_task": 605,
+  "success_candidate": "68d2127128afe5a04c87ae8df75e793be6485cf84d5be3c54042af3c6d2868e8",
+  "component": "solver_prompt",
+  "same_task": false
+ },
+ {
+  "failed_task": 801,
+  "success_task": 605,
+  "success_candidate": "68d2127128afe5a04c87ae8df75e793be6485cf84d5be3c54042af3c6d2868e8",
+  "component": "solver_prompt",
+  "same_task": false
+ },
+ {
+  "failed_task": 620,
+  "success_task": 605,
+  "success_candidate": "68d2127128afe5a04c87ae8df75e793be6485cf84d5be3c54042af3c6d2868e8",
+  "component": "solver_prompt",
+  "same_task": false
+ },
+ {
+  "failed_task": 752,
+  "success_task": 754,
+  "success_candidate": "4de8567860e8f91d86e362e696350fa72e9eb7c5852ad3c4509aebadb18bb01d",
+  "component": "repair_prompt",
+  "same_task": false
+ },
+ {
+  "failed_task": 762,
+  "success_task": 744,
+  "success_candidate": "34ed46870312c0e0a150db81479e9bc71391866a0cccf2d0e0f54610a7229c64",
+  "component": "solver_prompt",
+  "same_task": false
+ },
+ {
+  "failed_task": 801,
+  "success_task": 786,
+  "success_candidate": "9707676855476170d84b4a54c26054a097a9d9748359625dc1f8fb1f4f1f5550",
+  "component": "solver_prompt",
+  "same_task": false
+ },
+ {
+  "failed_task": 752,
+  "success_task": 754,
+  "success_candidate": "4de8567860e8f91d86e362e696350fa72e9eb7c5852ad3c4509aebadb18bb01d",
+  "component": "repair_prompt",
+  "same_task": false
+ },
+ {
+  "failed_task": 627,
+  "success_task": 720,
+  "success_candidate": "4cd3802f8127cd2e1551fb7e75706e651a113f7f7c7c40f932e7a7182c0c4c3d",
+  "component": "solver_prompt",
+  "same_task": false
+ },
+ {
+  "failed_task": 620,
+  "success_task": 754,
+  "success_candidate": "4de8567860e8f91d86e362e696350fa72e9eb7c5852ad3c4509aebadb18bb01d",
+  "component": "repair_prompt",
+  "same_task": false
+ },
+ {
+  "failed_task": 771,
+  "success_task": 732,
+  "success_candidate": "68d2127128afe5a04c87ae8df75e793be6485cf84d5be3c54042af3c6d2868e8",
+  "component": "solver_prompt",
+  "same_task": false
+ },
+ {
+  "failed_task": 742,
+  "success_task": 805,
+  "success_candidate": "d0d7f836c46d253af6b2f41e0e9885c45b6600e957097743cf758012c77be372",
+  "component": "solver_prompt",
+  "same_task": false
+ },
+ {
+  "failed_task": 771,
+  "success_task": 754,
+  "success_candidate": "4de8567860e8f91d86e362e696350fa72e9eb7c5852ad3c4509aebadb18bb01d",
+  "component": "repair_prompt",
+  "same_task": false
+ },
+ {
+  "failed_task": 620,
+  "success_task": 720,
+  "success_candidate": "d61197b4544afe74a04519885fcdf237c9e5a194f958a76f3093a38b3d437e2c",
+  "component": "solver_prompt",
+  "same_task": false
+ },
+ {
+  "failed_task": 742,
+  "success_task": 797,
+  "success_candidate": "d9922d67a2366fc6a16c5bdd70a494a66ae4868c3ed7ab52f59e5e58fb9df64f",
+  "component": "repair_prompt",
+  "same_task": false
+ },
+ {
+  "failed_task": 752,
+  "success_task": 720,
+  "success_candidate": "d61197b4544afe74a04519885fcdf237c9e5a194f958a76f3093a38b3d437e2c",
+  "component": "solver_prompt",
+  "same_task": false
+ },
+ {
+  "failed_task": 627,
+  "success_task": 797,
+  "success_candidate": "d9922d67a2366fc6a16c5bdd70a494a66ae4868c3ed7ab52f59e5e58fb9df64f",
+  "component": "repair_prompt",
+  "same_task": false
+ },
+ {
+  "failed_task": 762,
+  "success_task": 720,
+  "success_candidate": "d61197b4544afe74a04519885fcdf237c9e5a194f958a76f3093a38b3d437e2c",
+  "component": "solver_prompt",
+  "same_task": false
+ },
+ {
+  "failed_task": 752,
+  "success_task": 797,
+  "success_candidate": "d9922d67a2366fc6a16c5bdd70a494a66ae4868c3ed7ab52f59e5e58fb9df64f",
+  "component": "repair_prompt",
+  "same_task": false
+ },
+ {
+  "failed_task": 801,
+  "success_task": 720,
+  "success_candidate": "d61197b4544afe74a04519885fcdf237c9e5a194f958a76f3093a38b3d437e2c",
+  "component": "solver_prompt",
+  "same_task": false
+ },
+ {
+  "failed_task": 771,
+  "success_task": 762,
+  "success_candidate": "5e0489fd7013db110024b35d264d651a2a5d51fcb8065a1e8fabe2d411c1986f",
+  "component": "solver_prompt",
+  "same_task": false
+ },
+ {
+  "failed_task": 627,
+  "success_task": 797,
+  "success_candidate": "d9922d67a2366fc6a16c5bdd70a494a66ae4868c3ed7ab52f59e5e58fb9df64f",
+  "component": "repair_prompt",
+  "same_task": false
+ },
+ {
+  "failed_task": 762,
+  "success_task": 762,
+  "success_candidate": "5e0489fd7013db110024b35d264d651a2a5d51fcb8065a1e8fabe2d411c1986f",
+  "component": "solver_prompt",
+  "same_task": true
+ }
+]

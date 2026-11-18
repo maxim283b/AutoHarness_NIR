@@ -1,0 +1,18 @@
+{
+  "run_id": "direct",
+  "split": "test",
+  "n_tasks": 50,
+  "pass_at_1": 0.56,
+  "n_pass": 28,
+  "visible_pass_after_solve": 0.62,
+  "repair_triggered": 0,
+  "repair_success": 0,
+  "harness_errors": 0,
+  "lm_calls": 50,
+  "prompt_tokens_total": 4699,
+  "completion_tokens_total": 2978,
+  "tokens_per_task_mean": 153.54,
+  "lm_latency_per_task_mean_s": 7.480282462000032,
+  "wall_time_s": 411.33148259998416,
+  "finished_at": "2026-10-02T13:26:23.815239+00:00"
+}

@@ -1,0 +1,188 @@
+diff --git a/opencode-src/packages/opencode/src/tool/apply_patch.ts b/opencode-src/packages/opencode/src/tool/apply_patch.ts
+index e84cb53..6c16c12 100644
+--- a/opencode-src/packages/opencode/src/tool/apply_patch.ts
++++ b/opencode-src/packages/opencode/src/tool/apply_patch.ts
+@@ -14,7 +14,7 @@ import DESCRIPTION from "./apply_patch.txt"
+ import { FileSystem } from "@opencode-ai/core/filesystem"
+ import { Format } from "../format"
+ import * as Bom from "@/util/bom"
+-import { isTestFilePath, TEST_FILE_WARNING } from "./test-file-hint"
++import { isExistingTestArtifact, testFileBlockedMessage, isTestFilePath, TEST_FILE_WARNING } from "./test-file-hint"
+ 
+ export const Parameters = Schema.Struct({
+   patchText: Schema.String.annotate({ description: "The full patch text that describes all changes to be made" }),
+@@ -191,6 +191,15 @@ export const ApplyPatchTool = Tool.define(
+         }
+       }
+ 
++      // Refuse to modify or delete existing test artifacts. New test files
++      // (add) stay allowed with the warning appended below.
++      for (const change of fileChanges) {
++        if (change.type === "add" && !change.movePath) continue
++        if (isExistingTestArtifact(change.movePath ?? change.filePath)) {
++          yield* Effect.fail(new Error(testFileBlockedMessage(change.movePath ?? change.filePath)))
++        }
++      }
++
+       // Build per-file metadata for UI rendering (used for both permission and result)
+       const files = fileChanges.map((change) => ({
+         filePath: change.filePath,
+diff --git a/opencode-src/packages/opencode/src/tool/edit.ts b/opencode-src/packages/opencode/src/tool/edit.ts
+index 499ac9c..988ee23 100644
+--- a/opencode-src/packages/opencode/src/tool/edit.ts
++++ b/opencode-src/packages/opencode/src/tool/edit.ts
+@@ -18,7 +18,7 @@ import { Snapshot } from "@/snapshot"
+ import { assertExternalDirectoryEffect } from "./external-directory"
+ import { FSUtil } from "@opencode-ai/core/fs-util"
+ import * as Bom from "@/util/bom"
+-import { isTestFilePath, TEST_FILE_WARNING } from "./test-file-hint"
++import { isExistingTestArtifact, testFileBlockedMessage, isTestFilePath, TEST_FILE_WARNING } from "./test-file-hint"
+ 
+ function normalizeLineEndings(text: string): string {
+   return text.replaceAll("\r\n", "\n")
+@@ -83,6 +83,10 @@ export const EditTool = Tool.define(
+             : path.join(instance.directory, params.filePath)
+           yield* assertExternalDirectoryEffect(ctx, filePath)
+ 
++          if (isExistingTestArtifact(filePath)) {
++            throw new Error(testFileBlockedMessage(filePath))
++          }
++
+           let diff = ""
+           let contentOld = ""
+           let contentNew = ""
+diff --git a/opencode-src/packages/opencode/src/tool/shell.ts b/opencode-src/packages/opencode/src/tool/shell.ts
+index 1e4423e..8be35c8 100644
+--- a/opencode-src/packages/opencode/src/tool/shell.ts
++++ b/opencode-src/packages/opencode/src/tool/shell.ts
+@@ -14,6 +14,7 @@ import { Config } from "@/config/config"
+ import { RuntimeFlags } from "@/effect/runtime-flags"
+ import { Shell } from "@opencode-ai/core/shell"
+ import { ShellID } from "./shell/id"
++import { shellTestArtifactGuard } from "./test-file-hint"
+ 
+ import * as Truncate from "./truncate"
+ import { Plugin } from "@/plugin"
+@@ -615,6 +616,10 @@ export const ShellTool = Tool.define(
+               if (params.timeout !== undefined && params.timeout < 0) {
+                 throw new Error(`Invalid timeout value: ${params.timeout}. Timeout must be a positive number.`)
+               }
++              const guardMessage = shellTestArtifactGuard(params.command, cwd)
++              if (guardMessage) {
++                throw new Error(guardMessage)
++              }
+               const timeout = params.timeout ?? defaultTimeoutMs
+               const ps = Shell.ps(shell)
+               yield* Effect.scoped(
+diff --git a/opencode-src/packages/opencode/src/tool/test-file-hint.ts b/opencode-src/packages/opencode/src/tool/test-file-hint.ts
+index 7c12822..2909da9 100644
+--- a/opencode-src/packages/opencode/src/tool/test-file-hint.ts
++++ b/opencode-src/packages/opencode/src/tool/test-file-hint.ts
+@@ -1,12 +1,82 @@
+-const TEST_DIR_RE = /(^|\/)(tests?|__tests__|specs?|__mocks__)(\/|$)/
++import fs from "node:fs"
++import os from "node:os"
++import * as path from "path"
++
++const TEST_DIR_RE = /(^|\/)(tests?|__tests__|__snapshots__|specs?|__mocks__)(\/|$)/
+ 
+ export function isTestFilePath(p: string) {
+   const normalized = p.replace(/\\/g, "/")
+   if (TEST_DIR_RE.test(normalized)) return true
+   const base = normalized.slice(normalized.lastIndexOf("/") + 1)
++  if (/\.snap$/.test(base)) return true
+   return /(^|[-_.])(test|spec)[-_.]/.test(base) || /^test_/.test(base)
+ }
+ 
++export function testArtifactExists(p: string) {
++  try {
++    return fs.existsSync(p)
++  } catch {
++    return false
++  }
++}
++
++export function isExistingTestArtifact(p: string) {
++  return isTestFilePath(p) && testArtifactExists(p)
++}
++
++export function testFileBlockedMessage(p: string) {
++  return `Refusing to modify test artifact: ${p} is an existing test file, test fixture, or snapshot. Final validation runs the project's pristine test suite, so changes to existing test artifacts are discarded and cannot make validation pass. Implement the required behavior in the corresponding source/implementation files instead, and verify the fix there. You may freely read test files to understand the expected behavior. If a test is genuinely wrong or must be updated, report that explicitly in your final answer without changing it.`
++}
++
+ export const TEST_FILE_WARNING = `
+ 
+ Warning: you just modified a file that appears to be a test or test-utility file. Keep in mind: validation typically runs the project's own pristine test suite, so edits to test files do not count as implementing the task and may be discarded or overridden. Make sure the required behavior is actually implemented in the relevant source/implementation files, and verify it there, instead of relying on changes to tests.`
++
++const SNAPSHOT_FLAG_RE = /(^|[\s"'=])(--update-snapshots?|--updateSnapshot|--update(?![\w-])|-u(?![\w-]))/
++
++const TEST_RUNNER_RE =
++  /(^|[;&|(\s])(jest|vitest|mocha|karma|cypress)(?=$|[\s"')&|;])|(^|[\s"'&|;])(yarn|npm|pnpm|bun)(\s+run)?\s+test(?=$|[\s"':&|;])|\bgo\s+test\b|\bnpx\s+\S*(jest|vitest|mocha)(?=$|[\s&|;])/
++
++const SED_INPLACE_RE = /(^|[;&|\s])(sed|perl)\b[^|;&]*\s-i(?![\w-])/
++
++const FILE_WRITE_CMD_RE = /(^|[;&|\s])(cp|mv|rm|tee|truncate|shred|unlink)\b/
++
++const REDIRECT_RE = /(?:\d|&)?>>?\s*[^\s]/
++
++function stripQuoted(command: string) {
++  return command.replace(/'[^']*'/g, " ").replace(/"([^"\\]|\\.)*"/g, " ")
++}
++
++function resolveCandidate(token: string, cwd: string) {
++  const abs = path.isAbsolute(token) ? token : path.resolve(cwd, token)
++  const tmp = os.tmpdir()
++  if (abs === tmp || abs.startsWith(tmp + path.sep) || abs.startsWith("/tmp/")) return
++  return abs
++}
++
++export function shellTestArtifactGuard(command: string, cwd: string): string | undefined {
++  if (TEST_RUNNER_RE.test(command) && SNAPSHOT_FLAG_RE.test(command)) {
++    return `Blocked: this test command includes a snapshot-update flag (-u / --update-snapshot). Rewriting snapshots masks real failures because final validation restores the pristine test artifacts and runs them as originally written. Run the test again without the update flag, and fix the underlying source or implementation so the assertions pass unmodified.`
++  }
++  const writes =
++    SED_INPLACE_RE.test(command) ||
++    FILE_WRITE_CMD_RE.test(command) ||
++    REDIRECT_RE.test(stripQuoted(command))
++  if (!writes) return undefined
++  // Inspect the quote-stripped command so prose inside quoted strings
++  // (e.g. echo "fix tests" > notes.md) cannot trigger false positives.
++  for (const raw of stripQuoted(command).split(/\s+/)) {
++    const token = raw.replace(/^[>]+/, "").replace(/["',;:)]+$/, "")
++    if (!token || token.startsWith("-")) continue
++    // Bare directory words ("tests", "spec") are usually prose; require a
++    // path-ish token so only real file/dir references are considered.
++    if (/^(tests?|specs?)$/.test(token)) continue
++    if (!isTestFilePath(token)) continue
++    const abs = resolveCandidate(token, cwd)
++    if (!abs) continue
++    if (testArtifactExists(abs)) {
++      return testFileBlockedMessage(token)
++    }
++  }
++  return undefined
++}
+diff --git a/opencode-src/packages/opencode/src/tool/write.ts b/opencode-src/packages/opencode/src/tool/write.ts
+index 2847a80..99c2333 100644
+--- a/opencode-src/packages/opencode/src/tool/write.ts
++++ b/opencode-src/packages/opencode/src/tool/write.ts
+@@ -14,7 +14,7 @@ import { InstanceState } from "@/effect/instance-state"
+ import { trimDiff } from "./edit"
+ import { assertExternalDirectoryEffect } from "./external-directory"
+ import * as Bom from "@/util/bom"
+-import { isTestFilePath, TEST_FILE_WARNING } from "./test-file-hint"
++import { isExistingTestArtifact, testFileBlockedMessage, isTestFilePath, TEST_FILE_WARNING } from "./test-file-hint"
+ 
+ const MAX_PROJECT_DIAGNOSTICS_FILES = 5
+ 
+@@ -44,6 +44,10 @@ export const WriteTool = Tool.define(
+             : path.join(instance.directory, params.filePath)
+           yield* assertExternalDirectoryEffect(ctx, filepath)
+ 
++          if (isExistingTestArtifact(filepath)) {
++            throw new Error(testFileBlockedMessage(filepath))
++          }
++
+           const exists = yield* fs.existsSafe(filepath)
+           const source = exists ? yield* Bom.readFile(fs, filepath) : { bom: false, text: "" }
+           const next = Bom.split(params.content)

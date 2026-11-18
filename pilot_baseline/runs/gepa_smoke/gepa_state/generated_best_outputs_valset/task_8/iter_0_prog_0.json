@@ -1,0 +1,56 @@
+{
+    "task_id": 576,
+    "answer": "def is_Sub_Array(arr1, arr2):\n    return arr1 in arr2",
+    "score": 0.0,
+    "verifier": {
+        "ok": false,
+        "n_passed": 2,
+        "n_total": 3,
+        "error": "AssertionError",
+        "timed_out": false
+    },
+    "repair_used": false,
+    "visible_ok_first": true,
+    "prompt_tokens": 83,
+    "completion_tokens": 23,
+    "latency_s": 6.92142200001399,
+    "n_lm_calls": 1,
+    "seed": 0,
+    "candidate_hash": "80356790ad5c7d38116c22bd88443be68fe005eb50a062e11919dcba0b1ab2aa",
+    "harness_error": null,
+    "steps": [
+        {
+            "run_id": "gepa_smoke",
+            "phase": "optimize",
+            "split": "train|val",
+            "task_id": 576,
+            "candidate_hash": "80356790ad5c7d38116c22bd88443be68fe005eb50a062e11919dcba0b1ab2aa",
+            "solver_prompt_hash": "4b21c06e27d62cb912ef871b11db51a6737241f54c0c133537ce10b71fa4ab2e",
+            "repair_prompt_hash": "7d5eff122c73a44b30ae5e053412b5a45514b8ab83c747c340846f2e52ade694",
+            "model_id": "ollama_chat/qwen2.5-coder:1.5b",
+            "seed": 0,
+            "step": "solve",
+            "messages": [
+                {
+                    "role": "system",
+                    "content": "You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block."
+                },
+                {
+                    "role": "user",
+                    "content": "Write a python function to check whether a list is sublist of another or not.\nYour code should pass this test:\nassert is_Sub_Array([1,4,3,5],[1,2]) == False"
+                }
+            ],
+            "raw_response": "```python\ndef is_Sub_Array(arr1, arr2):\n    return arr1 in arr2\n```",
+            "finish_reason": "stop",
+            "prompt_tokens": 83,
+            "completion_tokens": 23,
+            "latency_s": 6.92142200001399,
+            "extracted_code": "def is_Sub_Array(arr1, arr2):\n    return arr1 in arr2",
+            "visible_test_ok": true,
+            "visible_error": null,
+            "final_pass": false,
+            "n_asserts_passed": 2,
+            "timestamp": "2026-10-02T13:54:33.803614+00:00"
+        }
+    ]
+}

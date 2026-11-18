@@ -1,0 +1,55 @@
+{
+  "schema_version": "final-harness-scientific-protocol/v1",
+  "created_at": "2026-10-12T14:25:00+00:00",
+  "run_id": "staged-scientific-v1",
+  "status": "initialized_after_gate_a2_before_screening_or_validation",
+  "inherits_amendment": "experiments/final_harness_experiment/preregistered_protocol_amendment_staged_v1.json",
+  "gate_a1": {
+    "status": "official_infrastructure_reproduction_passed",
+    "scientific_data_eligible": false,
+    "run_id": "codex-official-smoke-v5"
+  },
+  "gate_a2": {
+    "status": "real_target_benchmark_integration_passed",
+    "scientific_data_eligible": false,
+    "reason": "integration smoke only; raw rows, score and candidate must not be reused",
+    "run_id": "gate-a2-sql-v1",
+    "integrity_report_sha256": "798ce9beb24ec27658d03193fdef84e357668419c2f33b41b7c981af46fe3b5f"
+  },
+  "framework": {
+    "name": "AutoSaddler V2",
+    "commit": "e841543ce6cf6bdf690e65134b12a829ec9f66d1",
+    "provider": "CodexAgentProvider",
+    "official_sessions_per_candidate": ["evolve", "diagnose_patch", "reflect"]
+  },
+  "target": {
+    "model": "ministral-3-8b-instruct-2512",
+    "endpoint": "http://127.0.0.1:1234/v1/chat/completions",
+    "frozen": true
+  },
+  "screening": {
+    "status": "not_started",
+    "methods": ["original_autosaddler_optimizer", "random_search", "tabular_rl_optimizer", "tail_aware_rl_variant"],
+    "algorithm_seeds": [0],
+    "sequential_candidates_per_method": 6,
+    "official_session_cap_per_method": 18,
+    "equal_proposer_input_output_token_caps": true,
+    "equal_target_evaluation_budget": true,
+    "same_development_stream": true,
+    "validation_closed_until_all_finalists_frozen": true
+  },
+  "confirmation": {
+    "status": "not_started",
+    "separate_versioned_run_required": true,
+    "methods": "original plus at most one development-selected alternative",
+    "algorithm_seeds": [0, 1, 2],
+    "candidates_per_seed": 8,
+    "maximum_official_sessions": 144
+  },
+  "data_isolation": {
+    "reuse_gate_a1_rows": false,
+    "reuse_gate_a2_rows": false,
+    "validation_opened": false,
+    "held_out_opened": false
+  }
+}

@@ -1,0 +1,628 @@
+diff --git a/src/autosaddler/v2/core/engine.py b/src/autosaddler/v2/core/engine.py
+index 4b94cd2..9622eb0 100644
+--- a/src/autosaddler/v2/core/engine.py
++++ b/src/autosaddler/v2/core/engine.py
+@@ -121,6 +121,9 @@ class AutoSaddlerEngine:
+             raise
+ 
+     async def _optimize(self) -> OptimizationResult:
++        memory = getattr(self.scenario.prompt_pack, "adaptive_memory", None)
++        if memory is not None:
++            memory.reconcile()
+         state = self._state()
+         if state.run_completed:
+             return self._load_result()
+@@ -592,6 +595,9 @@ class AutoSaddlerEngine:
+                 **extra,
+             },
+         )
++        memory = getattr(self.scenario.prompt_pack, "adaptive_memory", None)
++        if memory is not None:
++            memory.record_iteration(iteration)
+ 
+     async def _drain_deferred(self) -> None:
+         for obligation_id, obligation in sorted(self._state().pending_obligations.items()):
+@@ -678,6 +684,14 @@ class AutoSaddlerEngine:
+                     "lessons": lessons,
+                 },
+             )
++            memory = getattr(self.scenario.prompt_pack, "adaptive_memory", None)
++            if memory is not None:
++                output = result.structured_output
++                assessment = output.get("causal_assessment") if output is not None else None
++                if not isinstance(assessment, Mapping):
++                    raise ValueError("Improved reflection requires causal_assessment")
++                memory.record_reflection(cast(int, obligation.get("owning_iteration")),
++                                         assessment, train_case_ids)
+             self.store.append(
+                 "DeferredWorkCompleted",
+                 operation_id(self.store.run_id, "deferred", obligation_id, "complete"),
+@@ -1222,6 +1236,25 @@ def _required_score(evaluation: Evaluation) -> float:
+     return evaluation.aggregate_score
+ 
+ 
++def _copy_session_file(source: str, destination: str) -> str:
++    """Use isolated APFS clones on macOS; preserve copy2 semantics elsewhere."""
++    import sys
++    if sys.platform == "darwin":
++        import ctypes
++        import errno
++        import os
++        clone = ctypes.CDLL(None, use_errno=True).clonefile
++        clone.argtypes = (ctypes.c_char_p, ctypes.c_char_p, ctypes.c_uint32)
++        clone.restype = ctypes.c_int
++        if clone(os.fsencode(source), os.fsencode(destination), 0) == 0:
++            shutil.copystat(source, destination)
++            return destination
++        code = ctypes.get_errno()
++        if code not in {errno.EXDEV, errno.ENOTSUP, errno.ENOSYS, errno.EINVAL}:
++            raise OSError(code, os.strerror(code), destination)
++    return shutil.copy2(source, destination)
++
++
+ def _prepare_session_attempt_workspace(source: Path | None, destination: Path) -> None:
+     if destination.exists():
+         shutil.rmtree(destination)
+@@ -1244,7 +1277,7 @@ def _prepare_session_attempt_workspace(source: Path | None, destination: Path) -
+             ignored.update({"session_output.json", "session_output_schema.json"})
+         return ignored.intersection(names)
+ 
+-    shutil.copytree(source, destination, symlinks=True, ignore=ignore)
++    shutil.copytree(source, destination, symlinks=True, ignore=ignore, copy_function=_copy_session_file)
+ 
+ 
+ def _case_aggregate_scores(evaluation: Evaluation) -> dict[str, float]:
+diff --git a/src/autosaddler/v2/harness/component_map.py b/src/autosaddler/v2/harness/component_map.py
+index dae037b..c36f61f 100644
+--- a/src/autosaddler/v2/harness/component_map.py
++++ b/src/autosaddler/v2/harness/component_map.py
+@@ -2,6 +2,7 @@ from __future__ import annotations
+ 
+ import difflib
+ import json
++import os
+ import shutil
+ from collections.abc import Callable, Mapping
+ from pathlib import Path
+@@ -151,14 +152,14 @@ class ComponentMapHarnessSpace:
+         components = self._load(candidate.candidate_id)
+         root = self.materialization_root / f"{purpose}-{candidate.candidate_id.removeprefix('sha256:')}"
+         if root.exists():
+-            shutil.rmtree(root)
++            _remove_materialization(root)
+         root.mkdir(parents=True)
+         _write_json(root / "candidate.json", components)
+         (root / "candidate.json").chmod(0o444)
+         return MaterializedHarness(
+             root=root,
+             candidate_id=candidate.candidate_id,
+-            release=lambda: shutil.rmtree(root, ignore_errors=True),
++            release=lambda: _remove_materialization(root),
+         )
+ 
+     def diff(self, parent: Candidate, child: Candidate) -> ChangeSummary:
+@@ -190,7 +191,7 @@ class ComponentMapHarnessSpace:
+                 raise RuntimeError(f"Candidate content collision: {candidate_id}")
+         else:
+             candidate_dir.mkdir(parents=True, exist_ok=False)
+-            candidate_path.write_text(payload, encoding="utf-8")
++            candidate_path.write_text(payload, encoding="utf-8", newline="")
+             candidate_path.chmod(0o444)
+         return Candidate(
+             candidate_id=candidate_id,
+@@ -204,7 +205,6 @@ class ComponentMapHarnessSpace:
+             ),
+             change=change,
+         )
+-
+     def _load(self, candidate_id: str) -> dict[str, str]:
+         path = self.store_root / candidate_id.removeprefix("sha256:") / "candidate.json"
+         if not path.is_file():
+@@ -220,6 +220,19 @@ class ComponentMapHarnessSpace:
+         return components
+ 
+ 
++def _remove_materialization(root: Path) -> None:
++    if not root.exists():
++        return
++    if os.name == "nt":
++        for path in sorted(root.rglob("*"), reverse=True):
++            try:
++                path.chmod(0o700 if path.is_dir() else 0o600)
++            except FileNotFoundError:
++                pass
++        root.chmod(0o700)
++    shutil.rmtree(root)
++
++
+ def _validated_components(value: Mapping[str, object]) -> dict[str, str]:
+     components: dict[str, str] = {}
+     for component, text in value.items():
+@@ -256,4 +269,4 @@ def _component_diff(
+ 
+ def _write_json(path: Path, value: Mapping[str, object]) -> None:
+     path.parent.mkdir(parents=True, exist_ok=True)
+-    path.write_text(canonical_json(value) + "\n", encoding="utf-8")
+\ No newline at end of file
++    path.write_text(canonical_json(value) + "\n", encoding="utf-8", newline="")
+diff --git a/src/autosaddler/v2/harness/git.py b/src/autosaddler/v2/harness/git.py
+index 300e313..6f721a7 100644
+--- a/src/autosaddler/v2/harness/git.py
++++ b/src/autosaddler/v2/harness/git.py
+@@ -218,7 +218,7 @@ class GitHarnessSpace:
+                 raise TypeError(f"Git update content must be text: {raw_path}")
+             destination = session.workspace.joinpath(*path.parts)
+             destination.parent.mkdir(parents=True, exist_ok=True)
+-            destination.write_text(content, encoding="utf-8")
++            destination.write_text(content, encoding="utf-8", newline="")
+ 
+     def finalize(self, session: MutationSession) -> Candidate:
+         parent_ids = self._sessions.get(session.session_id)
+@@ -656,4 +656,4 @@ def _read_json(path: Path) -> dict[str, object]:
+ 
+ def _write_json(path: Path, value: Mapping[str, object]) -> None:
+     path.parent.mkdir(parents=True, exist_ok=True)
+-    path.write_text(canonical_json(value) + "\n", encoding="utf-8")
++    path.write_text(canonical_json(value) + "\n", encoding="utf-8", newline="")
+diff --git a/src/autosaddler/v2/plugins/meta_are/config.py b/src/autosaddler/v2/plugins/meta_are/config.py
+index 676d34f..4ca7412 100644
+--- a/src/autosaddler/v2/plugins/meta_are/config.py
++++ b/src/autosaddler/v2/plugins/meta_are/config.py
+@@ -521,7 +521,10 @@ def _verify_demo_filesystem(
+     if set(expected) != set(actual_paths):
+         raise ValueError("Meta-ARE demo filesystem content does not match its manifest")
+     records = []
+-    for relative in sorted(expected):
++    # Preserve the manifest's recorded entry order. The provisioning manifest is
++    # itself content-addressed; re-sorting with Windows' different Path ordering
++    # would otherwise produce a false aggregate digest drift.
++    for relative in expected:
+         path = actual_paths[relative]
+         actual_digest = sha256_digest(path.read_bytes())
+         if expected[relative] is not None and expected[relative] != actual_digest:
+diff --git a/src/autosaddler/v2/plugins/meta_are/evaluator.py b/src/autosaddler/v2/plugins/meta_are/evaluator.py
+index 5c4324a..e9afb5a 100644
+--- a/src/autosaddler/v2/plugins/meta_are/evaluator.py
++++ b/src/autosaddler/v2/plugins/meta_are/evaluator.py
+@@ -108,7 +108,7 @@ class MetaAREResultNormalizer:
+ 
+             output_path = artifact_dir / "observations" / f"{case_id}-{repetition}.json"
+             output_path.parent.mkdir(parents=True, exist_ok=True)
+-            output_path.write_text(canonical_json(row) + "\n", encoding="utf-8")
++            output_path.write_text(canonical_json(row) + "\n", encoding="utf-8", newline="")
+             lite_value = _json_object(lite_path) if lite_path is not None else {}
+             hf_value = _json_object(hf_path) if hf_path is not None else {}
+             model_usage = _model_usage_records(hf_value, lite_value)
+@@ -142,6 +142,7 @@ class MetaAREResultNormalizer:
+                     )
+                     + "\n",
+                     encoding="utf-8",
++                    newline="",
+                 )
+             observations.append(
+                 Observation.create(
+@@ -393,7 +394,7 @@ def _runner_request_cases(
+         "case_ids": [case.case_id for case in requested_cases],
+         "repetitions": repetitions,
+     }
+-    request_path.write_text(canonical_json(value) + "\n", encoding="utf-8")
++    request_path.write_text(canonical_json(value) + "\n", encoding="utf-8", newline="")
+     return tuple(requested_cases)
+ 
+ 
+@@ -459,6 +460,7 @@ def _write_infrastructure_error(attempt_dir: Path, error: Exception) -> None:
+         )
+         + "\n",
+         encoding="utf-8",
++        newline="",
+     )
+ 
+ 
+diff --git a/src/autosaddler/v2/plugins/meta_are/provisioning.py b/src/autosaddler/v2/plugins/meta_are/provisioning.py
+index 0b72153..bc8881e 100644
+--- a/src/autosaddler/v2/plugins/meta_are/provisioning.py
++++ b/src/autosaddler/v2/plugins/meta_are/provisioning.py
+@@ -1,6 +1,5 @@
+ from __future__ import annotations
+ 
+-import fcntl
+ import hashlib
+ import json
+ import os
+@@ -16,6 +15,11 @@ from importlib.metadata import PackageNotFoundError, version
+ from pathlib import Path
+ from typing import Any, Iterator
+ 
++if os.name == "nt":
++    import msvcrt
++else:
++    import fcntl
++
+ DEFAULT_FILESYSTEM_REPO_ID = "meta-agents-research-environments/gaia2_filesystem"
+ EXPECTED_TOP_LEVEL_DIRECTORIES = (
+     "Documents",
+@@ -83,7 +87,9 @@ class ProvisioningRequest:
+         if _is_within(destination_root, _PROJECT_ROOT):
+             raise ValueError("destination_root must be outside the AutoSaddler repository")
+         existing_ancestor = _nearest_existing_ancestor(destination_root)
+-        if existing_ancestor.stat().st_uid != os.getuid():
++        # Windows has no POSIX uid ownership API. ACL enforcement remains the
++        # operating system's responsibility there; keep the original check on POSIX.
++        if os.name != "nt" and existing_ancestor.stat().st_uid != os.getuid():
+             raise ValueError("destination_root must have a user-owned existing ancestor")
+         object.__setattr__(self, "destination_root", destination_root)
+         object.__setattr__(self, "source_revision", self.source_revision.lower())
+@@ -191,6 +197,7 @@ def _snapshot_download(request: ProvisioningRequest, snapshot_root: Path) -> Pat
+         revision=request.source_revision,
+         allow_patterns="demo_filesystem/**",
+         local_dir=snapshot_root,
++        max_workers=2,
+     )
+     return Path(downloaded)
+ 
+@@ -451,11 +458,24 @@ def _remove_owned_stale_directories(request: ProvisioningRequest) -> None:
+ def _destination_lock(destination_root: Path) -> Iterator[None]:
+     lock_path = destination_root / ".autosaddler-meta-are.lock"
+     with lock_path.open("a+b") as lock_file:
+-        fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX)
++        if os.name == "nt":
++            lock_file.seek(0)
++            if lock_file.read(1) == b"":
++                lock_file.seek(0)
++                lock_file.write(b"0")
++                lock_file.flush()
++            lock_file.seek(0)
++            msvcrt.locking(lock_file.fileno(), msvcrt.LK_LOCK, 1)
++        else:
++            fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX)
+         try:
+             yield
+         finally:
+-            fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
++            if os.name == "nt":
++                lock_file.seek(0)
++                msvcrt.locking(lock_file.fileno(), msvcrt.LK_UNLCK, 1)
++            else:
++                fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
+ 
+ 
+ def _write_json(path: Path, value: dict[str, Any]) -> None:
+@@ -504,6 +524,11 @@ def _nearest_existing_ancestor(path: Path) -> Path:
+ 
+ 
+ def _fsync_tree(root: Path) -> None:
++    # Python/Windows does not provide the POSIX directory durability primitives
++    # used by this publication barrier, and fsync on read-only file descriptors
++    # can fail with EBADF. Atomic rename still provides the publish boundary.
++    if os.name == "nt":
++        return
+     for path in sorted((item for item in root.rglob("*") if item.is_file()), key=lambda item: item.as_posix()):
+         descriptor = os.open(path, os.O_RDONLY)
+         try:
+@@ -516,8 +541,12 @@ def _fsync_tree(root: Path) -> None:
+ 
+ 
+ def _fsync_directory(path: Path) -> None:
++    # Windows does not expose O_DIRECTORY and cannot fsync directory handles
++    # through Python's os.open. File payloads were already flushed above.
++    if os.name == "nt":
++        return
+     descriptor = os.open(path, os.O_RDONLY | os.O_DIRECTORY)
+     try:
+         os.fsync(descriptor)
+     finally:
+-        os.close(descriptor)
+\ No newline at end of file
++        os.close(descriptor)
+diff --git a/src/autosaddler/v2/plugins/meta_are/runner.py b/src/autosaddler/v2/plugins/meta_are/runner.py
+index 1f6f877..e673ab9 100644
+--- a/src/autosaddler/v2/plugins/meta_are/runner.py
++++ b/src/autosaddler/v2/plugins/meta_are/runner.py
+@@ -167,8 +167,8 @@ class MetaARERunner:
+                 shell=False,
+                 check=False,
+             )
+-            stdout_path.write_text(completed.stdout, encoding="utf-8")
+-            stderr_path.write_text(completed.stderr, encoding="utf-8")
++            stdout_path.write_text(completed.stdout, encoding="utf-8", newline="")
++            stderr_path.write_text(completed.stderr, encoding="utf-8", newline="")
+             completion_path.write_text(
+                 canonical_json(
+                     {
+@@ -178,6 +178,7 @@ class MetaARERunner:
+                 )
+                 + "\n",
+                 encoding="utf-8",
++                newline="",
+             )
+             if completed.returncode != 0:
+                 detail = completed.stderr[-2_000:] or completed.stdout[-2_000:]
+diff --git a/src/autosaddler/v2/providers/claude.py b/src/autosaddler/v2/providers/claude.py
+index acc02c8..7faad59 100644
+--- a/src/autosaddler/v2/providers/claude.py
++++ b/src/autosaddler/v2/providers/claude.py
+@@ -330,7 +330,7 @@ def _export_claude_session_state(
+         )
+     except Exception as error:
+         manifest.update({"status": "failed", "error_type": type(error).__name__, "error": str(error)[:2_000]})
+-    manifest_path.write_text(json.dumps(manifest, sort_keys=True, indent=2) + "\n", encoding="utf-8")
++    manifest_path.write_text(json.dumps(manifest, sort_keys=True, indent=2) + "\n", encoding="utf-8", newline="")
+ 
+ 
+ def _jsonl_line_count(path: Path) -> int:
+@@ -341,4 +341,4 @@ def _duration_seconds(message: Any) -> float | None:
+     duration_ms = getattr(message, "duration_ms", None)
+     if isinstance(duration_ms, (int, float)) and not isinstance(duration_ms, bool):
+         return float(duration_ms) / 1_000
+-    return None
+\ No newline at end of file
++    return None
+diff --git a/src/autosaddler/v2/providers/codex.py b/src/autosaddler/v2/providers/codex.py
+index d09bce5..665de57 100644
+--- a/src/autosaddler/v2/providers/codex.py
++++ b/src/autosaddler/v2/providers/codex.py
+@@ -133,6 +133,7 @@ class CodexCliTransport:
+                     )
+                     + "\n",
+                     encoding="utf-8",
++                    newline="",
+                 )
+             except Exception:
+                 logger.warning("Failed to write Codex trace export manifest", exc_info=True)
+diff --git a/src/autosaddler/v2/providers/copilot.py b/src/autosaddler/v2/providers/copilot.py
+index 452ca3d..0e51fdf 100644
+--- a/src/autosaddler/v2/providers/copilot.py
++++ b/src/autosaddler/v2/providers/copilot.py
+@@ -405,7 +405,7 @@ def _export_copilot_session_state(
+         )
+     except Exception as error:
+         manifest.update({"status": "failed", **_error_summary(error)})
+-    manifest_path.write_text(json.dumps(manifest, sort_keys=True, indent=2) + "\n", encoding="utf-8")
++    manifest_path.write_text(json.dumps(manifest, sort_keys=True, indent=2) + "\n", encoding="utf-8", newline="")
+ 
+ 
+ def _copilot_session_metrics(value: Any) -> dict[str, JsonValue]:
+@@ -527,4 +527,4 @@ def _float(value: Any) -> float | None:
+     try:
+         return float(value)
+     except (TypeError, ValueError):
+-        return None
+\ No newline at end of file
++        return None
+diff --git a/src/autosaddler/v2/providers/workspace_renderer.py b/src/autosaddler/v2/providers/workspace_renderer.py
+index 62c453f..0ae9b32 100644
+--- a/src/autosaddler/v2/providers/workspace_renderer.py
++++ b/src/autosaddler/v2/providers/workspace_renderer.py
+@@ -123,7 +123,7 @@ def _contained_path(root: Path, relative_path: str) -> Path:
+ 
+ def _write_text(path: Path, content: str) -> None:
+     path.parent.mkdir(parents=True, exist_ok=True)
+-    path.write_text(content, encoding="utf-8")
++    path.write_text(content, encoding="utf-8", newline="")
+ 
+ 
+ CLAUDE_CAPABILITY_TO_TOOLS: Mapping[Capability, tuple[str, ...]] = MappingProxyType(
+diff --git a/src/autosaddler/v2/storage/local.py b/src/autosaddler/v2/storage/local.py
+index 40d95c2..bd936aa 100644
+--- a/src/autosaddler/v2/storage/local.py
++++ b/src/autosaddler/v2/storage/local.py
+@@ -3,6 +3,7 @@ from __future__ import annotations
+ import json
+ import os
+ import shutil
++import time
+ from collections.abc import Callable, Mapping
+ from pathlib import Path, PurePosixPath
+ from typing import Any
+@@ -277,8 +278,13 @@ class LocalRunStore:
+         if not isinstance(source_budget, dict) or not isinstance(target_budget, dict):
+             raise TypeError("Resolved fork budgets must be mappings")
+         source_budget["max_iterations"] = target_budget.get("max_iterations")
++        # Relocating a run (e.g. to a shorter path on Windows) must not block forking it.
++        if isinstance(source_config.get("storage"), dict) and isinstance(target_config.get("storage"), dict):
++            source_config["storage"]["run_root"] = target_config["storage"].get("run_root")
+         if source_config != target_config:
+-            raise ValueError("Fork target config may differ only in optimization.budget.max_iterations")
++            raise ValueError(
++                "Fork target config may differ only in optimization.budget.max_iterations and storage.run_root"
++            )
+ 
+         source_manifest = source.read_json("manifest.json")
+         target_manifest = self.read_json("manifest.json")
+@@ -475,8 +481,16 @@ def _extension_projection(events: tuple[RunEvent, ...], namespace: str) -> dict[
+ def _atomic_write(path: Path, text: str) -> None:
+     path.parent.mkdir(parents=True, exist_ok=True)
+     temporary = path.with_name(f".{path.name}.tmp")
+-    with temporary.open("w", encoding="utf-8") as destination:
++    with temporary.open("w", encoding="utf-8", newline="") as destination:
+         destination.write(text)
+         destination.flush()
+         os.fsync(destination.fileno())
+-    temporary.replace(path)
++    # On Windows, antivirus/indexers can briefly lock the target and make the rename fail.
++    for attempt in range(10):
++        try:
++            temporary.replace(path)
++            return
++        except PermissionError:
++            if attempt == 9:
++                raise
++            time.sleep(0.1 * (attempt + 1))
+diff --git a/src/autosaddler/v2/core/adaptive_memory.py b/src/autosaddler/v2/core/adaptive_memory.py
+new file mode 100644
+index 0000000..1abb9b1
+--- /dev/null
++++ b/src/autosaddler/v2/core/adaptive_memory.py
+@@ -0,0 +1,172 @@
++"""Durable experiment journal and stage-specific retrieval for AutoSaddler V2.
++
++This extension consumes only optimization events. It does not read held-out cases,
++change evaluation results, or silently infer causality from a score difference.
++"""
++from __future__ import annotations
++
++from collections.abc import Mapping
++
++from autosaddler.v2.core.domain import JsonValue, to_json_value
++from autosaddler.v2.core.events import operation_id
++from autosaddler.v2.storage.local import LocalRunStore
++
++NAMESPACE = "autosaddler.improved_journal"
++
++
++class AdaptiveReflectionMemory:
++    def __init__(self, store: LocalRunStore, *, max_retrieved: int = 4) -> None:
++        if max_retrieved < 1:
++            raise ValueError("max_retrieved must be positive")
++        self.store = store
++        self.max_retrieved = max_retrieved
++
++    def reconcile(self) -> None:
++        """Close the crash window between IterationCompleted and journal commit."""
++        for event in self.store.events_of_type("IterationCompleted"):
++            self.record_iteration(event.payload["iteration"])
++
++    def record_iteration(self, iteration: int) -> None:
++        events = self.store.events()
++        completed = next((e for e in events if e.event_type == "IterationCompleted"
++                          and e.payload.get("iteration") == iteration), None)
++        if completed is None:
++            raise ValueError("Cannot journal an incomplete iteration")
++        scheduled = next((e for e in events if e.event_type == "DeferredWorkScheduled"
++                          and e.payload.get("owning_iteration") == iteration), None)
++        mutation = next((e for e in events if e.event_type == "MutationRejected"
++                         and e.payload.get("iteration") == iteration), None)
++        source = scheduled.payload if scheduled else {}
++        before = _scores(source.get("train_before_case_scores"))
++        after = _scores(source.get("train_after_case_scores"))
++        fixed = sorted(k for k in before.keys() & after.keys() if before[k] == 0 and after[k] > 0)
++        regressed = sorted(k for k in before.keys() & after.keys() if before[k] > 0 and after[k] == 0)
++        entry: dict[str, JsonValue] = {
++            "schema_version": "autosaddler-improved-journal/v1",
++            "iteration": iteration,
++            "problem": source.get("diagnosis") or (mutation.payload.get("verification_failure") if mutation else completed.payload.get("outcome")),
++            "root_cause_hypothesis": source.get("diagnosis"),
++            "proposed_change": source.get("updates"),
++            "changed_components": source.get("changed_components", []),
++            "candidate_id": source.get("candidate_id"),
++            "parent_candidate_id": source.get("working_parent_candidate_id"),
++            "train_before": {"aggregate": source.get("train_before_aggregate"), "case_scores": before},
++            "train_after": {"aggregate": source.get("train_after_aggregate"), "case_scores": after},
++            "validation": {"parent_aggregate": source.get("parent_development_aggregate"),
++                           "candidate_aggregate": source.get("candidate_development_aggregate")},
++            "fixed_case_ids": fixed,
++            "regressed_case_ids": regressed,
++            "outcome": completed.payload.get("outcome"),
++            "accepted": completed.payload.get("accepted") is True,
++            "causal_status": "uncertain",
++            "causal_reason": "Behavioral mechanism has not yet been verified by reflection.",
++            "next_step": "Inspect the changed active code path and matched task traces.",
++            "source_events": [e.operation_id for e in (completed, scheduled, mutation) if e is not None],
++        }
++        self.store.append("ExtensionStateChanged", operation_id(self.store.run_id, "improved-journal", iteration),
++                          {"namespace": NAMESPACE, "kind": "iteration", "entry": entry})
++
++    def record_reflection(self, iteration: int, assessment: Mapping[str, JsonValue], train_case_ids: tuple[str, ...]) -> None:
++        self.record_iteration(iteration)
++        status = assessment.get("status")
++        if status not in {"confirmed", "refuted", "uncertain"}:
++            raise ValueError("Invalid causal status")
++        evidence_ids = assessment.get("evidence_case_ids")
++        if not isinstance(evidence_ids, list) or any(not isinstance(x, str) for x in evidence_ids):
++            raise ValueError("Causal assessment needs evidence case IDs")
++        if not set(evidence_ids) <= set(train_case_ids):
++            raise ValueError("Causal assessment references a non-training case")
++        mechanism = assessment.get("behavioral_mechanism")
++        evidence = assessment.get("evidence")
++        if not isinstance(mechanism, str) or not isinstance(evidence, str):
++            raise ValueError("Causal assessment needs mechanism and evidence")
++        # A metric change alone cannot certify the proposed mechanism.
++        kind = assessment.get("evidence_kind")
++        refs = assessment.get("source_refs")
++        if status == "confirmed" and (kind not in {"trace", "code_route", "tool_behavior"}
++                                      or not isinstance(refs, list) or not refs
++                                      or any(not isinstance(ref, str) or not ref.strip() for ref in refs)
++                                      or not evidence_ids or not mechanism.strip() or not evidence.strip()):
++            raise ValueError("Confirmed mechanism needs behavioral and case evidence")
++        payload = {"namespace": NAMESPACE, "kind": "reflection", "iteration": iteration,
++                   "assessment": to_json_value(assessment)}
++        self.store.append("ExtensionStateChanged", operation_id(self.store.run_id, "improved-reflection", iteration), payload)
++
++    def retrieve(self, stage: str, context: Mapping[str, JsonValue]) -> dict[str, JsonValue]:
++        if stage not in {"evolve", "diagnose_patch", "patch", "reflect"}:
++            raise ValueError("Unknown retrieval stage")
++        self.reconcile()
++        current = context.get("iteration")
++        case_ids = set(x for x in context.get("train_case_ids", []) if isinstance(x, str))
++        reflections = {e.payload.get("iteration"): e.payload.get("assessment")
++                       for e in self.store.events_of_type("ExtensionStateChanged")
++                       if e.payload.get("namespace") == NAMESPACE and e.payload.get("kind") == "reflection"}
++        ranked = []
++        for event in self.store.events_of_type("ExtensionStateChanged"):
++            if event.payload.get("namespace") != NAMESPACE or event.payload.get("kind") != "iteration":
++                continue
++            entry = event.payload["entry"]
++            iteration = entry["iteration"]
++            if isinstance(current, int) and iteration >= current and stage != "reflect":
++                continue
++            if isinstance(current, int) and iteration > current:
++                continue
++            observed = set(entry["train_before"]["case_scores"]) | set(entry["train_after"]["case_scores"])
++            overlap = len(case_ids & observed)
++            score = overlap * 10 + (2 if entry["accepted"] else 0) + (1 if entry["regressed_case_ids"] else 0)
++            if stage == "diagnose_patch" and entry["outcome"] in {"declined", "mutation_rejected"}:
++                score += 3
++            if stage == "patch" and entry["changed_components"]:
++                score += 2
++            if stage == "reflect" and iteration == current:
++                score += 100
++            ranked.append((score, iteration, event.operation_id, entry))
++        ranked.sort(key=lambda row: (row[0], row[1]), reverse=True)
++        records = []
++        for _, iteration, source_id, entry in ranked[:self.max_retrieved]:
++            assessment = reflections.get(iteration)
++            records.append({"iteration": iteration, "source_operation_id": source_id,
++                            "detail_path": f".autosaddler/adaptive_memory/journal/{iteration:04d}.json",
++                            "candidate_id": entry["candidate_id"], "problem": _short(entry["problem"]),
++                            "changed_components": entry["changed_components"],
++                            "fixed_case_ids": entry["fixed_case_ids"], "regressed_case_ids": entry["regressed_case_ids"],
++                            "accepted": entry["accepted"], "outcome": entry["outcome"],
++                            "causal_status": assessment.get("status") if isinstance(assessment, Mapping) else "uncertain",
++                            "causal_evidence": _short(assessment.get("evidence")) if isinstance(assessment, Mapping) else None,
++                            "next_step": _short(assessment.get("next_step")) if isinstance(assessment, Mapping) else entry["next_step"]})
++        return {"schema_version": "autosaddler-adaptive-retrieval/v1", "stage": stage,
++                "source_namespace": NAMESPACE, "records": records,
++                "selection": "case overlap, stage-specific outcome, acceptance, recency; no held-out scores"}
++
++    def selected_details(self, retrieval: Mapping[str, JsonValue]) -> dict[str, str]:
++        selected = {record["iteration"] for record in retrieval["records"]}
++        reflections = {e.payload.get("iteration"): e.payload.get("assessment")
++                       for e in self.store.events_of_type("ExtensionStateChanged")
++                       if e.payload.get("namespace") == NAMESPACE and e.payload.get("kind") == "reflection"}
++        from autosaddler.v2.core.domain import canonical_json
++        files = {}
++        for event in self.store.events_of_type("ExtensionStateChanged"):
++            if event.payload.get("namespace") != NAMESPACE or event.payload.get("kind") != "iteration":
++                continue
++            entry = event.payload["entry"]
++            iteration = entry["iteration"]
++            if iteration in selected:
++                path = f".autosaddler/adaptive_memory/journal/{iteration:04d}.json"
++                files[path] = canonical_json({"source_operation_id": event.operation_id,
++                                              "entry": entry, "reflection": reflections.get(iteration)}) + "\n"
++        if len(files) != len(selected):
++            raise RuntimeError("Retrieved journal detail missing")
++        return files
++
++
++def _scores(value: object) -> dict[str, float]:
++    if not isinstance(value, Mapping):
++        return {}
++    return {str(k): float(v) for k, v in value.items() if isinstance(v, (int, float)) and not isinstance(v, bool)}
++
++
++def _short(value: object, limit: int = 400) -> str | None:
++    if value is None:
++        return None
++    text = str(value)
++    return text[:limit] + ("…" if len(text) > limit else "")

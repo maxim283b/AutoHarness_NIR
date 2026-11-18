@@ -1,0 +1,25 @@
+{
+  "schema_version": "optimizer-spec/v1",
+  "rl_optimizer": {
+    "state": ["candidate_hash", "score_bin", "step", "last_actions", "last_rewards", "cumulative_budget"],
+    "actions": ["system_instruction", "planning_instruction", "verification_instruction", "repair_rule", "tool_rule", "stop_rule"],
+    "policy": "tabular_softmax",
+    "update": "on_policy_REINFORCE_with_exponential_baseline",
+    "minimum_dependent_steps": 4,
+    "planned_core_steps": 14,
+    "is_true_rl_by_project_definition": true
+  },
+  "tailrl": {
+    "identified_name": "Tail-Likelihood Reinforcement Learning",
+    "paper": "https://arxiv.org/abs/2609.02987",
+    "official_repository": "https://github.com/Zanette-Labs/TailRL",
+    "commit": "5682c6ac03387355e017ce966693266bb148fa10",
+    "exact_reproduction": false,
+    "reason": "Official TailRL updates a generative token policy with a tail-likelihood policy-gradient advantage; this experiment keeps target and proposer frozen and only learns a discrete harness-action policy."
+  },
+  "tail_aware_rl_variant": {
+    "base_policy": "same tabular sequential RL as rl_optimizer",
+    "objective": "0.8 * mean_task_reward + 0.2 * mean_worst_20_percent_task_reward",
+    "published_tailrl_claim_permitted": false
+  }
+}

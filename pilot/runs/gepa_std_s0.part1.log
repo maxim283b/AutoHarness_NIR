@@ -1,0 +1,1045 @@
+Iteration 0: Base program full valset score: 0.8 over 20 / 20 examples
+Iteration 1: Selected program 0 score: 0.8
+Iteration 1: Proposed new text for solver_prompt: ## Instructions
+You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.
+
+### Input Format
+The input will be a description of a task, typically in the form of a function specification or a problem statement. The task description may include:
+- A docstring or comment block explaining the purpose and requirements of the function.
+- Specific test cases or assertions that the function must pass.
+
+### Task Description
+The task description will be a detailed problem statement or function specification that outlines the requirements for the function to be implemented. The assistant should infer the following from the input:
+- The name and parameters of the function.
+- The logic or algorithm that the function should implement.
+- Any constraints or edge cases that must be handled.
+
+### Domain-Specific Information
+The assistant should be aware of domain-specific information that may be relevant to the task, such as:
+- Mathematical formulas or algorithms.
+- Programming patterns or best practices.
+- Libraries or frameworks that may be useful.
+
+### Example
+Here is an example of a task description and the corresponding function implementation:
+```
+## Inputs
+Write a function to calculate the area of a rectangle.
+The function should take two parameters: length and width.
+The function should return the area of the rectangle.
+The area of a rectangle is calculated as length * width.
+Your code should pass this test:
+assert rectangle_area(5, 3) == 15
+
+## Generated code
+def rectangle_area(length, width):
+    return length * width
+
+## Visible test result
+passed
+```
+
+### Feedback
+The assistant should provide feedback on the function implementation, including:
+- Whether the function passed all tests.
+- Any issues or bugs in the function.
+- Suggestions for improvement or optimization.
+
+By following these instructions, the assistant will be able to correctly implement the function and provide feedback on its implementation.
+Iteration 1: Accepted candidate (subsample score 2.0 -> 3.0); running full eval.
+Iteration 1: Valset score for new program: 0.75 (coverage 20 / 20)
+Iteration 1: Val aggregate for new program: 0.75
+Iteration 1: Individual valset scores for new program: {0: 1.0, 1: 1.0, 2: 1.0, 3: 1.0, 4: 0.0, 5: 1.0, 6: 1.0, 7: 1.0, 8: 0.0, 9: 1.0, 10: 1.0, 11: 1.0, 12: 0.0, 13: 1.0, 14: 1.0, 15: 0.0, 16: 1.0, 17: 1.0, 18: 1.0, 19: 0.0}
+Iteration 1: Objective aggregate scores for new program: {'pass': 0.75, 'repair_used': 0.2, 'tokens': 574.45}
+Iteration 1: New valset pareto front scores: {0: 1.0, 1: 1.0, 2: 1.0, 3: 1.0, 4: 1.0, 5: 1.0, 6: 1.0, 7: 1.0, 8: 0.0, 9: 1.0, 10: 1.0, 11: 1.0, 12: 1.0, 13: 1.0, 14: 1.0, 15: 0.0, 16: 1.0, 17: 1.0, 18: 1.0, 19: 0.0}
+Iteration 1: Objective pareto front scores: {'pass': 0.8, 'repair_used': 0.2, 'tokens': 574.45}
+Iteration 1: Valset pareto front aggregate score: 0.85
+Iteration 1: Updated valset pareto front programs: {0: {0, 1}, 1: {0, 1}, 2: {1}, 3: {0, 1}, 4: {0}, 5: {0, 1}, 6: {0, 1}, 7: {0, 1}, 8: {0, 1}, 9: {0, 1}, 10: {0, 1}, 11: {0, 1}, 12: {0}, 13: {0, 1}, 14: {0, 1}, 15: {0, 1}, 16: {0, 1}, 17: {0, 1}, 18: {0, 1}, 19: {0, 1}}
+Iteration 1: Updated objective pareto front programs: {'pass': {0}, 'repair_used': {1}, 'tokens': {1}}
+Iteration 1: Best valset aggregate score so far: 0.8
+Iteration 1: Best program as per aggregate score on valset: 0
+Iteration 1: Best score on valset: 0.8
+Iteration 1: Linear pareto front program index: 0
+Iteration 1: New program candidate index: 1
+Iteration 2: Selected program 1 score: 0.75
+Iteration 2: All subsample scores perfect for parent 1. Skipping.
+Iteration 2: Reflective mutation did not propose a new candidate
+Iteration 3: Selected program 1 score: 0.75
+Iteration 3: All subsample scores perfect for parent 1. Skipping.
+Iteration 3: Reflective mutation did not propose a new candidate
+Iteration 4: Selected program 1 score: 0.75
+Iteration 4: Proposed new text for repair_prompt: The previous solution failed a test. Read the error, fix the function, and return only one corrected ```python``` code block.
+
+Input format:
+- The input will be a string containing the previous solution code block, the error message, and the expected output.
+- The error message will be a string indicating what went wrong.
+- The expected output will be a string containing the expected result of the function.
+
+Domain specific factual information:
+- The task involves calculating the lateral surface area of a cone.
+- The formula for the lateral surface area of a cone is \( \pi r h \), where \( r \) is the radius and \( h \) is the height.
+
+Generalizable strategy:
+- The assistant should read the error message and understand what went wrong with the previous solution.
+- The assistant should then fix the function accordingly and return only the corrected code block.
+- The assistant should not provide additional explanations or code blocks other than the corrected one.
+Iteration 4: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 5: Selected program 0 score: 0.8
+Iteration 5: All subsample scores perfect for parent 0. Skipping.
+Iteration 5: Reflective mutation did not propose a new candidate
+Iteration 6: Selected program 1 score: 0.75
+Iteration 6: Proposed new text for solver_prompt: {
+  "instruction": "You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.\n\n### Input Format\nThe input will be a description of a task, typically in the form of a function specification or a problem statement. The task description may include:\n- A docstring or comment block explaining the purpose and requirements of the function.\n- Specific test cases or assertions that the function must pass.\n\n### Task Description\nThe task description will be a detailed problem statement or function specification that outlines the requirements for the function to be implemented. The assistant should infer the following from the input:\n- The name and parameters of the function.\n- The logic or algorithm that the function should implement.\n- Any constraints or edge cases that must be handled.\n\n### Domain-Specific Information\nThe assistant should be aware of domain-specific information that may be relevant to the task, such as:\n- Mathematical formulas or algorithms.\n- Programming patterns or best practices.\n- Libraries or frameworks that may be useful.\n\n### Example\nHere is an example of a task description and the corresponding function implementation:\n```\n## Inputs\nWrite a function to calculate the area of a rectangle.\nThe function should take two parameters: length and width.\nThe function should return the area of the rectangle.\nThe area of a rectangle is calculated as length * width.\nYour code should pass this test:\nassert rectangle_area(5, 3) == 15\n\n## Generated code\ndef rectangle_area(length, width):\n    return length * width\n\n## Visible test result\npassed\n```\n\n### Feedback\nThe assistant should provide feedback on the function implementation, including:\n- Whether the function passed all tests.\n- Any issues or bugs in the function.\n- Suggestions for improvement or optimization.\n\nBy following these instructions, the assistant will be able to correctly implement the function and provide feedback on its implementation.\n\n### Additional Instructions\n- Identify and include domain-specific factual information in the instructions.\n- Recognize and document any generalizable strategies used by the assistant in solving tasks.\n- Ensure the instructions are clear and concise, covering all necessary details for the assistant to understand and implement the task effectively."
+}
+Iteration 6: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 7: Selected program 1 score: 0.75
+Iteration 7: Proposed new text for repair_prompt: The task is to write a function to check if the given expression is balanced or not. The function should return True if the expression is balanced, and False otherwise. The expression may contain parentheses (), square brackets [], and curly braces {}. The function should correctly handle nested parentheses, brackets, and braces.
+
+The previous solution failed a test. The test case was check_expression("{()}[{}]"), which should return True. The error was that the function returned False instead of True.
+
+The assistant should read the error, fix the function, and return only one corrected python code block. The corrected code block should pass the test case check_expression("{()}[{}]") == True.
+
+The assistant should also provide a repair attempt and a feedback on the result. The repair attempt should explain the changes made to the function to fix the error. The feedback should indicate whether the final code passed the test case and any other tests (if any are visible or hidden).
+
+The assistant should also identify all niche and domain specific factual information about the task, such as the types of brackets and braces that may be present in the expression, and how the function should handle them. The assistant should also identify any generalizable strategies that were used to solve the task, such as using a stack to keep track of the opening brackets and checking that they match the closing brackets in the correct order.
+Iteration 7: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 8: Selected program 1 score: 0.75
+Iteration 8: Proposed new text for solver_prompt: {
+  "instruction": "You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.\n\n### Input Format\nThe input will be a description of a task, typically in the form of a function specification or a problem statement. The task description may include:\n- A docstring or comment block explaining the purpose and requirements of the function.\n- Specific test cases or assertions that the function must pass.\n\n### Task Description\nThe task description will be a detailed problem statement or function specification that outlines the requirements for the function to be implemented. The assistant should infer the following from the input:\n- The name and parameters of the function.\n- The logic or algorithm that the function should implement.\n- Any constraints or edge cases that must be handled.\n\n### Domain-Specific Information\nThe assistant should be aware of domain-specific information that may be relevant to the task, such as:\n- Mathematical formulas or algorithms.\n- Programming patterns or best practices.\n- Libraries or frameworks that may be useful.\n\n### Example\nHere is an example of a task description and the corresponding function implementation:\n```\n## Inputs\nWrite a function to calculate the area of a rectangle.\nThe function should take two parameters: length and width.\nThe function should return the area of the rectangle.\nThe area of a rectangle is calculated as length * width.\nYour code should pass this test:\nassert rectangle_area(5, 3) == 15\n\n## Generated code\ndef rectangle_area(length, width):\n    return length * width\n\n## Visible test result\npassed\n```\n\n### Feedback\nThe assistant should provide feedback on the function implementation, including:\n- Whether the function passed all tests.\n- Any issues or bugs in the function.\n- Suggestions for improvement or optimization.\n\nBy following these instructions, the assistant will be able to correctly implement the function and provide feedback on its implementation.\n\n### Additional Instructions\n- Identify and include domain-specific factual information in the instructions, such as mathematical formulas or algorithms, programming patterns or best practices, and libraries or frameworks that may be useful.\n- If the assistant uses a generalizable strategy to solve the task, include that in the instructions as well.\n- Provide the new instructions within ``` blocks."
+}
+Iteration 8: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 9: Selected program 1 score: 0.75
+Iteration 9: All subsample scores perfect for parent 1. Skipping.
+Iteration 9: Reflective mutation did not propose a new candidate
+Iteration 10: Selected program 0 score: 0.8
+Iteration 10: Proposed new text for repair_prompt: Instructions:
+You are provided with a task and a previous solution that failed one or more tests. Your job is to read the error message, identify the issue with the previous solution, fix the code, and return only one corrected ```python``` code block. The test cases are provided to help you understand what is expected.
+
+Input format:
+- Task description: A description of the task, usually a problem statement or a link to a resource.
+- Previous solution: The code that was provided as a solution to the task.
+- Error message: The error message that was returned when running the tests.
+
+Output format:
+- Corrected ```python``` code block: Only return the corrected code block, without any additional text or comments.
+
+Example:
+
+## Inputs
+Task:
+Write a function to find the nth jacobsthal number. https://www.geeksforgeeks.org/jacobsthal-and-jacobsthal-lucas-numbers/ 0, 1, 1, 3, 5, 11, 21, 43, 85, 171, 341, 683, 1365, 2731, ...
+Your code should pass this test:
+assert jacobsthal_num(5) == 11
+
+Previous solution:
+```python
+def jacobsthal_num(n):
+    # Initialize the first two Jacobsthal numbers
+    a, b = 0, 1
+    
+    # Iterate to find the nth Jacobsthal number
+    for _ in range(2, n + 1):
+        a, b = b, a + b
+    
+    return b
+```
+
+Error:
+assert jacobsthal_num(5) == 11
+-> AssertionError: expected 11, got 5
+
+## Generated code
+def jacobsthal_num(n):
+    # Initialize the first two Jacobsthal numbers
+    a, b = 0, 1
+    
+    # Iterate to find the nth Jacobsthal number
+    for _ in range(2, n + 1):
+        a, b = b, a + 2 * b
+    
+    return b
+
+## Feedback
+FAIL: the final code passed 0 of 4 tests (the other tests are hidden). Visible test failed with: assert jacobsthal_num(5) == 11
+-> AssertionError: expected 11, got 29.
+
+## Repair attempt
+this record IS the repair attempt
+
+## Feedback
+FAIL: the final code passed 0 of 4 tests (the other tests are hidden). Visible test failed with: assert jacobsthal_num(5) == 11
+-> AssertionError: expected 11, got 29.
+
+## New Instructions:
+1. Read the task description carefully.
+2. Identify the issue with the previous solution by reading the error message.
+3. Fix the code to pass the given test cases.
+4. Return only the corrected ```python``` code block.
+5. Do not include any additional text or comments.
+
+Example output:
+```python
+def jacobsthal_num(n):
+    # Initialize the first two Jacobsthal numbers
+    a, b = 0, 1
+    
+    # Iterate to find the nth Jacobsthal number
+    for _ in range(2, n + 1):
+        a, b = b, a + 2 * b
+    
+    return b
+```
+Iteration 10: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 11: Selected program 0 score: 0.8
+Iteration 11: All subsample scores perfect for parent 0. Skipping.
+Iteration 11: Reflective mutation did not propose a new candidate
+Iteration 12: Selected program 1 score: 0.75
+Iteration 12: Proposed new text for repair_prompt: Instructions:
+You are provided with a task that requires you to identify and correct a Python function that failed a test. The task involves understanding the error message, modifying the function to address the issue, and ensuring that the corrected function passes all provided tests. The assistant is expected to return only the corrected Python code block.
+
+Input Format:
+The input will consist of:
+1. A task description, explaining what the function is supposed to do.
+2. A previous solution to the task.
+3. An error message indicating why the test failed.
+4. A list of test cases to pass.
+
+The task description will be in the following format:
+```
+Task:
+Write a python function to [description of the function's purpose].
+Your code should pass this test:
+assert test_function_name(expected_output)
+```
+
+Previous solution:
+```python
+def test_function_name(parameters):
+    [previous function implementation]
+```
+
+Error:
+[error message]
+
+## Generated code
+```python
+[corrected function implementation]
+```
+
+## Visible test result
+[whether the visible test passed or failed]
+
+## Repair attempt
+[any notes or comments on the repair attempt]
+
+## Feedback
+[feedback on the repair attempt]
+```
+
+Output Format:
+The assistant should return only the corrected Python code block:
+```python
+def test_function_name(parameters):
+    [corrected function implementation]
+```
+
+Domain Specific Factual Information:
+- Python function definition syntax.
+- Common Python data types and operations.
+- Conditional statements and control flow.
+- List comprehension and iterators.
+- Error handling and debugging techniques.
+
+Generalizable Strategy:
+- Understand the error message and identify the root cause.
+- Modify the function to address the issue.
+- Ensure that the corrected function passes all provided tests.
+- Return only the corrected code block without any additional explanation or comments.
+
+Examples of Different Task Inputs:
+1. Counting equal numbers from three integers.
+2. Calculating the sum of even numbers in a list.
+3. Checking if a string is a palindrome.
+
+By following these instructions, the assistant will be able to provide accurate and concise solutions to the tasks presented to them.
+Iteration 12: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 13: Selected program 1 score: 0.75
+Iteration 13: Proposed new text for solver_prompt: {
+  "instruction": "You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.\n\n### Input Format\nThe input will be a description of a task, typically in the form of a function specification or a problem statement. The task description may include:\n- A docstring or comment block explaining the purpose and requirements of the function.\n- Specific test cases or assertions that the function must pass.\n\n### Task Description\nThe task description will be a detailed problem statement or function specification that outlines the requirements for the function to be implemented. The assistant should infer the following from the input:\n- The name and parameters of the function.\n- The logic or algorithm that the function should implement.\n- Any constraints or edge cases that must be handled.\n\n### Domain-Specific Information\nThe assistant should be aware of domain-specific information that may be relevant to the task, such as:\n- Mathematical formulas or algorithms.\n- Programming patterns or best practices.\n- Libraries or frameworks that may be useful.\n\n### Example\nHere is an example of a task description and the corresponding function implementation:\n```\n## Inputs\nWrite a function to calculate the area of a rectangle.\nThe function should take two parameters: length and width.\nThe function should return the area of the rectangle.\nThe area of a rectangle is calculated as length * width.\nYour code should pass this test:\nassert rectangle_area(5, 3) == 15\n\n## Generated code\ndef rectangle_area(length, width):\n    return length * width\n\n## Visible test result\npassed\n```\n\n### Feedback\nThe assistant should provide feedback on the function implementation, including:\n- Whether the function passed all tests.\n- Any issues or bugs in the function.\n- Suggestions for improvement or optimization.\n\nBy following these instructions, the assistant will be able to correctly implement the function and provide feedback on its implementation."
+}
+Iteration 13: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 14: Selected program 0 score: 0.8
+Iteration 14: All subsample scores perfect for parent 0. Skipping.
+Iteration 14: Reflective mutation did not propose a new candidate
+Iteration 15: Selected program 1 score: 0.75
+Iteration 15: Proposed new text for repair_prompt: The task is to write a function to calculate the nth Jacobsthal number. The Jacobsthal numbers are a sequence of integers defined by the recurrence relation J(n) = 2J(n-1) + J(n-2), with the initial conditions J(0) = 0 and J(1) = 1. The function should pass the provided test case: assert jacobsthal_num(5) == 11. The previous solution attempted to implement the function using a loop, but it contained an error. The error was that the loop incorrectly updated the variables a and b, leading to incorrect results. The assistant should read the error, fix the function, and return only one corrected Python code block.
+Iteration 15: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 16: Selected program 1 score: 0.75
+Iteration 16: All subsample scores perfect for parent 1. Skipping.
+Iteration 16: Reflective mutation did not propose a new candidate
+Iteration 17: Selected program 0 score: 0.8
+Iteration 17: Proposed new text for solver_prompt: You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.
+
+The task involves writing a function that takes a list of integers as input and returns the maximum sum of any contiguous subarray within that list. The function should handle edge cases where the list may be empty or contain only negative numbers.
+
+**Input Format:**
+- A list of integers `nums`.
+
+**Output Format:**
+- An integer representing the maximum sum of any contiguous subarray within the input list.
+
+**Example:**
+```python
+# Example usage
+assert max_subarray_sum([-2, 1, -3, 4, -1, 2, 1, -5, 4]) == 6
+assert max_subarray_sum([1]) == 1
+assert max_subarray_sum([-1, -2, -3]) == -1
+assert max_subarray_sum([]) == 0
+```
+
+**Task Description:**
+The task requires implementing the Kadane's algorithm, which is an efficient way to find the maximum sum of a contiguous subarray within a one-dimensional numeric array. The algorithm works by iterating through the array and keeping track of the maximum sum of the subarray ending at the current position.
+
+**Niche and Domain Specific Factual Information:**
+- Kadane's algorithm is an optimization technique that involves iterating through the array only once, making it an O(n) solution.
+- The algorithm maintains two variables: one to store the maximum sum found so far (`max_so_far`) and another to store the maximum sum of the subarray ending at the current position (`max_ending_here`).
+- If `max_ending_here` becomes negative, it is reset to 0 because a negative sum would reduce the sum of any subarray it is part of.
+
+**Generalizable Strategy:**
+- The assistant should utilize Kadane's algorithm to solve the task efficiently.
+- The algorithm should handle edge cases, such as empty lists or lists with only negative numbers, gracefully.
+
+**Additional Feedback:**
+- The assistant should ensure that the function correctly handles edge cases, such as empty lists or lists with only negative numbers.
+- The assistant should provide clear and concise comments within the code to explain the logic of the algorithm.
+- The assistant should include a docstring at the beginning of the function to describe the function's purpose and parameters.
+
+**Example Repair Attempt:**
+```python
+def max_subarray_sum(nums):
+    # Initialize variables to store the maximum sum found so far and the maximum sum of the subarray ending at the current position
+    max_so_far = float('-inf')
+    max_ending_here = 0
+    
+    # Iterate through the array
+    for num in nums:
+        # Update the maximum sum of the subarray ending at the current position
+        max_ending_here += num
+        
+        # Update the maximum sum found so far
+        max_so_far = max(max_so_far, max_ending_here)
+        
+        # If the maximum sum of the subarray ending at the current position becomes negative, reset it to 0
+        if max_ending_here < 0:
+            max_ending_here = 0
+    
+    return max_so_far
+```
+
+**Feedback:**
+- The repair attempt provided a correct implementation of Kadane's algorithm.
+- The function handles edge cases, such as empty lists, gracefully.
+- The function includes a docstring and comments to explain the logic of the algorithm.
+- The function passed all the provided test cases.
+Iteration 17: New subsample score 1.0 is not better than old score 2.0, skipping
+Iteration 18: Selected program 0 score: 0.8
+Iteration 18: All subsample scores perfect for parent 0. Skipping.
+Iteration 18: Reflective mutation did not propose a new candidate
+Iteration 19: Selected program 1 score: 0.75
+Iteration 19: Proposed new text for solver_prompt: ## Instructions
+You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.
+
+### Input Format
+The input will be a description of a task, typically in the form of a function specification or a problem statement. The task description may include:
+- A docstring or comment block explaining the purpose and requirements of the function.
+- Specific test cases or assertions that the function must pass.
+
+### Task Description
+The task description will be a detailed problem statement or function specification that outlines the requirements for the function to be implemented. The assistant should infer the following from the input:
+- The name and parameters of the function.
+- The logic or algorithm that the function should implement.
+- Any constraints or edge cases that must be handled.
+
+### Domain-Specific Information
+The assistant should be aware of domain-specific information that may be relevant to the task, such as:
+- Mathematical formulas or algorithms.
+- Programming patterns or best practices.
+- Libraries or frameworks that may be useful.
+
+### Example
+Here is an example of a task description and the corresponding function implementation:
+```
+## Inputs
+Write a function to calculate the area of a rectangle.
+The function should take two parameters: length and width.
+The function should return the area of the rectangle.
+The area of a rectangle is calculated as length * width.
+Your code should pass this test:
+assert rectangle_area(5, 3) == 15
+
+## Generated code
+def rectangle_area(length, width):
+    return length * width
+
+## Visible test result
+passed
+```
+
+### Feedback
+The assistant should provide feedback on the function implementation, including:
+- Whether the function passed all tests.
+- Any issues or bugs in the function.
+- Suggestions for improvement or optimization.
+
+By following these instructions, the assistant will be able to correctly implement the function and provide feedback on its implementation.
+Iteration 19: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 20: Selected program 1 score: 0.75
+Iteration 20: All subsample scores perfect for parent 1. Skipping.
+Iteration 20: Reflective mutation did not propose a new candidate
+Iteration 21: Selected program 1 score: 0.75
+Iteration 21: Proposed new text for repair_prompt: Instructions:
+You are provided with a task that requires you to identify and correct a bug in a given Python function. The function is expected to pass a specific test case, but it currently fails. Your task is to read the error message, understand the issue, fix the function, and return only one corrected ```python``` code block.
+
+### Input Format:
+1. **Task Description**: A description of the task, typically a problem statement or a link to a problem.
+2. **Previous Solution**: The provided code block that attempts to solve the task.
+3. **Error Message**: The error message indicating the failure of the test case.
+4. **Visible Test Result**: The result of the failed test case, showing the expected and actual output.
+5. **Repair Attempt**: The assistant's attempt to fix the code.
+
+### Output Format:
+- Return only one corrected ```python``` code block.
+
+### Domain-Specific Information:
+- The task involves checking if an expression is balanced, typically involving parentheses, brackets, and braces.
+- The error message indicates a failure in the test case, specifically with an assertion error.
+
+### General Strategy:
+- Understand the error message and identify the mismatch between expected and actual behavior.
+- Review the provided code and identify the logical flaw or bug.
+- Correct the code to pass the test case.
+- Ensure that the corrected code is concise and follows best practices.
+
+### Examples:
+```plaintext
+# Example 1
+## Inputs
+Task:
+Write a function to check if the given expression is balanced or not. https://www.geeksforgeeks.org/check-for-balanced-parentheses-in-an-expression/
+Your code should pass this test:
+assert check_expression("{()}[{}]") == True
+
+Previous solution:
+```python
+def check_expression(expression):
+    stack = []
+    for char in expression:
+        if char in "([{":
+            stack.append(char)
+        elif char in ")]}":
+            if not stack or stack.pop() != char:
+                return False
+    return len(stack) == 0
+```
+
+Error:
+assert check_expression("{()}[{}]") == True
+-> AssertionError: expected True, got False
+
+## Generated code
+def check_expression(expression):
+    stack = []
+    for char in expression:
+        if char in "([{":
+            stack.append(char)
+        elif char in ")]}":
+            if not stack or stack.pop() != char:
+                return False
+    return len(stack) == 0
+
+## Visible test result
+failed: assert check_expression("{()}[{}]") == True
+-> AssertionError: expected True, got False
+
+## Repair attempt
+this record IS the repair attempt
+
+## Feedback
+FAIL: the final code passed 1 of 3 tests (the other tests are hidden). Visible test failed with: assert check_expression("{()}[{}]") == True
+-> AssertionError: expected True, got False.
+
+```
+
+### Feedback:
+- The final code passed 1 of 3 tests (the other tests are hidden). Visible test failed with: assert check_expression("{()}[{}]") == True
+-> AssertionError: expected True, got False.
+
+### New Instructions:
+- Understand the task, previous solution, error message, visible test result, and repair attempt.
+- Identify and correct the bug in the provided code to pass the test case.
+- Return only one corrected ```python``` code block.
+- Ensure the corrected code is concise and follows best practices.
+Iteration 21: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 22: Selected program 1 score: 0.75
+Iteration 22: Proposed new text for solver_prompt: ## Instructions
+You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.
+
+### Input Format
+The input will be a description of a task, typically in the form of a function specification or a problem statement. The task description may include:
+- A docstring or comment block explaining the purpose and requirements of the function.
+- Specific test cases or assertions that the function must pass.
+
+### Task Description
+The task description will be a detailed problem statement or function specification that outlines the requirements for the function to be implemented. The assistant should infer the following from the input:
+- The name and parameters of the function.
+- The logic or algorithm that the function should implement.
+- Any constraints or edge cases that must be handled.
+
+### Domain-Specific Information
+The assistant should be aware of domain-specific information that may be relevant to the task, such as:
+- Mathematical formulas or algorithms.
+- Programming patterns or best practices.
+- Libraries or frameworks that may be useful.
+
+### Example
+Here is an example of a task description and the corresponding function implementation:
+```
+## Inputs
+Write a function to calculate the area of a rectangle.
+The function should take two parameters: length and width.
+The function should return the area of the rectangle.
+The area of a rectangle is calculated as length * width.
+Your code should pass this test:
+assert rectangle_area(5, 3) == 15
+
+## Generated code
+def rectangle_area(length, width):
+    return length * width
+
+## Visible test result
+passed
+```
+
+### Feedback
+The assistant should provide feedback on the function implementation, including:
+- Whether the function passed all tests.
+- Any issues or bugs in the function.
+- Suggestions for improvement or optimization.
+
+By following these instructions, the assistant will be able to correctly implement the function and provide feedback on its implementation.
+Iteration 22: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 23: Selected program 1 score: 0.75
+Iteration 23: Proposed new text for repair_prompt: # Instructions
+
+## Task Description
+You are provided with a task that requires you to fix a function to pass a specific test case. The function should calculate the lateral surface area of a cone given the radius \( r \) and the height \( h \). The formula for the lateral surface area of a cone is \( \pi r l \), where \( l \) is the slant height of the cone, calculated as \( \sqrt{r^2 + h^2} \).
+
+## Input Format
+The input will consist of a task description, a previous solution, an error message, and a test case that the previous solution failed.
+
+## Assistant's Responsibilities
+1. **Identify the Error**: Carefully read the error message to understand why the previous solution failed the test case.
+2. **Correct the Function**: Modify the previous solution to fix the error and ensure it passes the test case.
+3. **Return Only One Corrected Code Block**: Provide the corrected function as a single, properly formatted Python code block.
+
+## Domain-Specific Information
+- The lateral surface area of a cone is calculated using the formula \( \pi r l \), where \( l \) is the slant height.
+- The slant height \( l \) can be calculated using the Pythagorean theorem: \( l = \sqrt{r^2 + h^2} \).
+- The input parameters \( r \) and \( h \) are the radius and height of the cone, respectively.
+- The expected output should be a floating-point number representing the lateral surface area of the cone.
+
+## Example Input and Output
+### Example 1
+**Inputs**
+Task:
+Write a function to find the lateral surface area of a cone given radius \( r \) and the height \( h \).
+Your code should pass this test:
+```python
+assert lateralsurface_cone(5,12)==204.20352248333654
+```
+
+Previous solution:
+```python
+import math
+
+def lateralsurface_cone(r, h):
+    return math.pi * r * h
+```
+
+Error:
+```python
+assert lateralsurface_cone(5,12)==204.20352248333654
+-> AssertionError: expected 204.20352248333654, got 188.49555921538757
+```
+
+**Generated Code**
+```python
+import math
+
+def lateralsurface_cone(r, h):
+    l = math.sqrt(r**2 + h**2)
+    return math.pi * r * l
+```
+
+### Example 2
+**Inputs**
+Task:
+Write a function to calculate the area of a rectangle given its length and width.
+Your code should pass this test:
+```python
+assert rectangle_area(4, 5) == 20
+```
+
+Previous solution:
+```python
+def rectangle_area(length, width):
+    return length * width + length + width
+```
+
+Error:
+```python
+assert rectangle_area(4, 5) == 20
+-> AssertionError: expected 20, got 18
+```
+
+**Generated Code**
+```python
+def rectangle_area(length, width):
+    return length * width
+```
+
+## Feedback
+- The assistant should ensure that the function is correctly implemented to pass the test case.
+- The assistant should return only the corrected code block without any additional text or explanations.
+
+## General Strategy
+- Read the error message carefully to identify the issue.
+- Modify the function to include the correct formula for the lateral surface area of a cone.
+- Ensure that the function returns a floating-point number.
+
+## Your Next Task
+Please provide the corrected code block for the given task and test case.
+Iteration 23: Accepted candidate (subsample score 2.0 -> 3.0); running full eval.
+Iteration 23: Valset score for new program: 0.75 (coverage 20 / 20)
+Iteration 23: Val aggregate for new program: 0.75
+Iteration 23: Individual valset scores for new program: {0: 1.0, 1: 1.0, 2: 1.0, 3: 1.0, 4: 0.0, 5: 1.0, 6: 1.0, 7: 1.0, 8: 0.0, 9: 1.0, 10: 1.0, 11: 1.0, 12: 0.0, 13: 1.0, 14: 1.0, 15: 0.0, 16: 1.0, 17: 1.0, 18: 1.0, 19: 0.0}
+Iteration 23: Objective aggregate scores for new program: {'pass': 0.75, 'repair_used': 0.2, 'tokens': 705.95}
+Iteration 23: New valset pareto front scores: {0: 1.0, 1: 1.0, 2: 1.0, 3: 1.0, 4: 1.0, 5: 1.0, 6: 1.0, 7: 1.0, 8: 0.0, 9: 1.0, 10: 1.0, 11: 1.0, 12: 1.0, 13: 1.0, 14: 1.0, 15: 0.0, 16: 1.0, 17: 1.0, 18: 1.0, 19: 0.0}
+Iteration 23: Objective pareto front scores: {'pass': 0.8, 'repair_used': 0.2, 'tokens': 705.95}
+Iteration 23: Valset pareto front aggregate score: 0.85
+Iteration 23: Updated valset pareto front programs: {0: {0, 1, 2}, 1: {0, 1, 2}, 2: {1, 2}, 3: {0, 1, 2}, 4: {0}, 5: {0, 1, 2}, 6: {0, 1, 2}, 7: {0, 1, 2}, 8: {0, 1, 2}, 9: {0, 1, 2}, 10: {0, 1, 2}, 11: {0, 1, 2}, 12: {0}, 13: {0, 1, 2}, 14: {0, 1, 2}, 15: {0, 1, 2}, 16: {0, 1, 2}, 17: {0, 1, 2}, 18: {0, 1, 2}, 19: {0, 1, 2}}
+Iteration 23: Updated objective pareto front programs: {'pass': {0}, 'repair_used': {1, 2}, 'tokens': {2}}
+Iteration 23: Best valset aggregate score so far: 0.8
+Iteration 23: Best program as per aggregate score on valset: 0
+Iteration 23: Best score on valset: 0.8
+Iteration 23: Linear pareto front program index: 0
+Iteration 23: New program candidate index: 2
+Iteration 24: Selected program 2 score: 0.75
+Iteration 24: Proposed new text for solver_prompt: {
+  "instruction": "You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.\n\n### Input Format\nThe input will be a description of a task, typically in the form of a function specification or a problem statement. The task description may include:\n- A docstring or comment block explaining the purpose and requirements of the function.\n- Specific test cases or assertions that the function must pass.\n\n### Task Description\nThe task description will be a detailed problem statement or function specification that outlines the requirements for the function to be implemented. The assistant should infer the following from the input:\n- The name and parameters of the function.\n- The logic or algorithm that the function should implement.\n- Any constraints or edge cases that must be handled.\n\n### Domain-Specific Information\nThe assistant should be aware of domain-specific information that may be relevant to the task, such as:\n- Mathematical formulas or algorithms.\n- Programming patterns or best practices.\n- Libraries or frameworks that may be useful.\n\n### Example\nHere is an example of a task description and the corresponding function implementation:\n```\n## Inputs\nWrite a function to calculate the area of a rectangle.\nThe function should take two parameters: length and width.\nThe function should return the area of the rectangle.\nThe area of a rectangle is calculated as length * width.\nYour code should pass this test:\nassert rectangle_area(5, 3) == 15\n\n## Generated code\ndef rectangle_area(length, width):\n    return length * width\n\n## Visible test result\npassed\n```\n\n### Feedback\nThe assistant should provide feedback on the function implementation, including:\n- Whether the function passed all tests.\n- Any issues or bugs in the function.\n- Suggestions for improvement or optimization.\n\nBy following these instructions, the assistant will be able to correctly implement the function and provide feedback on its implementation.\n\n### Additional Instructions\n- Identify and include domain-specific information in the task description if not explicitly provided.\n- Recognize and implement generalizable strategies where applicable.\n- Provide detailed feedback on the function implementation, including any niche or domain-specific knowledge used.\n- Ensure the function is self-contained and follows Python best practices.\n"
+}
+Iteration 24: Accepted candidate (subsample score 1.0 -> 2.0); running full eval.
+Iteration 24: Valset score for new program: 0.7 (coverage 20 / 20)
+Iteration 24: Val aggregate for new program: 0.7
+Iteration 24: Individual valset scores for new program: {0: 1.0, 1: 1.0, 2: 0.0, 3: 1.0, 4: 0.0, 5: 1.0, 6: 1.0, 7: 1.0, 8: 0.0, 9: 1.0, 10: 1.0, 11: 1.0, 12: 0.0, 13: 1.0, 14: 1.0, 15: 0.0, 16: 1.0, 17: 1.0, 18: 1.0, 19: 0.0}
+Iteration 24: Objective aggregate scores for new program: {'pass': 0.7, 'repair_used': 0.25, 'tokens': 862.3}
+Iteration 24: New valset pareto front scores: {0: 1.0, 1: 1.0, 2: 1.0, 3: 1.0, 4: 1.0, 5: 1.0, 6: 1.0, 7: 1.0, 8: 0.0, 9: 1.0, 10: 1.0, 11: 1.0, 12: 1.0, 13: 1.0, 14: 1.0, 15: 0.0, 16: 1.0, 17: 1.0, 18: 1.0, 19: 0.0}
+Iteration 24: Objective pareto front scores: {'pass': 0.8, 'repair_used': 0.25, 'tokens': 862.3}
+Iteration 24: Valset pareto front aggregate score: 0.85
+Iteration 24: Updated valset pareto front programs: {0: {0, 1, 2, 3}, 1: {0, 1, 2, 3}, 2: {1, 2}, 3: {0, 1, 2, 3}, 4: {0}, 5: {0, 1, 2, 3}, 6: {0, 1, 2, 3}, 7: {0, 1, 2, 3}, 8: {0, 1, 2, 3}, 9: {0, 1, 2, 3}, 10: {0, 1, 2, 3}, 11: {0, 1, 2, 3}, 12: {0}, 13: {0, 1, 2, 3}, 14: {0, 1, 2, 3}, 15: {0, 1, 2, 3}, 16: {0, 1, 2, 3}, 17: {0, 1, 2, 3}, 18: {0, 1, 2, 3}, 19: {0, 1, 2, 3}}
+Iteration 24: Updated objective pareto front programs: {'pass': {0}, 'repair_used': {3}, 'tokens': {3}}
+Iteration 24: Best valset aggregate score so far: 0.8
+Iteration 24: Best program as per aggregate score on valset: 0
+Iteration 24: Best score on valset: 0.8
+Iteration 24: Linear pareto front program index: 0
+Iteration 24: New program candidate index: 3
+Iteration 25: Selected program 0 score: 0.8
+Iteration 25: All subsample scores perfect for parent 0. Skipping.
+Iteration 25: Reflective mutation did not propose a new candidate
+Iteration 26: Selected program 2 score: 0.75
+Iteration 26: All subsample scores perfect for parent 2. Skipping.
+Iteration 26: Reflective mutation did not propose a new candidate
+Iteration 27: Selected program 0 score: 0.8
+Iteration 27: All subsample scores perfect for parent 0. Skipping.
+Iteration 27: Reflective mutation did not propose a new candidate
+Iteration 28: Selected program 0 score: 0.8
+Iteration 28: All subsample scores perfect for parent 0. Skipping.
+Iteration 28: Reflective mutation did not propose a new candidate
+Iteration 29: Selected program 2 score: 0.75
+Iteration 29: All subsample scores perfect for parent 2. Skipping.
+Iteration 29: Reflective mutation did not propose a new candidate
+Iteration 30: Selected program 0 score: 0.8
+Iteration 30: Proposed new text for repair_prompt: ## Instructions
+You are provided with a task description and a set of example inputs along with their corresponding outputs and feedback. Your goal is to read the inputs carefully, understand the task requirements, and generate the correct Python code to solve the task. Additionally, you need to analyze the assistant's responses and feedback to identify any domain-specific or niche factual information that should be included in the instructions for future tasks. 
+
+Your instructions should include:
+1. A detailed description of the task, including any input and output formats.
+2. A list of examples with their corresponding expected outputs and any visible test results.
+3. Feedback on the assistant's responses and any insights into domain-specific knowledge or generalizable strategies that were used.
+4. Any specific niche or domain-specific factual information that should be incorporated into the instructions for future tasks.
+
+Please provide the new instructions within a single code block.
+Iteration 30: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 31: Selected program 2 score: 0.75
+Iteration 31: All subsample scores perfect for parent 2. Skipping.
+Iteration 31: Reflective mutation did not propose a new candidate
+Iteration 32: Selected program 0 score: 0.8
+Iteration 32: All subsample scores perfect for parent 0. Skipping.
+Iteration 32: Reflective mutation did not propose a new candidate
+Iteration 33: Selected program 2 score: 0.75
+Iteration 33: Proposed new text for repair_prompt: # Instructions
+
+## Task Description
+You are provided with a task that requires you to fix a function to pass a specific test case. The function should calculate the lateral surface area of a cone given the radius \( r \) and the height \( h \). The formula for the lateral surface area of a cone is \( \pi r l \), where \( l \) is the slant height of the cone, calculated as \( \sqrt{r^2 + h^2} \).
+
+## Input Format
+The input will consist of a task description, a previous solution, an error message, and a test case that the previous solution failed.
+
+## Assistant's Responsibilities
+1. **Identify the Error**: Carefully read the error message to understand why the previous solution failed the test case.
+2. **Correct the Function**: Modify the previous solution to fix the error and ensure it passes the test case.
+3. **Return Only One Corrected Code Block**: Provide the corrected function as a single, properly formatted Python code block.
+
+## Domain-Specific Information
+- The lateral surface area of a cone is calculated using the formula \( \pi r l \), where \( l \) is the slant height.
+- The slant height \( l \) can be calculated using the Pythagorean theorem: \( l = \sqrt{r^2 + h^2} \).
+- The input parameters \( r \) and \( h \) are the radius and height of the cone, respectively.
+- The expected output should be a floating-point number representing the lateral surface area of the cone.
+
+## Example Input and Output
+### Example 1
+**Inputs**
+Task:
+Write a function to find the lateral surface area of a cone given radius \( r \) and the height \( h \).
+Your code should pass this test:
+```python
+assert lateralsurface_cone(5,12)==204.20352248333654
+```
+
+Previous solution:
+```python
+import math
+
+def lateralsurface_cone(r, h):
+    return math.pi * r * h
+```
+
+Error:
+```python
+assert lateralsurface_cone(5,12)==204.20352248333654
+-> AssertionError: expected 204.20352248333654, got 188.49555921538757
+```
+
+**Generated Code**
+```python
+import math
+
+def lateralsurface_cone(r, h):
+    l = math.sqrt(r**2 + h**2)
+    return math.pi * r * l
+```
+
+### Example 2
+**Inputs**
+Task:
+Write a function to calculate the area of a rectangle given its length and width.
+Your code should pass this test:
+```python
+assert rectangle_area(4, 5) == 20
+```
+
+Previous solution:
+```python
+def rectangle_area(length, width):
+    return length * width + length + width
+```
+
+Error:
+```python
+assert rectangle_area(4, 5) == 20
+-> AssertionError: expected 20, got 18
+```
+
+**Generated Code**
+```python
+def rectangle_area(length, width):
+    return length * width
+```
+
+## Feedback
+- The assistant should ensure that the function is correctly implemented to pass the test case.
+- The assistant should return only the corrected code block without any additional text or explanations.
+
+## General Strategy
+- Read the error message carefully to identify the issue.
+- Modify the function to include the correct formula for the lateral surface area of a cone.
+- Ensure that the function returns a floating-point number.
+
+## Your Next Task
+Please provide the corrected code block for the given task and test case.
+```
+Iteration 33: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 34: Selected program 2 score: 0.75
+Iteration 34: All subsample scores perfect for parent 2. Skipping.
+Iteration 34: Reflective mutation did not propose a new candidate
+Iteration 35: Selected program 0 score: 0.8
+Iteration 35: Proposed new text for solver_prompt: You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.
+
+The task involves writing a function to calculate the area of a tetrahedron given its side length. The tetrahedron is a polyhedron with four triangular faces, four vertices, and six equal edges. The formula to calculate the area of a regular tetrahedron with side length \( s \) is:
+
+\[ \text{Area} = \sqrt{3} \times \left( \frac{s^2 \sqrt{3}}{4} \right) \]
+
+This can be simplified to:
+
+\[ \text{Area} = \frac{s^2 \sqrt{3}}{\sqrt{3}} = s^2 \sqrt{3} \]
+
+Your function should take one argument, the side length of the tetrahedron, and return the calculated area.
+
+Your code should pass this test:
+assert area_tetrahedron(3) == 15.588457268119894
+
+The assistant should be aware of the mathematical formula for calculating the area of a regular tetrahedron and implement it correctly in the function.
+Iteration 35: New subsample score 1.0 is not better than old score 1.0, skipping
+Iteration 36: Selected program 0 score: 0.8
+Iteration 36: Proposed new text for repair_prompt: # Instructions
+
+## Task Input Format
+The task input will be a single string that contains:
+1. A task description in natural language.
+2. A list of test cases with expected outputs.
+3. An optional previous solution provided by the user or assistant.
+
+The format will be:
+```
+## Inputs
+Task:
+[Task Description]
+
+Your code should pass these tests:
+[Tests and expected outputs]
+
+Previous solution:
+[Previous solution code]
+```
+
+## Task Description
+The task description will be a detailed explanation of the problem to be solved. It may include:
+1. The function signature (if applicable).
+2. The problem constraints.
+3. Any specific requirements or edge cases.
+
+## Test Cases
+The test cases will include:
+1. A list of test cases.
+2. The expected output for each test case.
+
+## Previous Solution
+The previous solution provided by the user or assistant will include:
+1. The code block of the previous solution.
+
+## Expected Output
+The assistant is expected to provide:
+1. A single corrected code block that passes all the provided test cases.
+2. The reasoning or explanation for the changes made.
+
+## Feedback
+The feedback will include:
+1. The results of the tests run on the generated code.
+2. Any additional information or insights that may be helpful.
+
+## Niche and Domain Specific Information
+The assistant should be aware of any niche or domain-specific factual information required to solve the task. This may include mathematical formulas, programming best practices, or domain-specific terminologies.
+
+## Generalizable Strategy
+The assistant should be able to utilize a generalizable strategy to solve the task, such as:
+1. Identifying the root cause of the failure.
+2. Analyzing the test cases and previous solution.
+3. Applying logical reasoning to identify the correct approach.
+4. Generating a corrected code block that addresses the issue.
+
+## Example Inputs
+```
+## Inputs
+Task:
+Write a Python function to find the smallest missing number from a sorted list of natural numbers.
+Your code should pass this test:
+assert find_First_Missing([0,1,2,3]) == 4
+
+Previous solution:
+```python
+def find_First_Missing(nums):
+    # Initialize the expected next number
+    expected = 0
+    # Iterate through the list of numbers
+    for num in nums:
+        # If the current number matches the expected number, increment the expected number
+        if num == expected:
+            expected += 1
+        # If the current number is greater than the expected number, return the expected number as the smallest missing number
+        elif num > expected:
+            return expected
+    # If all numbers are present in the list, the smallest missing number is the length of the list plus one
+    return len(nums) + 1
+```
+
+Error:
+assert find_First_Missing([0,1,2,3]) == 4
+-> AssertionError: expected 4, got 5
+
+## Generated code
+def find_First_Missing(nums):
+    # Initialize the expected next number
+    expected = 0
+    # Iterate through the list of numbers
+    for num in nums:
+        # If the current number is greater than the expected number, return the expected number as the smallest missing number
+        if num > expected:
+            return expected
+        # If the current number matches the expected number, increment the expected number
+        elif num == expected:
+            expected += 1
+    # If all numbers are present in the list, the smallest missing number is the length of the list plus one
+    return len(nums) + 1
+
+## Visible test result
+failed: assert find_First_Missing([0,1,2,3]) == 4
+-> AssertionError: expected 4, got 5
+
+## Repair attempt
+this record IS the repair attempt
+```
+
+## Feedback
+FAIL: the final code passed 2 of 3 tests (the other tests are hidden). Visible test failed with: assert find_First_Missing([0,1,2,3]) == 4
+-> AssertionError: expected 4, got 5.
+Iteration 36: New subsample score 1.0 is not better than old score 1.0, skipping
+Iteration 37: Selected program 0 score: 0.8
+Iteration 37: All subsample scores perfect for parent 0. Skipping.
+Iteration 37: Reflective mutation did not propose a new candidate
+Iteration 38: Selected program 0 score: 0.8
+Iteration 38: Proposed new text for solver_prompt: You are a Python programmer. Write a correct, self-contained Python function to solve the given task. Return only one ```python``` code block. The function should handle edge cases and provide accurate results. Make sure to include comments in your code to explain the logic. The task inputs will provide a clear problem description and a set of assertions to test the function. The feedback will indicate whether the function passed the visible tests and suggest improvements for hidden tests. Use the provided examples and feedback to refine your approach and ensure the function meets the requirements.
+Iteration 38: New subsample score 1.0 is not better than old score 2.0, skipping
+Iteration 39: Selected program 2 score: 0.75
+Iteration 39: All subsample scores perfect for parent 2. Skipping.
+Iteration 39: Reflective mutation did not propose a new candidate
+Iteration 40: Selected program 0 score: 0.8
+Iteration 40: Proposed new text for repair_prompt: Task:
+You are given a list of integers. Your task is to find the largest subset of these integers such that every pair of integers in the subset is divisible. You should write a function `largest_subset` that takes a list of integers as input and returns the size of the largest such subset.
+
+You should pass the following tests:
+assert largest_subset([1, 3, 6, 13, 17, 18]) == 4
+assert largest_subset([1, 2, 3, 4, 5, 6]) == 3
+assert largest_subset([10, 20, 30, 40]) == 4
+
+Previous solution:
+```
+def largest_subset(nums):
+    nums.sort()  # Sort the list in ascending order
+    count = 0  # Initialize the count of the largest subset
+    i = 0  # Initialize the index for the current element
+    
+    while i < len(nums):
+        j = i + 1  # Start checking from the next element
+        while j < len(nums) and nums[j] % nums[i] == 0:
+            j += 1  # Move to the next element that is divisible by the current element
+        count = max(count, j - i)  # Update the count of the largest subset
+        i = j  # Move to the next element
+    
+    return count
+```
+
+Error:
+assert largest_subset([1, 3, 6, 13, 17, 18]) == 4
+-> AssertionError: expected 4, got 6
+
+## Generated code
+def largest_subset(nums):
+    nums.sort()  # Sort the list in ascending order
+    count = 0  # Initialize the count of the largest subset
+    i = 0  # Initialize the index for the current element
+    
+    while i < len(nums):
+        j = i + 1  # Start checking from the next element
+        while j < len(nums) and nums[j] % nums[i] == 0:
+            j += 1  # Move to the next element that is divisible by the current element
+        count = max(count, j - i)  # Update the count of the largest subset
+        i = j  # Move to the next element
+    
+    return count
+
+## Visible test result
+failed: assert largest_subset([1, 3, 6, 13, 17, 18]) == 4
+-> AssertionError: expected 4, got 6
+
+## Repair attempt
+this record IS the repair attempt
+
+## Feedback
+FAIL: the final code passed 0 of 3 tests (the other tests are hidden). Visible test failed with: assert largest_subset([1, 3, 6, 13, 17, 18]) == 4
+-> AssertionError: expected 4, got 6.
+
+Instruction:
+Read the inputs carefully and identify the input format and infer detailed task description about the task I wish to solve with the assistant.
+
+Read all the assistant responses and the corresponding feedback. Identify all niche and domain specific factual information about the task and include it in the instruction, as a lot of it may not be available to the assistant in the future. The assistant may have utilized a generalizable strategy to solve the task, if so, include that in the instruction as well.
+
+Provide the new instructions within ``` blocks.
+Iteration 40: New subsample score 2.0 is not better than old score 2.0, skipping
+Iteration 41: Selected program 2 score: 0.75
+Iteration 41: All subsample scores perfect for parent 2. Skipping.
+Iteration 41: Reflective mutation did not propose a new candidate
+Iteration 42: Selected program 2 score: 0.75
+Iteration 42: All subsample scores perfect for parent 2. Skipping.
+Iteration 42: Reflective mutation did not propose a new candidate
+Iteration 43: Selected program 0 score: 0.8
+Iteration 43: All subsample scores perfect for parent 0. Skipping.
+Iteration 43: Reflective mutation did not propose a new candidate
+Iteration 44: Selected program 0 score: 0.8
+Iteration 44: All subsample scores perfect for parent 0. Skipping.
+Iteration 44: Reflective mutation did not propose a new candidate
+Iteration 45: Selected program 2 score: 0.75
+Iteration 45: Exception during optimization: 'charmap' codec can't encode character '\u03c0' in position 2751: character maps to <undefined>
+Traceback (most recent call last):
+  File "C:\Users\efr_v\Documents\ChatGPT\autoharness\pilot\.venv\Lib\site-packages\gepa\core\engine.py", line 1096, in run
+    proposals = self.reflective_proposer.propose(state)
+  File "C:\Users\efr_v\Documents\ChatGPT\autoharness\pilot\.venv\Lib\site-packages\gepa\proposer\reflective_mutation\reflective_mutation.py", line 571, in propose
+    self.logger.log(f"Iteration {i}: Proposed new text for {pname}: {text}")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\efr_v\Documents\ChatGPT\autoharness\pilot\.venv\Lib\site-packages\gepa\logging\logger.py", line 69, in log
+    print(*args, **kwargs)
+    ~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\efr_v\Documents\ChatGPT\autoharness\pilot\.venv\Lib\site-packages\gepa\logging\logger.py", line 23, in write
+    f.write(obj)
+    ~~~~~~~^^^^^
+  File "C:\Users\efr_v\AppData\Local\Programs\Python\Python313\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u03c0' in position 2751: character maps to <undefined>
+
+Traceback (most recent call last):
+  File "C:\Users\efr_v\Documents\ChatGPT\autoharness\pilot\run_optimize.py", line 198, in <module>
+  File "C:\Users\efr_v\Documents\ChatGPT\autoharness\pilot\run_optimize.py", line 157, in main
+    
+    
+    ...<15 lines>...
+        callbacks=[PatchLogger(run_dir, ledger)],
+        ^
+  File "C:\Users\efr_v\Documents\ChatGPT\autoharness\pilot\.venv\Lib\site-packages\gepa\api.py", line 498, in optimize
+    state = engine.run()
+  File "C:\Users\efr_v\Documents\ChatGPT\autoharness\pilot\.venv\Lib\site-packages\gepa\core\engine.py", line 1118, in run
+    raise e
+  File "C:\Users\efr_v\Documents\ChatGPT\autoharness\pilot\.venv\Lib\site-packages\gepa\core\engine.py", line 1096, in run
+    proposals = self.reflective_proposer.propose(state)
+  File "C:\Users\efr_v\Documents\ChatGPT\autoharness\pilot\.venv\Lib\site-packages\gepa\proposer\reflective_mutation\reflective_mutation.py", line 571, in propose
+    self.logger.log(f"Iteration {i}: Proposed new text for {pname}: {text}")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\efr_v\Documents\ChatGPT\autoharness\pilot\.venv\Lib\site-packages\gepa\logging\logger.py", line 69, in log
+    print(*args, **kwargs)
+    ~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\efr_v\Documents\ChatGPT\autoharness\pilot\.venv\Lib\site-packages\gepa\logging\logger.py", line 23, in write
+    f.write(obj)
+    ~~~~~~~^^^^^
+  File "C:\Users\efr_v\AppData\Local\Programs\Python\Python313\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u03c0' in position 2751: character maps to <undefined>

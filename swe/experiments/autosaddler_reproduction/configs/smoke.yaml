@@ -1,0 +1,21 @@
+schema_version: autosaddler/v2
+scenario:
+  type: shared_opencode
+  settings:
+    mode: smoke
+    capability_phase_iterations: 1
+optimization:
+  task_selection: {type: balanced_benchmarks, batch_size: 3, seed: 42}
+  acceptance: {type: matched_valid_strict_improvement}
+  development: {type: full_on_accept}
+  ranking: {type: macro_benchmark_development}
+  budget: {max_rollouts: 30, max_iterations: 2}
+  diagnosis_patch_timeout_seconds: 30
+  session_retries: 0
+provider:
+  type: experiment_smoke
+  capabilities: [read_workspace, edit_workspace, run_commands, load_skills]
+  settings: {}
+storage:
+  type: local
+  run_root: ../../../results/autosaddler_reproduction/engine_smoke

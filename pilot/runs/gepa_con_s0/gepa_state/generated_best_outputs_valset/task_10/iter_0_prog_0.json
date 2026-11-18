@@ -1,0 +1,5 @@
+{
+    "task_id": 567,
+    "final_code": "def issort_list(lst):\n    return lst == sorted(lst)",
+    "final_pass": true
+}

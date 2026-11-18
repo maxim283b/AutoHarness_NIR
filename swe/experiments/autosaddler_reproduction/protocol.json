@@ -1,0 +1,250 @@
+{
+  "status": "terminal_go_plus_recovery_running",
+  "updated": "2026-11-04",
+  "paper": "https://arxiv.org/html/2608.23041v1",
+  "upstream_commit": "e841543ce6cf6bdf690e65134b12a829ec9f66d1",
+  "implementation": "AutoSaddler V2 0.2.0 with captured pre-existing local Windows compatibility patches; reference paper used V1",
+  "historical_acp_pilot": {
+    "run_id": "acp-pilot-v2-20261102",
+    "config": "configs/acp_pilot_20261102.yaml",
+    "target_agent": "OpenCode 1.19.5",
+    "model_transport": "Codex ACP 2.5.0 with typed action-selection MCP; OpenCode executes all task tools",
+    "target_and_optimizer_model": "gpt-6-luna",
+    "judge_model": "gpt-6-luna, differs from the paper",
+    "minimum_weekly_remaining_percent": 50,
+    "iterations": 4,
+    "capability_iterations": 2,
+    "steering_iterations": 2,
+    "batch_size": 3,
+    "train_per_benchmark": 2,
+    "development_per_benchmark": 1,
+    "test_per_benchmark": 3,
+    "test_repetitions": 1,
+    "case_selection_seed": 42,
+    "scope": "Bounded pilot, not full benchmark replication; no API fallback or purchased top-up"
+  },
+  "recommended_design": {
+    "target_harnesses": "One shared OpenCode harness, evaluated on several benchmarks",
+    "optimizer_transport": "OpenCode ACP in an isolated Docker workspace; implemented in optimizer_provider.py",
+    "interpretation": "AutoSaddler applied to OpenCode with multi-benchmark evaluation; reproduction of the method, not the original paper's harness-specific results",
+    "search_features_to_preserve": [
+      "diagnosis_patch",
+      "reflection",
+      "evolution_dag",
+      "structured_interventions",
+      "capability_then_steering",
+      "same_batch_verification",
+      "development_selection"
+    ],
+    "optimizer_candidate": null,
+    "target_candidate": null,
+    "model_provider": "OpenCode-provided models; exact service, plan and available allowance must be verified",
+    "candidate_status": "Supersedes the earlier OpenRouter model shortlist; freeze model IDs and parameters before baseline",
+    "judge": "meta-llama/llama-3.3-70b-instruct"
+  },
+  "paper_protocol": {
+    "optimizer_and_target_model": "anthropic/claude-opus-4.6",
+    "optimization_runs": 1,
+    "test_repetitions": 3,
+    "gaia2": {
+      "harness": "Meta-ARE Default ReAct",
+      "train": 75,
+      "dev": 65,
+      "test": 300,
+      "train_groups": [
+        29
+      ],
+      "dev_groups": [
+        30
+      ],
+      "test_groups": [
+        21,
+        22,
+        27
+      ],
+      "epochs": 2,
+      "batch_size": 3
+    },
+    "swe_bench_pro": {
+      "harness": "SWE-agent",
+      "train": 79,
+      "dev": 80,
+      "test": 237,
+      "train_groups": [
+        "qutebrowser"
+      ],
+      "dev_groups": [
+        "Vuls",
+        "NodeBB"
+      ],
+      "test_groups": [
+        "Ansible",
+        "Flipt",
+        "Element-web"
+      ],
+      "epochs": 2,
+      "batch_size": null
+    },
+    "terminal_bench_2": {
+      "harness": "Terminus 2",
+      "runner": "Harbor",
+      "train": 30,
+      "dev": 19,
+      "test": 40,
+      "epochs": 4,
+      "batch_size": null,
+      "exact_split_ids": "Not present in the local upstream checkout; must obtain or disclose a replacement split"
+    }
+  },
+  "experiment_design": {
+    "baseline": "H0: pinned OpenCode version, configuration, prompts, tools and skills",
+    "optimized": "H1: ONE immutable candidate selected using development scores only",
+    "optimization": "One AutoSaddler search on a predeclared balanced mixture of benchmark train sets; no independent per-benchmark winners in the main table",
+    "development_selection": "Macro-average of per-benchmark development success rates, with fixed weights",
+    "evaluation": "Evaluate exactly H0 and the same H1 on identical held-out task IDs, repeats, model IDs, decoding parameters, tools and resource ceilings",
+    "adaptation": "Benchmark-specific environment adapters are fixed before baseline and shared by H0 and H1; never use benchmark IDs to select different optimized configurations",
+    "search_space": "Freeze a writable-path manifest before paid search. Prompt/config/tool/skill edits are distinct from OpenCode source/loop edits; report actual scope and preserve capability/steering phases where applicable.",
+    "benchmarks": {
+      "terminal_bench_2": "First integration target: check Harbor OpenCode support and pin adapter/version",
+      "swe_bench_pro": "Second integration target: fixed repository task adapter plus official patch evaluator; pin the paper-era dataset version",
+      "gaia2": "Required benchmark. Tool transport verified on a real train scenario with OpenCode 1.19.5; full events/time/judge adapter remains to implement. See gaia2_compatibility.json."
+    },
+    "claims": "The main experiment measures joint multi-task improvement. A claim of transfer requires an additional predeclared benchmark excluded from optimization."
+  },
+  "token_accounting": {
+    "unit": "One API request with immutable run/candidate/task/repeat IDs",
+    "roles": [
+      "optimizer",
+      "target_search",
+      "target_final_baseline",
+      "target_final_optimized",
+      "judge"
+    ],
+    "optimizer_phases": [
+      "diagnosis_patch",
+      "reflection",
+      "evolution"
+    ],
+    "counters": [
+      "input_tokens",
+      "output_tokens",
+      "cached_input_tokens",
+      "cache_write_tokens",
+      "reasoning_tokens",
+      "reported_total_tokens"
+    ],
+    "no_double_count": "Cached and reasoning counters may be subsets of input/output; preserve provider semantics and never blindly add all counters",
+    "include": "All billed attempts, auxiliary/subagent calls, accepted and rejected candidates, failures and retries",
+    "unknown_usage": "Record null with coverage status when usage is missing; never silently convert unknown usage to zero",
+    "search_cost": "Report optimizer tokens AND target agent train/dev tokens separately, plus judge tokens; all three contribute to optimization cost",
+    "final_cost": "Report H0 and H1 held-out inference tokens separately for each benchmark; include tokens per attempted task and per solved task",
+    "shared_run": "Optimizer totals belong to the shared optimization_run_id and are counted once; per-benchmark attribution is optional and must document its rule",
+    "subscription": "Record provider monetary cost and allowance consumed separately from subscription cash price; included requests still consume tokens/quota"
+  },
+  "budget_usd": {
+    "status": "OpenCode subscription/allowance budget; the old OpenRouter allocations are superseded",
+    "total_cap": 40,
+    "enforcement_status": "Native Go Plus OAuth proxy with per-role allowance/request reserves and rolling/weekly/monthly quota checks; no top-up or alternate provider",
+    "policy": "Use explicit provider/model IDs; no automatic provider fallback or top-up. Count optimizer, train/dev target, final target and judge usage separately."
+  },
+  "sizing_rule": {
+    "fixed_experiment_counts": false,
+    "calibrate_on": "train/dev only; no test-driven model or hyperparameter selection",
+    "iteration_upper_bound_rollouts": "2 * batch_size + dev_size (assuming the patch is accepted)",
+    "initial_dev_rollouts": "dev_size",
+    "paired_test_rollouts": "2 * test_size * test_repetitions",
+    "cost_rule": "Reserve paired final evaluation first. Then choose iterations from remaining money using measured optimizer, agent, judge and retry costs, with a safety margin.",
+    "tiny_pilot_warning": "One or two iterations may not exercise both patch phases and cannot establish paper-level search behavior or generalization."
+  },
+  "paper_cost_evidence": {
+    "scope": "GAIA2 only; do not extrapolate these averages to other benchmarks",
+    "optimizer_usd_per_patch": 14.56,
+    "generated_patches": 39,
+    "optimizer_total_usd_derived": 567.84,
+    "average_rollout_input_tokens": 550988,
+    "average_rollout_output_tokens": 7380,
+    "source": "Appendix I, Tables 13 and 14"
+  },
+  "execution_blockers": [],
+  "current_terminal_pilot": {
+    "config": "configs/terminal_go_plus_20261104.yaml",
+    "run_id": "go-terminal-recovery-20261104",
+    "benchmarks": [
+      "terminal_bench_2"
+    ],
+    "target": "opencode-go/qwen3.7-plus",
+    "optimizer": "opencode-go/kimi-k2.7-code",
+    "train": 4,
+    "development": 3,
+    "test": 5,
+    "test_repetitions": 1,
+    "iterations": 4,
+    "capability_iterations": 2,
+    "steering_iterations": 2,
+    "batch_size": 2,
+    "max_search_rollouts": 31,
+    "max_final_rollouts": 10,
+    "case_selection_seed": 42,
+    "allowance_limit": 20,
+    "request_limit": 2000,
+    "role_allowance_limits": {
+      "optimizer": 4,
+      "target_search": 8,
+      "target_final_baseline": 4,
+      "target_final_optimized": 4
+    },
+    "role_request_limits": {
+      "optimizer": 200,
+      "target_search": 1000,
+      "target_final_baseline": 400,
+      "target_final_optimized": 400
+    },
+    "quota_guard": "Stop before new calls when any rolling/weekly/monthly usage reaches 70%; no automatic retries or provider fallback",
+    "request_limits": "200000 UTF-8 serialized bytes; maximum 8192 output tokens; conservative allowance reservation before each call",
+    "billing": "Require native Go Plus billing and balance cost zero in every response. Existing account Extra Usage setting has not been inspected or changed; quota guards keep calls away from exhaustion.",
+    "calibration": {
+      "train_task": "log-summary-date-ranges",
+      "score": 1.0,
+      "target_calls": 4,
+      "target_tokens": 41065,
+      "wire_calls": 4,
+      "wire_tokens": 22306,
+      "optimizer_protocol_calls": 22,
+      "total_allowance": 0.14950607,
+      "balance_cost": 0
+    },
+    "calibration_limits": "One representative task and one synthetic-scoring optimizer cycle establish connectivity, not a guaranteed upper bound on hard-task usage.",
+    "failure_policy": "Stop on infrastructure/API/usage errors, preserve traces and usage; never convert them into valid zero rewards. A budget-limited partial run is not reported as a completed experiment.",
+    "interpretation": "Bounded V2/OpenCode method pilot, not original paper results. Local seeded split, different models and harness; no final test outcomes consulted during design."
+  },
+  "recovery": {
+    "run_id": "go-terminal-recovery-20261104",
+    "created_at_utc": "2026-11-03T22:18:25.205213+00:00",
+    "previous_run": "go-terminal-pilot-20261103",
+    "prior_requests": 91,
+    "prior_allowance": 0.1725182,
+    "prior_tokens": 1468561,
+    "same_total_allowance_cap": 20,
+    "same_total_request_cap": 2000,
+    "tests_passed": 61,
+    "lifecycle_proof": {
+      "passed": true,
+      "real_docker": true,
+      "real_harbor": true,
+      "agent_timed_out": true,
+      "verifier_reward": 1.0,
+      "cleanup_before_verifier": true,
+      "model_calls": 0,
+      "artifacts": "C:\\Users\\efr_v\\Documents\\ChatGPT\\autoharness\\results\\autosaddler_reproduction\\lifecycle_fixture\\6d7d1fcb93"
+    },
+    "upstream_main_verified": "e841543ce6cf6bdf690e65134b12a829ec9f66d1",
+    "source_snapshot_sha256": "cd4f405498ff0a96ce485ceb3164ed88fa4c8be9c599bebf46ec5bb7dd04b577",
+    "changes": [
+      "Only native AgentTimeoutError with verified process cleanup and official verifier reward is a valid task outcome. Other exceptions remain errors.",
+      "Stop the active command and its descendant processes before verification. Preserve background services left by already completed tool calls.",
+      "Previous requests and allowance remain charged against role and global caps.",
+      "Go provider usage is authoritative for total tokens, including requests interrupted at agent timeout."
+    ],
+    "restart_reason": "Adapter lifecycle changed; initial development is measured again under the corrected version. Prior measurements remain diagnostic and their costs remain included."
+  }
+}

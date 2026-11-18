@@ -1,0 +1,18 @@
+diff --git a/instructions.md b/instructions.md
+index ffdf624..1b97639 100644
+--- a/instructions.md
++++ b/instructions.md
+@@ -4,3 +4,13 @@ Use observations to verify your actions. Distinguish tool errors from task
+ failures. Respect the task's scope, preserve unrelated state, and report the
+ actual outcome. When a task provides a communication tool, send the final answer
+ through that tool. Do not inspect evaluation scripts or seek reference solutions.
++
++When a component's rendering or behavior should depend on a feature flag,
++setting, or permission, implement that check inside the gated component (for
++example as an early return near the top of the component) so the component is
++self-governing; do not rely only on checks at individual call sites.
++
++Before reporting a task as complete, run the project's existing tests that cover
++the files you changed (for example the repository's own test suite for those
++files) and fix failures your change introduced. Do not modify existing tests to
++make them pass.

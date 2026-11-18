@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "task_id": "sql-001",
+  "task_input": {"question": "List users", "schema": "users(id, name)"},
+  "harness": {"system_prompt": "Return SQL", "pattern": "direct", "max_repairs": 0, "memory_k": 0, "use_visible_verifier": true, "stop_rule": "after_final_verifier", "tool_policy": {}, "model": {"backend": "ollama", "model": "qwen2.5-coder:1.5b", "seed": 0}, "seed": 0, "harness_source_hash": "example"},
+  "harness_config_hash": "example-config-sha256",
+  "harness_source_hash": "example-source-sha256",
+  "model": {"backend": "ollama", "model": "qwen2.5-coder:1.5b", "seed": 0},
+  "seed": 0,
+  "steps": [{"index": 0, "kind": "model", "name": "solve", "input": "List users", "output": "SELECT * FROM users", "messages": [], "tool_result": null, "prompt_tokens": 12, "completion_tokens": 5, "calls": 1, "latency_s": 0.2, "error_type": null, "error": null}, {"index": 1, "kind": "verifier", "name": "verifier", "input": "SELECT * FROM users", "output": {"success": true}, "messages": [], "tool_result": {"name": "verifier", "input": "SELECT * FROM users", "output": {"success": true}, "ok": true, "error": null}, "prompt_tokens": 0, "completion_tokens": 0, "calls": 1, "latency_s": 0.01}],
+  "success": true,
+  "error_type": null,
+  "stop_reason": "success",
+  "final_output": "SELECT * FROM users",
+  "total_prompt_tokens": 12,
+  "total_completion_tokens": 5,
+  "model_calls": 1,
+  "tool_calls": 1,
+  "latency_s": 0.21,
+  "wall_time_s": 0.21
+}

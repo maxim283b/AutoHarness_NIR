@@ -1,0 +1,109 @@
+diff --git a/opencode-src/packages/opencode/src/session/prompt.ts b/opencode-src/packages/opencode/src/session/prompt.ts
+index 1613ddf..7c5e7a4 100644
+--- a/opencode-src/packages/opencode/src/session/prompt.ts
++++ b/opencode-src/packages/opencode/src/session/prompt.ts
+@@ -111,6 +111,58 @@ Once you have made the file changes, verify them (for example by reading the mod
+   `You stopped again without making any file changes. The requested work is still not implemented. You MUST call the edit, write, or apply_patch tool now to modify the relevant files. Do not reply with a summary, a plan, an explanation, or a question, and do not ask for confirmation. Call a file editing tool on the appropriate file in this response.`,
+ ]
+ 
++// Cap the number of times we steer a session that keeps stopping while its
++// most recent test-looking command run still reports failing tests.
++const FAILING_TEST_STEER_LIMIT = 2
++const failingTestSteers = new Map<string, number>()
++
++const FAILING_TEST_STEER_TEXT = [
++  `IMPORTANT: Do not finish yet. Your most recent test run reported failing tests, so the requested work is not complete. Continue working immediately: fix the code that causes the remaining test failures, then rerun the failing test suite to confirm the failures are gone. Do not summarize what you have already done, do not claim the work is finished while tests fail, and do not ask for confirmation.`,
++  `You stopped again while tests are still failing. You MUST continue now: fix the code that causes the failing tests and rerun the test suite to confirm it passes before finishing. Do not reply with a summary, an explanation, or a question, and do not ask for confirmation. Take action in this response.`,
++]
++
++const TEST_FAIL_MARKERS = [
++  /^\s*---\s*FAIL:/m,
++  /^\s*FAIL\b/m,
++  /^\s*not ok\b/m,
++  /\b\d+\s+(?:failed|failing)\b/i,
++  /\bfailing tests?\b/i,
++]
++const TEST_PASS_MARKERS = [/\b\d+\s+(?:passed|passing)\b/i, /^\s*---\s*PASS:/m, /^\s*ok\b/m]
++
++const looksLikeTestRun = (output: string) =>
++  TEST_PASS_MARKERS.some((re) => re.test(output)) || TEST_FAIL_MARKERS.some((re) => re.test(output))
++const showsFailingTests = (output: string) => TEST_FAIL_MARKERS.some((re) => re.test(output))
++
++function bashExitCode(part: SessionV1.ToolPart): number | undefined {
++  if (part.state.status !== "completed") return undefined
++  const metadata = part.state.metadata as unknown as { exit?: unknown } | undefined
++  const exit = metadata?.exit
++  return typeof exit === "number" ? exit : undefined
++}
++
++// True when the latest completed bash run that looks like a test suite run
++// still reported failing tests (failure markers plus a non-zero exit code).
++// Unrelated commands (no test-summary markers) are skipped so a rerun that
++// passes prevents the steer.
++function stoppedOnFailingTests(msgs: SessionV1.WithParts[]): boolean {
++  for (let i = msgs.length - 1; i >= 0; i--) {
++    const parts = msgs[i]?.parts
++    if (!parts) continue
++    for (let j = parts.length - 1; j >= 0; j--) {
++      const part = parts[j]
++      if (part.type !== "tool" || part.tool !== ShellID.ToolID) continue
++      if (part.state.status !== "completed") continue
++      const output = part.state.output ?? ""
++      if (!output || !looksLikeTestRun(output)) continue
++      if (!showsFailingTests(output)) return false
++      const exit = bashExitCode(part)
++      return exit !== undefined && exit !== 0
++    }
++  }
++  return false
++}
++
+ function hasAnyToolPart(msgs: SessionV1.WithParts[]) {
+   return msgs.some((msg) => msg.parts.some((part) => part.type === "tool"))
+ }
+@@ -1192,6 +1244,45 @@ const layer = Layer.effect(
+               })
+               continue
+             }
++            const failingCount = failingTestSteers.get(sessionID) ?? 0
++            if (
++              lastAssistant.finish === "stop" &&
++              !session.parentID &&
++              lastUser.agent !== "plan" &&
++              failingCount < FAILING_TEST_STEER_LIMIT &&
++              stoppedOnFailingTests(msgs)
++            ) {
++              // The agent stopped even though its most recent test-suite run
++              // still reported failing tests. Persist a durable user steer
++              // message so the next loop iteration reloads it from the
++              // database and continues fixing the failures instead of exiting.
++              const steerText = FAILING_TEST_STEER_TEXT[Math.min(failingCount, FAILING_TEST_STEER_TEXT.length - 1)]
++              const steerMsg: SessionV1.User = {
++                id: MessageID.ascending(),
++                role: "user",
++                sessionID: lastUser.sessionID,
++                time: { created: Date.now() },
++                agent: lastUser.agent,
++                model: { ...lastUser.model },
++              }
++              const steerPart: SessionV1.TextPart = {
++                id: PartID.ascending(),
++                messageID: steerMsg.id,
++                sessionID: steerMsg.sessionID,
++                type: "text",
++                synthetic: true,
++                text: steerText,
++              }
++              yield* sessions.updateMessage(steerMsg)
++              yield* sessions.updatePart(steerPart)
++              failingTestSteers.set(sessionID, failingCount + 1)
++              yield* Effect.logInfo("failing-tests steer", {
++                "session.id": sessionID,
++                attempt: failingCount + 1,
++                messageID: steerMsg.id,
++              })
++              continue
++            }
+             yield* Effect.logInfo("exiting loop", { "session.id": sessionID })
+             break
+           }

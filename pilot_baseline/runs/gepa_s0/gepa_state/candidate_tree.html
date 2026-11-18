@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GEPA Candidate Tree</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; width: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f8f9fa; display: flex; flex-direction: column; }
+  #header { background: #fff; border-bottom: 1px solid #dee2e6; padding: 12px 20px; display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
+  #header h1 { font-size: 18px; font-weight: 600; color: #212529; }
+  .legend { display: flex; gap: 14px; font-size: 13px; color: #495057; }
+  .legend-item { display: flex; align-items: center; gap: 4px; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 50%; border: 1px solid #adb5bd; }
+  #graph-container { flex: 1 1 auto; width: 100%; overflow: auto; padding: 20px; text-align: center; }
+  #graph-container svg { width: 100%; height: 100%; }
+  #tooltip {
+    display: none; position: fixed; background: #fff; border: 1px solid #dee2e6;
+    border-radius: 8px; padding: 14px 16px; max-width: 560px; max-height: 70vh; overflow-y: auto;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18); z-index: 1000; font-size: 13px; line-height: 1.5;
+  }
+  #tooltip .tt-header { font-weight: 700; font-size: 15px; margin-bottom: 6px; color: #212529; }
+  #tooltip .tt-meta { color: #6c757d; margin-bottom: 4px; }
+  #tooltip .tt-hint { color: #adb5bd; font-size: 11px; font-style: italic; margin-bottom: 10px; }
+  #tooltip .tt-comp-name { font-weight: 600; color: #495057; margin-top: 10px; border-bottom: 1px solid #e9ecef; padding-bottom: 2px; }
+  #tooltip .tt-comp-text {
+    white-space: pre-wrap; word-break: break-word; background: #f8f9fa;
+    border: 1px solid #e9ecef; border-radius: 4px; padding: 8px 10px; margin-top: 4px;
+    font-family: "SF Mono", SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px;
+    max-height: 200px; overflow-y: auto;
+  }
+  .role-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; margin-left: 6px; }
+  .role-best { background: #00e5ff33; color: #006064; }
+  .role-pareto { background: #ff980033; color: #e65100; }
+  .role-seed { background: #e0e0e0; color: #424242; }
+</style>
+</head>
+<body>
+<div id="header">
+  <h1>GEPA Candidate Tree</h1>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:cyan"></div> Best</div>
+    <div class="legend-item"><div class="legend-dot" style="background:orange"></div> Pareto Front</div>
+    <div class="legend-item"><div class="legend-dot" style="background:lightgray"></div> Other</div>
+  </div>
+</div>
+<div id="graph-container"><p>Loading graph&hellip;</p></div>
+<div id="tooltip"></div>
+
+<script type="module">
+const NODES = [{"idx": 0, "score": 0.75, "parents": "seed", "role": "Seed", "components": {"repair_prompt": "The previous solution failed a test. Read the error, fix the function, and return only one corrected ```python``` code block.", "solver_prompt": "You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block."}},
+{"idx": 1, "score": 0.75, "parents": "0", "role": "", "components": {"repair_prompt": "The previous solution failed a test. Read the error, fix the function, and return only one corrected ```python``` code block.", "solver_prompt": "## Instructions\nYou are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.\n\n### Input Format\nThe input will be a function definition with a docstring that describes the task and a list of test cases that the function should pass. The test cases will be in the format of assertions.\n\n### Task Description\nYou are given a task description that describes the problem you need to solve. The task description will include a function signature and a docstring that explains what the function should do.\n\n### Example\nGiven the following task description:\n```\n## Inputs\n### task\nWrite a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists.\nYour code should pass this test:\nassert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]\n```\nThe assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. The function should pass the given test case.\n\n### Feedback\nThe feedback will indicate whether the function passed the test cases or not. If the function did not pass the test cases, the feedback will include the error message and the test case that failed.\n\n### Niche and Domain Specific Information\nYou are a Python programmer, so you should be familiar with Python syntax, data structures, and built-in functions. You should also be familiar with the concept of element-wise operations on lists.\n\n### Generalizable Strategy\nThe assistant may have utilized a generalizable strategy to solve the task. This strategy may include using list comprehensions, the `zip` function, or other Python built-in functions.\n\n### Constraints\nThe input lists will contain only integers and will have the same length.\n\n### Output\nThe assistant should return only one `python` code block that contains the correct implementation of the function."}},
+{"idx": 2, "score": 0.65, "parents": "1", "role": "", "components": {"repair_prompt": "The previous solution failed a test. Read the error, fix the function, and return only one corrected ```python``` code block.", "solver_prompt": "{\n  \"instruction\": \"You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.\\n\\n### Input Format\\nThe input will be a function definition with a docstring that describes the task and a list of test cases that the function should pass. The test cases will be in the format of assertions.\\n\\n### Task Description\\nYou are given a task description that describes the problem you need to solve. The task description will include a function signature and a docstring that explains what the function should do.\\n\\n### Example\\nGiven the following task description:\\n```\\n## Inputs\\n### task\\nWrite a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists.\\nYour code should pass this test:\\nassert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]\\n```\\nThe assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. The function should pass the given test case.\\n\\n### Feedback\\nThe feedback will indicate whether the function passed the test cases or not. If the function did not pass the test cases, the feedback will include the error message and the test case that failed.\\n\\n### Niche and Domain Specific Information\\nYou are a Python programmer, so you should be familiar with Python syntax, data structures, and built-in functions. You should also be familiar with the concept of element-wise operations on lists.\\n\\n### Generalizable Strategy\\nThe assistant may have utilized a generalizable strategy to solve the task. This strategy may include using list comprehensions, the `zip` function, or other Python built-in functions.\\n\\n### Constraints\\nThe input lists will contain only integers and will have the same length.\\n\\n### Output\\nThe assistant should return only one `python` code block that contains the correct implementation of the function.\"\n}"}},
+{"idx": 3, "score": 0.75, "parents": "1", "role": "", "components": {"repair_prompt": "## Instructions\nYou are provided with a task input, which includes a problem description, a sample code, and a test case that failed. Your goal is to read the error message, identify the issue in the provided code, and correct it. \n\nThe task description will be in the following format:\n```\n## Inputs\n### task\n<Problem description>\n\nYour code should pass this test:\nassert <Test case>\n```\n\nThe sample code will be in the following format:\n```\n## Generated code\ndef <Function name>(<Parameters>):\n    <Code>\n```\n\nThe test result will be in the following format:\n```\n## Visible test result\nTest `<Test case>` failed with: <Error message>\n```\n\nYour response should contain only one corrected ```python``` code block.\n\n## Example\n### Inputs\n### task\nWrite a python function to count the number of equal numbers from three given integers.\nYour code should pass this test:\nassert test_three_equal(1,1,1) == 3\n\n## Generated code\ndef test_three_equal(a, b, c):\n    return a == b == c\n\n## Visible test result\nTest `assert test_three_equal(1,1,1) == 3` failed with: AssertionError\n\n### Expected Output\n```python\ndef test_three_equal(a, b, c):\n    if a == b == c:\n        return 3\n    elif a == b:\n        return 2\n    elif a == c:\n        return 2\n    elif b == c:\n        return 2\n    else:\n        return 0\n```\n\n## Guidelines\n1. Read the error message and identify the issue.\n2. Correct the function to pass the test case.\n3. Return only one corrected ```python``` code block.\n4. Ensure that the corrected code passes the given test case.", "solver_prompt": "## Instructions\nYou are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.\n\n### Input Format\nThe input will be a function definition with a docstring that describes the task and a list of test cases that the function should pass. The test cases will be in the format of assertions.\n\n### Task Description\nYou are given a task description that describes the problem you need to solve. The task description will include a function signature and a docstring that explains what the function should do.\n\n### Example\nGiven the following task description:\n```\n## Inputs\n### task\nWrite a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists.\nYour code should pass this test:\nassert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]\n```\nThe assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. The function should pass the given test case.\n\n### Feedback\nThe feedback will indicate whether the function passed the test cases or not. If the function did not pass the test cases, the feedback will include the error message and the test case that failed.\n\n### Niche and Domain Specific Information\nYou are a Python programmer, so you should be familiar with Python syntax, data structures, and built-in functions. You should also be familiar with the concept of element-wise operations on lists.\n\n### Generalizable Strategy\nThe assistant may have utilized a generalizable strategy to solve the task. This strategy may include using list comprehensions, the `zip` function, or other Python built-in functions.\n\n### Constraints\nThe input lists will contain only integers and will have the same length.\n\n### Output\nThe assistant should return only one `python` code block that contains the correct implementation of the function."}},
+{"idx": 4, "score": 0.75, "parents": "3", "role": "", "components": {"repair_prompt": "## Instructions\nYou are provided with a task input, which includes a problem description, a sample code, and a test case that failed. Your goal is to read the error message, identify the issue in the provided code, and correct it. \n\nThe task description will be in the following format:\n```\n## Inputs\n### task\n<Problem description>\n\nYour code should pass this test:\nassert <Test case>\n```\n\nThe sample code will be in the following format:\n```\n## Generated code\ndef <Function name>(<Parameters>):\n    <Code>\n```\n\nThe test result will be in the following format:\n```\n## Visible test result\nTest `<Test case>` failed with: <Error message>\n```\n\nYour response should contain only one corrected ```python``` code block.\n\n## Example\n### Inputs\n### task\nWrite a python function to count the number of equal numbers from three given integers.\nYour code should pass this test:\nassert test_three_equal(1,1,1) == 3\n\n## Generated code\ndef test_three_equal(a, b, c):\n    return a == b == c\n\n## Visible test result\nTest `assert test_three_equal(1,1,1) == 3` failed with: AssertionError\n\n### Expected Output\n```python\ndef test_three_equal(a, b, c):\n    if a == b == c:\n        return 3\n    elif a == b:\n        return 2\n    elif a == c:\n        return 2\n    elif b == c:\n        return 2\n    else:\n        return 0\n```\n\n## Guidelines\n1. Read the error message and identify the issue.\n2. Correct the function to pass the test case.\n3. Return only one corrected ```python``` code block.\n4. Ensure that the corrected code passes the given test case.", "solver_prompt": "## Instructions\nYou are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.\n\n### Input Format\nThe input will be a function definition with a docstring that describes the task and a list of test cases that the function should pass. The test cases will be in the format of assertions.\n\n### Task Description\nYou are given a task description that describes the problem you need to solve. The task description will include a function signature and a docstring that explains what the function should do.\n\n### Example\nGiven the following task description:\n```\n## Inputs\n### task\nWrite a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists.\nYour code should pass this test:\nassert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]\n```\nThe assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. The function should pass the given test case.\n\n### Feedback\nThe feedback will indicate whether the function passed the test cases or not. If the function did not pass the test cases, the feedback will include the error message and the test case that failed.\n\n### Niche and Domain Specific Information\nYou are a Python programmer, so you should be familiar with Python syntax, data structures, and built-in functions. You should also be familiar with the concept of element-wise operations on lists.\n\n### Generalizable Strategy\nThe assistant may have utilized a generalizable strategy to solve the task. This strategy may include using list comprehensions, the `zip` function, or other Python built-in functions.\n\n### Constraints\nThe input lists will contain only integers and will have the same length.\n\n### Output\nThe assistant should return only one `python` code block that contains the correct implementation of the function.\n\n### Additional Information\n- The function should handle cases where the input lists are of different lengths by raising a `ValueError`.\n- The function should handle cases where the input lists contain non-integer values by raising a `TypeError`.\n\n### Example Task\nGiven the following task description:\n```\n## Inputs\n### task\nWrite a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists. If the input lists are of different lengths, the function should raise a ValueError.\nYour code should pass these tests:\nassert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]\nassert sum_lists([1, 2], [4, 5, 6]) == ValueError\nassert sum_lists([1, 2, 3], [4, 5, \"6\"]) == TypeError\n```\nThe assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. If the input lists are of different lengths, the function should raise a `ValueError`. If the input lists contain non-integer values, the function should raise a `TypeError`. The function should pass the given test cases."}},
+{"idx": 5, "score": 0.75, "parents": "4", "role": "", "components": {"repair_prompt": "{\n  \"instruction\": \"## Instructions\\nYou are provided with a task input, which includes a problem description, a sample code, and a test case that failed. Your goal is to read the error message, identify the issue in the provided code, and correct it.\\n\\nThe task description will be in the following format:\\n```\\n## Inputs\\n### task\\n<Problem description>\\n\\nYour code should pass this test:\\nassert <Test case>\\n```\\n\\nThe sample code will be in the following format:\\n```\\n## Generated code\\ndef <Function name>(<Parameters>):\\n    <Code>\\n```\\n\\nThe test result will be in the following format:\\n```\\n## Visible test result\\nTest `<Test case>` failed with: <Error message>\\n```\\n\\nYour response should contain only one corrected ```python``` code block.\\n\\n## Guidelines\\n1. Read the error message and identify the issue.\\n2. Correct the function to pass the test case.\\n3. Return only one corrected ```python``` code block.\\n4. Ensure that the corrected code passes the given test case.\\n5. Include any domain-specific factual information or generalizable strategies used in the solution.\\n\\n## Example\\n### Inputs\\n### task\\nWrite a python function to count the number of equal numbers from three given integers.\\nYour code should pass this test:\\nassert test_three_equal(1,1,1) == 3\\n\\n## Generated code\\ndef test_three_equal(a, b, c):\\n    return a == b == c\\n\\n## Visible test result\\nTest `assert test_three_equal(1,1,1) == 3` failed with: AssertionError\\n\\n### Expected Output\\n```python\\ndef test_three_equal(a, b, c):\\n    if a == b == c:\\n        return 3\\n    elif a == b:\\n        return 2\\n    elif a == c:\\n        return 2\\n    elif b == c:\\n        return 2\\n    else:\\n        return 0\\n```\"\n}", "solver_prompt": "## Instructions\nYou are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.\n\n### Input Format\nThe input will be a function definition with a docstring that describes the task and a list of test cases that the function should pass. The test cases will be in the format of assertions.\n\n### Task Description\nYou are given a task description that describes the problem you need to solve. The task description will include a function signature and a docstring that explains what the function should do.\n\n### Example\nGiven the following task description:\n```\n## Inputs\n### task\nWrite a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists.\nYour code should pass this test:\nassert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]\n```\nThe assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. The function should pass the given test case.\n\n### Feedback\nThe feedback will indicate whether the function passed the test cases or not. If the function did not pass the test cases, the feedback will include the error message and the test case that failed.\n\n### Niche and Domain Specific Information\nYou are a Python programmer, so you should be familiar with Python syntax, data structures, and built-in functions. You should also be familiar with the concept of element-wise operations on lists.\n\n### Generalizable Strategy\nThe assistant may have utilized a generalizable strategy to solve the task. This strategy may include using list comprehensions, the `zip` function, or other Python built-in functions.\n\n### Constraints\nThe input lists will contain only integers and will have the same length.\n\n### Output\nThe assistant should return only one `python` code block that contains the correct implementation of the function.\n\n### Additional Information\n- The function should handle cases where the input lists are of different lengths by raising a `ValueError`.\n- The function should handle cases where the input lists contain non-integer values by raising a `TypeError`.\n\n### Example Task\nGiven the following task description:\n```\n## Inputs\n### task\nWrite a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists. If the input lists are of different lengths, the function should raise a ValueError.\nYour code should pass these tests:\nassert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]\nassert sum_lists([1, 2], [4, 5, 6]) == ValueError\nassert sum_lists([1, 2, 3], [4, 5, \"6\"]) == TypeError\n```\nThe assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. If the input lists are of different lengths, the function should raise a `ValueError`. If the input lists contain non-integer values, the function should raise a `TypeError`. The function should pass the given test cases."}},
+{"idx": 6, "score": 0.8, "parents": "3", "role": "Best", "components": {"repair_prompt": "## Instructions\nYou are provided with a task input, which includes a problem description, a sample code, and a test case that failed. Your goal is to read the error message, identify the issue in the provided code, and correct it. \n\nThe task description will be in the following format:\n```\n## Inputs\n### task\n<Problem description>\n\nYour code should pass this test:\nassert <Test case>\n```\n\nThe sample code will be in the following format:\n```\n## Generated code\ndef <Function name>(<Parameters>):\n    <Code>\n```\n\nThe test result will be in the following format:\n```\n## Visible test result\nTest `<Test case>` failed with: <Error message>\n```\n\nYour response should contain only one corrected ```python``` code block.\n\n## Example\n### Inputs\n### task\nWrite a python function to count the number of equal numbers from three given integers.\nYour code should pass this test:\nassert test_three_equal(1,1,1) == 3\n\n## Generated code\ndef test_three_equal(a, b, c):\n    return a == b == c\n\n## Visible test result\nTest `assert test_three_equal(1,1,1) == 3` failed with: AssertionError\n\n### Expected Output\n```python\ndef test_three_equal(a, b, c):\n    if a == b == c:\n        return 3\n    elif a == b:\n        return 2\n    elif a == c:\n        return 2\n    elif b == c:\n        return 2\n    else:\n        return 0\n```\n\n## Guidelines\n1. Read the error message and identify the issue.\n2. Correct the function to pass the test case.\n3. Return only one corrected ```python``` code block.\n4. Ensure that the corrected code passes the given test case.", "solver_prompt": "## Instructions\nYou are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.\n\n### Input Format\nThe input will be a function definition with a docstring that describes the task and a list of test cases that the function should pass. The test cases will be in the format of assertions.\n\n### Task Description\nYou are given a task description that describes the problem you need to solve. The task description will include a function signature and a docstring that explains what the function should do.\n\n### Example\nGiven the following task description:\n```\n## Inputs\n### task\nWrite a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists.\nYour code should pass this test:\nassert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]\n```\nThe assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. The function should pass the given test case.\n\n### Feedback\nThe feedback will indicate whether the function passed the test cases or not. If the function did not pass the test cases, the feedback will include the error message and the test case that failed.\n\n### Niche and Domain Specific Information\nYou are a Python programmer, so you should be familiar with Python syntax, data structures, and built-in functions. You should also be familiar with the concept of element-wise operations on lists.\n\n### Generalizable Strategy\nThe assistant may have utilized a generalizable strategy to solve the task. This strategy may include using list comprehensions, the `zip` function, or other Python built-in functions.\n\n### Constraints\nThe input lists will contain only integers and will have the same length.\n\n### Output\nThe assistant should return only one `python` code block that contains the correct implementation of the function.\n\n### Additional Information\n- The function should handle cases where the input lists are of different lengths by raising a `ValueError`.\n- The function should handle cases where the input lists contain non-integer values by raising a `TypeError`."}}];
+const DOT = `digraph G {
+    rankdir=TB;
+    node [style=filled, shape=circle, fontsize=14, width=0.6, height=0.6];
+    0 [label="0\\n(0.75)", fillcolor=lightgray, tooltip="Candidate 0
+Val Score: 0.7500
+Parent(s): seed
+Role: Seed
+
+--- repair_prompt ---
+The previous solution failed a test. Read the error, fix the function, and return only one corrected \`\`\`python\`\`\` code block.
+--- solver_prompt ---
+You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one \`\`\`python\`\`\` code block."];
+    1 [label="1\\n(0.75)", fillcolor=lightgray, tooltip="Candidate 1
+Val Score: 0.7500
+Parent(s): 0
+
+--- repair_prompt ---
+The previous solution failed a test. Read the error, fix the function, and return only one corrected \`\`\`python\`\`\` code block.
+--- solver_prompt ---
+## Instructions
+You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one \`\`\`python\`\`\` code block.
+
+### Input Format
+The input will be a function definition with a docstring that describes the task and a list of test cases that the function should pass. The test cases will be in the format of assertions.
+
+### Task Description
+You are given a task description that describes the problem you need to solve. The task description will include a function signature and a docstring that explains what the function should do.
+
+### Example
+Given the following task description:
+\`\`\`
+## Inputs
+### task
+Write a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists.
+Your code should pass this test:
+assert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]
+\`\`\`
+The assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. The function should pass the given test case.
+
+### Feedback
+The feedback will indicate whether the function passed the test cases or not. If the function did not pass the test cases, the feedback will include the error message and the test case that failed.
+
+### Niche and Domain Specific Information
+You are a Python programmer, so you should be familiar with Python syntax, data structures, and built-in functions. You should also be familiar with the concept of element-wise operations on lists.
+
+### Generalizable Strategy
+The assistant may have utilized a generalizable strategy to solve the task. This strategy may include using list comprehensions, the \`zip\` function, or other Python built-in functions.
+
+### Constraints
+The input lists will contain only integers and will have the same length.
+
+### Output
+The assistant should return only one \`python\` code block that contains the correct implementation of the function."];
+    2 [label="2\\n(0.65)", fillcolor=lightgray, tooltip="Candidate 2
+Val Score: 0.6500
+Parent(s): 1
+
+--- repair_prompt ---
+The previous solution failed a test. Read the error, fix the function, and return only one corrected \`\`\`python\`\`\` code block.
+--- solver_prompt ---
+{
+  &quot;instruction&quot;: &quot;You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one \`\`\`python\`\`\` code block.\\n\\n### Input Format\\nThe input will be a function definition with a docstring that describes the task and a list of test cases that the function should pass. The test cases will be in the format of assertions.\\n\\n### Task Description\\nYou are given a task description that describes the problem you need to solve. The task description will include a function signature and a docstring that explains what the function should do.\\n\\n### Example\\nGiven the following task description:\\n\`\`\`\\n## Inputs\\n### task\\nWrite a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists.\\nYour code should pass this test:\\nassert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]\\n\`\`\`\\nThe assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. The function should pass the given test case.\\n\\n### Feedback\\nThe feedback will indicate whether the function passed the test cases or not. If the function did not pass the test cases, the feedback will include the error message and the test case that failed.\\n\\n### Niche and Domain Specific Information\\nYou are a Python programmer, so you should be familiar with Python syntax, data structures, and built-in functions. You should also be familiar with the concept of element-wise operations on lists.\\n\\n### Generalizable Strategy\\nThe assistant may have utilized a generalizable strategy to solve the task. This strategy may include using list comprehensions, the \`zip\` function, or other Python built-in functions.\\n\\n### Constraints\\nThe input lists will contain only integers and will have the same length.\\n\\n### Output\\nThe assistant should return only one \`python\` code block that contains the correct implementation of the function.&quot;
+}"];
+    3 [label="3\\n(0.75)", fillcolor=lightgray, tooltip="Candidate 3
+Val Score: 0.7500
+Parent(s): 1
+
+--- repair_prompt ---
+## Instructions
+You are provided with a task input, which includes a problem description, a sample code, and a test case that failed. Your goal is to read the error message, identify the issue in the provided code, and correct it. 
+
+The task description will be in the following format:
+\`\`\`
+## Inputs
+### task
+&lt;Problem description&gt;
+
+Your code should pass this test:
+assert &lt;Test case&gt;
+\`\`\`
+
+The sample code will be in the following format:
+\`\`\`
+## Generated code
+def &lt;Function name&gt;(&lt;Parameters&gt;):
+    &lt;Code&gt;
+\`\`\`
+
+The test result will be in the following format:
+\`\`\`
+## Visible test result
+Test \`&lt;Test case&gt;\` failed with: &lt;Error message&gt;
+\`\`\`
+
+Your response should contain only one corrected \`\`\`python\`\`\` code block.
+
+## Example
+### Inputs
+### task
+Write a python function to count the number of equal numbers from three given integers.
+Your code should pass this test:
+assert test_three_equal(1,1,1) == 3
+
+## Generated code
+def test_three_equal(a, b, c):
+    return a == b == c
+
+## Visible test result
+Test \`assert test_three_equal(1,1,1) == 3\` failed with: AssertionError
+
+### Expected Output
+\`\`\`python
+def test_three_equal(a, b, c):
+    if a == b == c:
+        return 3
+    elif a == b:
+        return 2
+    elif a == c:
+        return 2
+    elif b == c:
+        return 2
+    else:
+        return 0
+\`\`\`
+
+## Guidelines
+1. Read the error message and identify the issue.
+2. Correct the function to pass the test case.
+3. Return only one corrected \`\`\`python\`\`\` code block.
+4. Ensure that the corrected code passes the given test case.
+--- solver_prompt ---
+## Instructions
+You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one \`\`\`python\`\`\` code block.
+
+### Input Format
+The input will be a function definition with a docstring that describes the task and a list of test cases that the function should pass. The test cases will be in the format of assertions.
+
+### Task Description
+You are given a task description that describes the problem you need to solve. The task description will include a function signature and a docstring that explains what the function should do.
+
+### Example
+Given the following task description:
+\`\`\`
+## Inputs
+### task
+Write a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists.
+Your code should pass this test:
+assert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]
+\`\`\`
+The assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. The function should pass the given test case.
+
+### Feedback
+The feedback will indicate whether the function passed the test cases or not. If the function did not pass the test cases, the feedback will include the error message and the test case that failed.
+
+### Niche and Domain Specific Information
+You are a Python programmer, so you should be familiar with Python syntax, data structures, and built-in functions. You should also be familiar with the concept of element-wise operations on lists.
+
+### Generalizable Strategy
+The assistant may have utilized a generalizable strategy to solve the task. This strategy may include using list comprehensions, the \`zip\` function, or other Python built-in functions.
+
+### Constraints
+The input lists will contain only integers and will have the same length.
+
+### Output
+The assistant should return only one \`python\` code block that contains the correct implementation of the function."];
+    4 [label="4\\n(0.75)", fillcolor=lightgray, tooltip="Candidate 4
+Val Score: 0.7500
+Parent(s): 3
+
+--- repair_prompt ---
+## Instructions
+You are provided with a task input, which includes a problem description, a sample code, and a test case that failed. Your goal is to read the error message, identify the issue in the provided code, and correct it. 
+
+The task description will be in the following format:
+\`\`\`
+## Inputs
+### task
+&lt;Problem description&gt;
+
+Your code should pass this test:
+assert &lt;Test case&gt;
+\`\`\`
+
+The sample code will be in the following format:
+\`\`\`
+## Generated code
+def &lt;Function name&gt;(&lt;Parameters&gt;):
+    &lt;Code&gt;
+\`\`\`
+
+The test result will be in the following format:
+\`\`\`
+## Visible test result
+Test \`&lt;Test case&gt;\` failed with: &lt;Error message&gt;
+\`\`\`
+
+Your response should contain only one corrected \`\`\`python\`\`\` code block.
+
+## Example
+### Inputs
+### task
+Write a python function to count the number of equal numbers from three given integers.
+Your code should pass this test:
+assert test_three_equal(1,1,1) == 3
+
+## Generated code
+def test_three_equal(a, b, c):
+    return a == b == c
+
+## Visible test result
+Test \`assert test_three_equal(1,1,1) == 3\` failed with: AssertionError
+
+### Expected Output
+\`\`\`python
+def test_three_equal(a, b, c):
+    if a == b == c:
+        return 3
+    elif a == b:
+        return 2
+    elif a == c:
+        return 2
+    elif b == c:
+        return 2
+    else:
+        return 0
+\`\`\`
+
+## Guidelines
+1. Read the error message and identify the issue.
+2. Correct the function to pass the test case.
+3. Return only one corrected \`\`\`python\`\`\` code block.
+4. Ensure that the corrected code passes the given test case.
+--- solver_prompt ---
+## Instructions
+You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one \`\`\`python\`\`\` code block.
+
+### Input Format
+The input will be a function definition with a docstring that describes the task and a list of test cases that the function should pass. The test cases will be in the format of assertions.
+
+### Task Description
+You are given a task description that describes the problem you need to solve. The task description will include a function signature and a docstring that explains what the function should do.
+
+### Example
+Given the following task description:
+\`\`\`
+## Inputs
+### task
+Write a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists.
+Your code should pass this test:
+assert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]
+\`\`\`
+The assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. The function should pass the given test case.
+
+### Feedback
+The feedback will indicate whether the function passed the test cases or not. If the function did not pass the test cases, the feedback will include the error message and the test case that failed.
+
+### Niche and Domain Specific Information
+You are a Python programmer, so you should be familiar with Python syntax, data structures, and built-in functions. You should also be familiar with the concept of element-wise operations on lists.
+
+### Generalizable Strategy
+The assistant may have utilized a generalizable strategy to solve the task. This strategy may include using list comprehensions, the \`zip\` function, or other Python built-in functions.
+
+### Constraints
+The input lists will contain only integers and will have the same length.
+
+### Output
+The assistant should return only one \`python\` code block that contains the correct implementation of the function.
+
+### Additional Information
+- The function should handle cases where the input lists are of different lengths by raising a \`ValueError\`.
+- The function should handle cases where the input lists contain non-integer values by raising a \`TypeError\`.
+
+### Example Task
+Given the following task description:
+\`\`\`
+## Inputs
+### task
+Write a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists. If the input lists are of different lengths, the function should raise a ValueError.
+Your code should pass these tests:
+assert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]
+assert sum_lists([1, 2], [4, 5, 6]) == ValueError
+assert sum_lists([1, 2, 3], [4, 5, &quot;6&quot;]) == TypeError
+\`\`\`
+The assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. If the input lists are of different lengths, the function should raise a \`ValueError\`. If the input lists contain non-integer values, the function should raise a \`TypeError\`. The function should pass the given test cases."];
+    5 [label="5\\n(0.75)", fillcolor=lightgray, tooltip="Candidate 5
+Val Score: 0.7500
+Parent(s): 4
+
+--- repair_prompt ---
+{
+  &quot;instruction&quot;: &quot;## Instructions\\nYou are provided with a task input, which includes a problem description, a sample code, and a test case that failed. Your goal is to read the error message, identify the issue in the provided code, and correct it.\\n\\nThe task description will be in the following format:\\n\`\`\`\\n## Inputs\\n### task\\n&lt;Problem description&gt;\\n\\nYour code should pass this test:\\nassert &lt;Test case&gt;\\n\`\`\`\\n\\nThe sample code will be in the following format:\\n\`\`\`\\n## Generated code\\ndef &lt;Function name&gt;(&lt;Parameters&gt;):\\n    &lt;Code&gt;\\n\`\`\`\\n\\nThe test result will be in the following format:\\n\`\`\`\\n## Visible test result\\nTest \`&lt;Test case&gt;\` failed with: &lt;Error message&gt;\\n\`\`\`\\n\\nYour response should contain only one corrected \`\`\`python\`\`\` code block.\\n\\n## Guidelines\\n1. Read the error message and identify the issue.\\n2. Correct the function to pass the test case.\\n3. Return only one corrected \`\`\`python\`\`\` code block.\\n4. Ensure that the corrected code passes the given test case.\\n5. Include any domain-specific factual information or generalizable strategies used in the solution.\\n\\n## Example\\n### Inputs\\n### task\\nWrite a python function to count the number of equal numbers from three given integers.\\nYour code should pass this test:\\nassert test_three_equal(1,1,1) == 3\\n\\n## Generated code\\ndef test_three_equal(a, b, c):\\n    return a == b == c\\n\\n## Visible test result\\nTest \`assert test_three_equal(1,1,1) == 3\` failed with: AssertionError\\n\\n### Expected Output\\n\`\`\`python\\ndef test_three_equal(a, b, c):\\n    if a == b == c:\\n        return 3\\n    elif a == b:\\n        return 2\\n    elif a == c:\\n        return 2\\n    elif b == c:\\n        return 2\\n    else:\\n        return 0\\n\`\`\`&quot;
+}
+--- solver_prompt ---
+## Instructions
+You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one \`\`\`python\`\`\` code block.
+
+### Input Format
+The input will be a function definition with a docstring that describes the task and a list of test cases that the function should pass. The test cases will be in the format of assertions.
+
+### Task Description
+You are given a task description that describes the problem you need to solve. The task description will include a function signature and a docstring that explains what the function should do.
+
+### Example
+Given the following task description:
+\`\`\`
+## Inputs
+### task
+Write a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists.
+Your code should pass this test:
+assert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]
+\`\`\`
+The assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. The function should pass the given test case.
+
+### Feedback
+The feedback will indicate whether the function passed the test cases or not. If the function did not pass the test cases, the feedback will include the error message and the test case that failed.
+
+### Niche and Domain Specific Information
+You are a Python programmer, so you should be familiar with Python syntax, data structures, and built-in functions. You should also be familiar with the concept of element-wise operations on lists.
+
+### Generalizable Strategy
+The assistant may have utilized a generalizable strategy to solve the task. This strategy may include using list comprehensions, the \`zip\` function, or other Python built-in functions.
+
+### Constraints
+The input lists will contain only integers and will have the same length.
+
+### Output
+The assistant should return only one \`python\` code block that contains the correct implementation of the function.
+
+### Additional Information
+- The function should handle cases where the input lists are of different lengths by raising a \`ValueError\`.
+- The function should handle cases where the input lists contain non-integer values by raising a \`TypeError\`.
+
+### Example Task
+Given the following task description:
+\`\`\`
+## Inputs
+### task
+Write a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists. If the input lists are of different lengths, the function should raise a ValueError.
+Your code should pass these tests:
+assert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]
+assert sum_lists([1, 2], [4, 5, 6]) == ValueError
+assert sum_lists([1, 2, 3], [4, 5, &quot;6&quot;]) == TypeError
+\`\`\`
+The assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. If the input lists are of different lengths, the function should raise a \`ValueError\`. If the input lists contain non-integer values, the function should raise a \`TypeError\`. The function should pass the given test cases."];
+    6 [label="6\\n(0.80)", fillcolor=cyan, tooltip="Candidate 6
+Val Score: 0.8000
+Parent(s): 3
+Role: BEST
+
+--- repair_prompt ---
+## Instructions
+You are provided with a task input, which includes a problem description, a sample code, and a test case that failed. Your goal is to read the error message, identify the issue in the provided code, and correct it. 
+
+The task description will be in the following format:
+\`\`\`
+## Inputs
+### task
+&lt;Problem description&gt;
+
+Your code should pass this test:
+assert &lt;Test case&gt;
+\`\`\`
+
+The sample code will be in the following format:
+\`\`\`
+## Generated code
+def &lt;Function name&gt;(&lt;Parameters&gt;):
+    &lt;Code&gt;
+\`\`\`
+
+The test result will be in the following format:
+\`\`\`
+## Visible test result
+Test \`&lt;Test case&gt;\` failed with: &lt;Error message&gt;
+\`\`\`
+
+Your response should contain only one corrected \`\`\`python\`\`\` code block.
+
+## Example
+### Inputs
+### task
+Write a python function to count the number of equal numbers from three given integers.
+Your code should pass this test:
+assert test_three_equal(1,1,1) == 3
+
+## Generated code
+def test_three_equal(a, b, c):
+    return a == b == c
+
+## Visible test result
+Test \`assert test_three_equal(1,1,1) == 3\` failed with: AssertionError
+
+### Expected Output
+\`\`\`python
+def test_three_equal(a, b, c):
+    if a == b == c:
+        return 3
+    elif a == b:
+        return 2
+    elif a == c:
+        return 2
+    elif b == c:
+        return 2
+    else:
+        return 0
+\`\`\`
+
+## Guidelines
+1. Read the error message and identify the issue.
+2. Correct the function to pass the test case.
+3. Return only one corrected \`\`\`python\`\`\` code block.
+4. Ensure that the corrected code passes the given test case.
+--- solver_prompt ---
+## Instructions
+You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one \`\`\`python\`\`\` code block.
+
+### Input Format
+The input will be a function definition with a docstring that describes the task and a list of test cases that the function should pass. The test cases will be in the format of assertions.
+
+### Task Description
+You are given a task description that describes the problem you need to solve. The task description will include a function signature and a docstring that explains what the function should do.
+
+### Example
+Given the following task description:
+\`\`\`
+## Inputs
+### task
+Write a function that takes two lists of integers and returns a new list containing the element-wise sum of the two input lists.
+Your code should pass this test:
+assert sum_lists([1, 2, 3], [4, 5, 6]) == [5, 7, 9]
+\`\`\`
+The assistant should write a function that takes two lists of integers as input and returns a new list containing the element-wise sum of the two input lists. The function should pass the given test case.
+
+### Feedback
+The feedback will indicate whether the function passed the test cases or not. If the function did not pass the test cases, the feedback will include the error message and the test case that failed.
+
+### Niche and Domain Specific Information
+You are a Python programmer, so you should be familiar with Python syntax, data structures, and built-in functions. You should also be familiar with the concept of element-wise operations on lists.
+
+### Generalizable Strategy
+The assistant may have utilized a generalizable strategy to solve the task. This strategy may include using list comprehensions, the \`zip\` function, or other Python built-in functions.
+
+### Constraints
+The input lists will contain only integers and will have the same length.
+
+### Output
+The assistant should return only one \`python\` code block that contains the correct implementation of the function.
+
+### Additional Information
+- The function should handle cases where the input lists are of different lengths by raising a \`ValueError\`.
+- The function should handle cases where the input lists contain non-integer values by raising a \`TypeError\`."];
+    0 -> 1;
+    1 -> 2;
+    1 -> 3;
+    3 -> 4;
+    4 -> 5;
+    3 -> 6;
+}`;
+
+const nodeMap = {};
+NODES.forEach(n => { nodeMap[n.idx] = n; });
+
+let pinnedIdx = null;   // non-null when tooltip is click-pinned (scrollable)
+let hoverIdx = null;    // non-null when hovering over a node
+
+function renderTooltip(idx) {
+  const n = nodeMap[idx];
+  if (!n) return "";
+  let roleBadge = "";
+  if (n.role === "Best") roleBadge = '<span class="role-badge role-best">BEST</span>';
+  else if (n.role === "Pareto Front") roleBadge = '<span class="role-badge role-pareto">PARETO</span>';
+  else if (n.role === "Seed") roleBadge = '<span class="role-badge role-seed">SEED</span>';
+
+  let comps = "";
+  for (const [name, text] of Object.entries(n.components)) {
+    const escaped = text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    comps += '<div class="tt-comp-name">' + name + '</div><div class="tt-comp-text">' + escaped + '</div>';
+  }
+
+  return '<div class="tt-header">Candidate ' + n.idx + roleBadge + '</div>' +
+    '<div class="tt-meta">Score: <strong>' + n.score + '</strong>&nbsp;&nbsp;|&nbsp;&nbsp;Parent(s): ' + n.parents +
+    '</div><div class="tt-hint">' + (pinnedIdx === idx ? 'Click node again to dismiss' : 'Click to pin &amp; scroll') + '</div>' +
+    comps;
+}
+
+function positionTooltip(x, y) {
+  const tt = document.getElementById("tooltip");
+  let tx = x + 16, ty = y + 16;
+  const r = tt.getBoundingClientRect();
+  if (tx + r.width > window.innerWidth - 8) tx = x - r.width - 16;
+  if (ty + r.height > window.innerHeight - 8) ty = y - r.height - 16;
+  if (tx < 8) tx = 8;
+  if (ty < 8) ty = 8;
+  tt.style.left = tx + "px";
+  tt.style.top = ty + "px";
+}
+
+function showTooltip(idx, x, y) {
+  const tt = document.getElementById("tooltip");
+  tt.innerHTML = renderTooltip(idx);
+  tt.style.display = "block";
+  positionTooltip(x, y);
+}
+
+function hideTooltip() {
+  pinnedIdx = null;
+  hoverIdx = null;
+  document.getElementById("tooltip").style.display = "none";
+}
+
+// Click outside tooltip and outside nodes dismisses pinned tooltip
+document.addEventListener("mousedown", function(e) {
+  const tt = document.getElementById("tooltip");
+  if (pinnedIdx !== null && tt.style.display === "block"
+      && !tt.contains(e.target) && !e.target.closest(".node")) {
+    hideTooltip();
+  }
+});
+
+async function render() {
+  const { instance } = await import("https://cdn.jsdelivr.net/npm/@viz-js/viz@3.11.0/lib/viz-standalone.mjs");
+  const viz = await instance();
+  const svg = viz.renderSVGElement(DOT);
+  const container = document.getElementById("graph-container");
+  container.innerHTML = "";
+  container.appendChild(svg);
+
+  // Attach hover listeners and strip native <title> tooltips to avoid double tooltips
+  svg.querySelectorAll(".node").forEach(node => {
+    const title = node.querySelector("title");
+    if (!title) return;
+    const idx = parseInt(title.textContent, 10);
+    if (isNaN(idx)) return;
+    title.remove();  // remove native SVG tooltip
+    node.style.cursor = "pointer";
+    // Hover: show tooltip following the mouse (non-interactive)
+    node.addEventListener("mouseenter", e => {
+      if (pinnedIdx !== null) return;  // don't override a pinned tooltip
+      hoverIdx = idx;
+      showTooltip(idx, e.clientX, e.clientY);
+    });
+    node.addEventListener("mousemove", e => {
+      if (pinnedIdx !== null || hoverIdx !== idx) return;
+      positionTooltip(e.clientX, e.clientY);
+    });
+    node.addEventListener("mouseleave", () => {
+      if (pinnedIdx !== null) return;
+      hoverIdx = null;
+      document.getElementById("tooltip").style.display = "none";
+    });
+    // Click: pin the tooltip so user can scroll it
+    node.addEventListener("click", e => {
+      e.stopPropagation();
+      if (pinnedIdx === idx) { hideTooltip(); return; }
+      pinnedIdx = idx;
+      showTooltip(idx, e.clientX, e.clientY);
+    });
+  });
+  // Also strip <title> from edges and the graph itself
+  svg.querySelectorAll(".edge title").forEach(t => t.remove());
+  const graphTitle = svg.querySelector(":scope > title");
+  if (graphTitle) graphTitle.remove();
+}
+
+render().catch(err => {
+  document.getElementById("graph-container").innerHTML =
+    "<p style='color:red'>Failed to render graph: " + err.message + "</p>" +
+    "<pre>" + DOT.replace(/</g,"&lt;") + "</pre>";
+});
+</script>
+</body>
+</html>

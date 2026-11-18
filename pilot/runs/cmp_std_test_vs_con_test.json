@@ -1,0 +1,46 @@
+{
+ "a": "runs/std_test",
+ "b": "runs/con_test",
+ "n": 50,
+ "pass_a": 0.66,
+ "pass_b": 0.68,
+ "diff_b_minus_a": 0.020000000000000018,
+ "diff_ci95_paired_bootstrap": [
+  -0.06000000000000005,
+  0.10000000000000009
+ ],
+ "b_only": 3,
+ "a_only": 2,
+ "mcnemar_exact_p": 1.0,
+ "beta_posterior_a": {
+  "k": 33,
+  "n": 50,
+  "mean": 0.6538461538461539,
+  "ci95": [
+   0.52078744576937,
+   0.7756937966643029
+  ]
+ },
+ "beta_posterior_b": {
+  "k": 34,
+  "n": 50,
+  "mean": 0.6730769230769231,
+  "ci95": [
+   0.541127097379392,
+   0.7924166650862636
+  ]
+ },
+ "tokens_per_task_a": 654.84,
+ "tokens_per_task_b": 291.92,
+ "repair_rate_a": 0.36,
+ "repair_rate_b": 0.32,
+ "flipped_to_pass": [
+  106,
+  415,
+  429
+ ],
+ "flipped_to_fail": [
+  255,
+  446
+ ]
+}

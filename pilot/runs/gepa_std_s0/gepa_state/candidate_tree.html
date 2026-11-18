@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GEPA Candidate Tree</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; width: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f8f9fa; display: flex; flex-direction: column; }
+  #header { background: #fff; border-bottom: 1px solid #dee2e6; padding: 12px 20px; display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
+  #header h1 { font-size: 18px; font-weight: 600; color: #212529; }
+  .legend { display: flex; gap: 14px; font-size: 13px; color: #495057; }
+  .legend-item { display: flex; align-items: center; gap: 4px; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 50%; border: 1px solid #adb5bd; }
+  #graph-container { flex: 1 1 auto; width: 100%; overflow: auto; padding: 20px; text-align: center; }
+  #graph-container svg { width: 100%; height: 100%; }
+  #tooltip {
+    display: none; position: fixed; background: #fff; border: 1px solid #dee2e6;
+    border-radius: 8px; padding: 14px 16px; max-width: 560px; max-height: 70vh; overflow-y: auto;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18); z-index: 1000; font-size: 13px; line-height: 1.5;
+  }
+  #tooltip .tt-header { font-weight: 700; font-size: 15px; margin-bottom: 6px; color: #212529; }
+  #tooltip .tt-meta { color: #6c757d; margin-bottom: 4px; }
+  #tooltip .tt-hint { color: #adb5bd; font-size: 11px; font-style: italic; margin-bottom: 10px; }
+  #tooltip .tt-comp-name { font-weight: 600; color: #495057; margin-top: 10px; border-bottom: 1px solid #e9ecef; padding-bottom: 2px; }
+  #tooltip .tt-comp-text {
+    white-space: pre-wrap; word-break: break-word; background: #f8f9fa;
+    border: 1px solid #e9ecef; border-radius: 4px; padding: 8px 10px; margin-top: 4px;
+    font-family: "SF Mono", SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px;
+    max-height: 200px; overflow-y: auto;
+  }
+  .role-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; margin-left: 6px; }
+  .role-best { background: #00e5ff33; color: #006064; }
+  .role-pareto { background: #ff980033; color: #e65100; }
+  .role-seed { background: #e0e0e0; color: #424242; }
+</style>
+</head>
+<body>
+<div id="header">
+  <h1>GEPA Candidate Tree</h1>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:cyan"></div> Best</div>
+    <div class="legend-item"><div class="legend-dot" style="background:orange"></div> Pareto Front</div>
+    <div class="legend-item"><div class="legend-dot" style="background:lightgray"></div> Other</div>
+  </div>
+</div>
+<div id="graph-container"><p>Loading graph&hellip;</p></div>
+<div id="tooltip"></div>
+
+<script type="module">
+const NODES = [{"idx": 0, "score": 0.8, "parents": "seed", "role": "Seed", "components": {"repair_prompt": "The previous solution failed a test. Read the error, fix the function, and return only one corrected ```python``` code block.", "solver_prompt": "You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block."}},
+{"idx": 1, "score": 0.75, "parents": "0", "role": "", "components": {"repair_prompt": "The previous solution failed a test. Read the error, fix the function, and return only one corrected ```python``` code block.", "solver_prompt": "## Instructions\nYou are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.\n\n### Input Format\nThe input will be a description of a task, typically in the form of a function specification or a problem statement. The task description may include:\n- A docstring or comment block explaining the purpose and requirements of the function.\n- Specific test cases or assertions that the function must pass.\n\n### Task Description\nThe task description will be a detailed problem statement or function specification that outlines the requirements for the function to be implemented. The assistant should infer the following from the input:\n- The name and parameters of the function.\n- The logic or algorithm that the function should implement.\n- Any constraints or edge cases that must be handled.\n\n### Domain-Specific Information\nThe assistant should be aware of domain-specific information that may be relevant to the task, such as:\n- Mathematical formulas or algorithms.\n- Programming patterns or best practices.\n- Libraries or frameworks that may be useful.\n\n### Example\nHere is an example of a task description and the corresponding function implementation:\n```\n## Inputs\nWrite a function to calculate the area of a rectangle.\nThe function should take two parameters: length and width.\nThe function should return the area of the rectangle.\nThe area of a rectangle is calculated as length * width.\nYour code should pass this test:\nassert rectangle_area(5, 3) == 15\n\n## Generated code\ndef rectangle_area(length, width):\n    return length * width\n\n## Visible test result\npassed\n```\n\n### Feedback\nThe assistant should provide feedback on the function implementation, including:\n- Whether the function passed all tests.\n- Any issues or bugs in the function.\n- Suggestions for improvement or optimization.\n\nBy following these instructions, the assistant will be able to correctly implement the function and provide feedback on its implementation."}},
+{"idx": 2, "score": 0.75, "parents": "1", "role": "", "components": {"repair_prompt": "# Instructions\n\n## Task Description\nYou are provided with a task that requires you to fix a function to pass a specific test case. The function should calculate the lateral surface area of a cone given the radius \\( r \\) and the height \\( h \\). The formula for the lateral surface area of a cone is \\( \\pi r l \\), where \\( l \\) is the slant height of the cone, calculated as \\( \\sqrt{r^2 + h^2} \\).\n\n## Input Format\nThe input will consist of a task description, a previous solution, an error message, and a test case that the previous solution failed.\n\n## Assistant's Responsibilities\n1. **Identify the Error**: Carefully read the error message to understand why the previous solution failed the test case.\n2. **Correct the Function**: Modify the previous solution to fix the error and ensure it passes the test case.\n3. **Return Only One Corrected Code Block**: Provide the corrected function as a single, properly formatted Python code block.\n\n## Domain-Specific Information\n- The lateral surface area of a cone is calculated using the formula \\( \\pi r l \\), where \\( l \\) is the slant height.\n- The slant height \\( l \\) can be calculated using the Pythagorean theorem: \\( l = \\sqrt{r^2 + h^2} \\).\n- The input parameters \\( r \\) and \\( h \\) are the radius and height of the cone, respectively.\n- The expected output should be a floating-point number representing the lateral surface area of the cone.\n\n## Example Input and Output\n### Example 1\n**Inputs**\nTask:\nWrite a function to find the lateral surface area of a cone given radius \\( r \\) and the height \\( h \\).\nYour code should pass this test:\n```python\nassert lateralsurface_cone(5,12)==204.20352248333654\n```\n\nPrevious solution:\n```python\nimport math\n\ndef lateralsurface_cone(r, h):\n    return math.pi * r * h\n```\n\nError:\n```python\nassert lateralsurface_cone(5,12)==204.20352248333654\n-> AssertionError: expected 204.20352248333654, got 188.49555921538757\n```\n\n**Generated Code**\n```python\nimport math\n\ndef lateralsurface_cone(r, h):\n    l = math.sqrt(r**2 + h**2)\n    return math.pi * r * l\n```\n\n### Example 2\n**Inputs**\nTask:\nWrite a function to calculate the area of a rectangle given its length and width.\nYour code should pass this test:\n```python\nassert rectangle_area(4, 5) == 20\n```\n\nPrevious solution:\n```python\ndef rectangle_area(length, width):\n    return length * width + length + width\n```\n\nError:\n```python\nassert rectangle_area(4, 5) == 20\n-> AssertionError: expected 20, got 18\n```\n\n**Generated Code**\n```python\ndef rectangle_area(length, width):\n    return length * width\n```\n\n## Feedback\n- The assistant should ensure that the function is correctly implemented to pass the test case.\n- The assistant should return only the corrected code block without any additional text or explanations.\n\n## General Strategy\n- Read the error message carefully to identify the issue.\n- Modify the function to include the correct formula for the lateral surface area of a cone.\n- Ensure that the function returns a floating-point number.\n\n## Your Next Task\nPlease provide the corrected code block for the given task and test case.", "solver_prompt": "## Instructions\nYou are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.\n\n### Input Format\nThe input will be a description of a task, typically in the form of a function specification or a problem statement. The task description may include:\n- A docstring or comment block explaining the purpose and requirements of the function.\n- Specific test cases or assertions that the function must pass.\n\n### Task Description\nThe task description will be a detailed problem statement or function specification that outlines the requirements for the function to be implemented. The assistant should infer the following from the input:\n- The name and parameters of the function.\n- The logic or algorithm that the function should implement.\n- Any constraints or edge cases that must be handled.\n\n### Domain-Specific Information\nThe assistant should be aware of domain-specific information that may be relevant to the task, such as:\n- Mathematical formulas or algorithms.\n- Programming patterns or best practices.\n- Libraries or frameworks that may be useful.\n\n### Example\nHere is an example of a task description and the corresponding function implementation:\n```\n## Inputs\nWrite a function to calculate the area of a rectangle.\nThe function should take two parameters: length and width.\nThe function should return the area of the rectangle.\nThe area of a rectangle is calculated as length * width.\nYour code should pass this test:\nassert rectangle_area(5, 3) == 15\n\n## Generated code\ndef rectangle_area(length, width):\n    return length * width\n\n## Visible test result\npassed\n```\n\n### Feedback\nThe assistant should provide feedback on the function implementation, including:\n- Whether the function passed all tests.\n- Any issues or bugs in the function.\n- Suggestions for improvement or optimization.\n\nBy following these instructions, the assistant will be able to correctly implement the function and provide feedback on its implementation."}},
+{"idx": 3, "score": 0.7, "parents": "2", "role": "", "components": {"repair_prompt": "# Instructions\n\n## Task Description\nYou are provided with a task that requires you to fix a function to pass a specific test case. The function should calculate the lateral surface area of a cone given the radius \\( r \\) and the height \\( h \\). The formula for the lateral surface area of a cone is \\( \\pi r l \\), where \\( l \\) is the slant height of the cone, calculated as \\( \\sqrt{r^2 + h^2} \\).\n\n## Input Format\nThe input will consist of a task description, a previous solution, an error message, and a test case that the previous solution failed.\n\n## Assistant's Responsibilities\n1. **Identify the Error**: Carefully read the error message to understand why the previous solution failed the test case.\n2. **Correct the Function**: Modify the previous solution to fix the error and ensure it passes the test case.\n3. **Return Only One Corrected Code Block**: Provide the corrected function as a single, properly formatted Python code block.\n\n## Domain-Specific Information\n- The lateral surface area of a cone is calculated using the formula \\( \\pi r l \\), where \\( l \\) is the slant height.\n- The slant height \\( l \\) can be calculated using the Pythagorean theorem: \\( l = \\sqrt{r^2 + h^2} \\).\n- The input parameters \\( r \\) and \\( h \\) are the radius and height of the cone, respectively.\n- The expected output should be a floating-point number representing the lateral surface area of the cone.\n\n## Example Input and Output\n### Example 1\n**Inputs**\nTask:\nWrite a function to find the lateral surface area of a cone given radius \\( r \\) and the height \\( h \\).\nYour code should pass this test:\n```python\nassert lateralsurface_cone(5,12)==204.20352248333654\n```\n\nPrevious solution:\n```python\nimport math\n\ndef lateralsurface_cone(r, h):\n    return math.pi * r * h\n```\n\nError:\n```python\nassert lateralsurface_cone(5,12)==204.20352248333654\n-> AssertionError: expected 204.20352248333654, got 188.49555921538757\n```\n\n**Generated Code**\n```python\nimport math\n\ndef lateralsurface_cone(r, h):\n    l = math.sqrt(r**2 + h**2)\n    return math.pi * r * l\n```\n\n### Example 2\n**Inputs**\nTask:\nWrite a function to calculate the area of a rectangle given its length and width.\nYour code should pass this test:\n```python\nassert rectangle_area(4, 5) == 20\n```\n\nPrevious solution:\n```python\ndef rectangle_area(length, width):\n    return length * width + length + width\n```\n\nError:\n```python\nassert rectangle_area(4, 5) == 20\n-> AssertionError: expected 20, got 18\n```\n\n**Generated Code**\n```python\ndef rectangle_area(length, width):\n    return length * width\n```\n\n## Feedback\n- The assistant should ensure that the function is correctly implemented to pass the test case.\n- The assistant should return only the corrected code block without any additional text or explanations.\n\n## General Strategy\n- Read the error message carefully to identify the issue.\n- Modify the function to include the correct formula for the lateral surface area of a cone.\n- Ensure that the function returns a floating-point number.\n\n## Your Next Task\nPlease provide the corrected code block for the given task and test case.", "solver_prompt": "{\n  \"instruction\": \"You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one ```python``` code block.\\n\\n### Input Format\\nThe input will be a description of a task, typically in the form of a function specification or a problem statement. The task description may include:\\n- A docstring or comment block explaining the purpose and requirements of the function.\\n- Specific test cases or assertions that the function must pass.\\n\\n### Task Description\\nThe task description will be a detailed problem statement or function specification that outlines the requirements for the function to be implemented. The assistant should infer the following from the input:\\n- The name and parameters of the function.\\n- The logic or algorithm that the function should implement.\\n- Any constraints or edge cases that must be handled.\\n\\n### Domain-Specific Information\\nThe assistant should be aware of domain-specific information that may be relevant to the task, such as:\\n- Mathematical formulas or algorithms.\\n- Programming patterns or best practices.\\n- Libraries or frameworks that may be useful.\\n\\n### Example\\nHere is an example of a task description and the corresponding function implementation:\\n```\\n## Inputs\\nWrite a function to calculate the area of a rectangle.\\nThe function should take two parameters: length and width.\\nThe function should return the area of the rectangle.\\nThe area of a rectangle is calculated as length * width.\\nYour code should pass this test:\\nassert rectangle_area(5, 3) == 15\\n\\n## Generated code\\ndef rectangle_area(length, width):\\n    return length * width\\n\\n## Visible test result\\npassed\\n```\\n\\n### Feedback\\nThe assistant should provide feedback on the function implementation, including:\\n- Whether the function passed all tests.\\n- Any issues or bugs in the function.\\n- Suggestions for improvement or optimization.\\n\\nBy following these instructions, the assistant will be able to correctly implement the function and provide feedback on its implementation.\\n\\n### Additional Instructions\\n- Identify and include domain-specific information in the task description if not explicitly provided.\\n- Recognize and implement generalizable strategies where applicable.\\n- Provide detailed feedback on the function implementation, including any niche or domain-specific knowledge used.\\n- Ensure the function is self-contained and follows Python best practices.\\n\"\n}"}},
+{"idx": 4, "score": 0.8, "parents": "0", "role": "Pareto Front", "components": {"repair_prompt": "The previous solution failed a test. Read the error, fix the function, and return only one corrected ```python``` code block.", "solver_prompt": "You are a Python programmer. Write a correct, self-contained Python function to solve the given task. Your function should handle various input formats and edge cases as described in the task description. Ensure your code is well-documented and follows best practices. Include any necessary imports at the beginning of your code block. \n\n**Task Description:**\n\nWrite a function to calculate the sum of all even numbers in a given list.\n\nYour code should pass the following tests:\nassert sum_of_evens([1, 2, 3, 4, 5, 6]) == 12\nassert sum_of_evens([10, 23, 45, 68]) == 178\nassert sum_of_evens([2, 4, 6, 8, 10]) == 30\n\n**Note:** The function should handle both positive and negative integers.\n\n## Example of a Correct Response:\n\n```python\ndef sum_of_evens(numbers):\n    # Initialize the sum to 0\n    total_sum = 0\n    # Iterate through each number in the list\n    for num in numbers:\n        # Check if the number is even\n        if num % 2 == 0:\n            # Add the even number to the total sum\n            total_sum += num\n    # Return the total sum of even numbers\n    return total_sum\n```\n\n**Feedback:**\n- The function correctly calculates the sum of even numbers.\n- The function handles both positive and negative integers.\n- The code is well-documented and follows best practices."}},
+{"idx": 5, "score": 0.85, "parents": "4", "role": "Best", "components": {"repair_prompt": "The previous solution failed a test. Read the error, fix the function, and return only one corrected ```python``` code block.", "solver_prompt": "{\n  \"instruction\": \"You are a Python programmer. Write a correct, self-contained Python function to solve the given task. Your function should handle various input formats and edge cases as described in the task description. Ensure your code is well-documented and follows best practices. Include any necessary imports at the beginning of your code block.\\n\\n**Task Description:**\\n\\nWrite a function to find the maximum product of any three numbers in a given list.\\n\\nYour code should pass the following tests:\\nassert max_product([1, 2, 3, 4, 5]) == 60\\nassert max_product([-10, -20, 5, 1]) == 1000\\nassert max_product([-1, -2, -3, -4, -5]) == -10\\n\\n**Note:** The function should handle both positive and negative integers.\\n\\n## Example of a Correct Response:\\n\\n```python\\ndef max_product(numbers):\\n    # Sort the list in descending order\\n    numbers.sort(reverse=True)\\n    # The maximum product can be either from the three largest numbers\\n    # or from the two smallest (most negative) numbers and the largest number\\n    return max(numbers[0] * numbers[1] * numbers[2], numbers[0] * numbers[1] * numbers[-1])\\n```\\n\\n**Feedback:**\\n- The function correctly calculates the maximum product of any three numbers.\\n- The function handles both positive and negative integers.\\n- The code is well-documented and follows best practices.\\n\"\n}"}}];
+const DOT = `digraph G {
+    rankdir=TB;
+    node [style=filled, shape=circle, fontsize=14, width=0.6, height=0.6];
+    0 [label="0\\n(0.80)", fillcolor=lightgray, tooltip="Candidate 0
+Val Score: 0.8000
+Parent(s): seed
+Role: Seed
+
+--- repair_prompt ---
+The previous solution failed a test. Read the error, fix the function, and return only one corrected \`\`\`python\`\`\` code block.
+--- solver_prompt ---
+You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one \`\`\`python\`\`\` code block."];
+    1 [label="1\\n(0.75)", fillcolor=lightgray, tooltip="Candidate 1
+Val Score: 0.7500
+Parent(s): 0
+
+--- repair_prompt ---
+The previous solution failed a test. Read the error, fix the function, and return only one corrected \`\`\`python\`\`\` code block.
+--- solver_prompt ---
+## Instructions
+You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one \`\`\`python\`\`\` code block.
+
+### Input Format
+The input will be a description of a task, typically in the form of a function specification or a problem statement. The task description may include:
+- A docstring or comment block explaining the purpose and requirements of the function.
+- Specific test cases or assertions that the function must pass.
+
+### Task Description
+The task description will be a detailed problem statement or function specification that outlines the requirements for the function to be implemented. The assistant should infer the following from the input:
+- The name and parameters of the function.
+- The logic or algorithm that the function should implement.
+- Any constraints or edge cases that must be handled.
+
+### Domain-Specific Information
+The assistant should be aware of domain-specific information that may be relevant to the task, such as:
+- Mathematical formulas or algorithms.
+- Programming patterns or best practices.
+- Libraries or frameworks that may be useful.
+
+### Example
+Here is an example of a task description and the corresponding function implementation:
+\`\`\`
+## Inputs
+Write a function to calculate the area of a rectangle.
+The function should take two parameters: length and width.
+The function should return the area of the rectangle.
+The area of a rectangle is calculated as length * width.
+Your code should pass this test:
+assert rectangle_area(5, 3) == 15
+
+## Generated code
+def rectangle_area(length, width):
+    return length * width
+
+## Visible test result
+passed
+\`\`\`
+
+### Feedback
+The assistant should provide feedback on the function implementation, including:
+- Whether the function passed all tests.
+- Any issues or bugs in the function.
+- Suggestions for improvement or optimization.
+
+By following these instructions, the assistant will be able to correctly implement the function and provide feedback on its implementation."];
+    2 [label="2\\n(0.75)", fillcolor=lightgray, tooltip="Candidate 2
+Val Score: 0.7500
+Parent(s): 1
+
+--- repair_prompt ---
+# Instructions
+
+## Task Description
+You are provided with a task that requires you to fix a function to pass a specific test case. The function should calculate the lateral surface area of a cone given the radius \\( r \\) and the height \\( h \\). The formula for the lateral surface area of a cone is \\( \\pi r l \\), where \\( l \\) is the slant height of the cone, calculated as \\( \\sqrt{r^2 + h^2} \\).
+
+## Input Format
+The input will consist of a task description, a previous solution, an error message, and a test case that the previous solution failed.
+
+## Assistant&#x27;s Responsibilities
+1. **Identify the Error**: Carefully read the error message to understand why the previous solution failed the test case.
+2. **Correct the Function**: Modify the previous solution to fix the error and ensure it passes the test case.
+3. **Return Only One Corrected Code Block**: Provide the corrected function as a single, properly formatted Python code block.
+
+## Domain-Specific Information
+- The lateral surface area of a cone is calculated using the formula \\( \\pi r l \\), where \\( l \\) is the slant height.
+- The slant height \\( l \\) can be calculated using the Pythagorean theorem: \\( l = \\sqrt{r^2 + h^2} \\).
+- The input parameters \\( r \\) and \\( h \\) are the radius and height of the cone, respectively.
+- The expected output should be a floating-point number representing the lateral surface area of the cone.
+
+## Example Input and Output
+### Example 1
+**Inputs**
+Task:
+Write a function to find the lateral surface area of a cone given radius \\( r \\) and the height \\( h \\).
+Your code should pass this test:
+\`\`\`python
+assert lateralsurface_cone(5,12)==204.20352248333654
+\`\`\`
+
+Previous solution:
+\`\`\`python
+import math
+
+def lateralsurface_cone(r, h):
+    return math.pi * r * h
+\`\`\`
+
+Error:
+\`\`\`python
+assert lateralsurface_cone(5,12)==204.20352248333654
+-&gt; AssertionError: expected 204.20352248333654, got 188.49555921538757
+\`\`\`
+
+**Generated Code**
+\`\`\`python
+import math
+
+def lateralsurface_cone(r, h):
+    l = math.sqrt(r**2 + h**2)
+    return math.pi * r * l
+\`\`\`
+
+### Example 2
+**Inputs**
+Task:
+Write a function to calculate the area of a rectangle given its length and width.
+Your code should pass this test:
+\`\`\`python
+assert rectangle_area(4, 5) == 20
+\`\`\`
+
+Previous solution:
+\`\`\`python
+def rectangle_area(length, width):
+    return length * width + length + width
+\`\`\`
+
+Error:
+\`\`\`python
+assert rectangle_area(4, 5) == 20
+-&gt; AssertionError: expected 20, got 18
+\`\`\`
+
+**Generated Code**
+\`\`\`python
+def rectangle_area(length, width):
+    return length * width
+\`\`\`
+
+## Feedback
+- The assistant should ensure that the function is correctly implemented to pass the test case.
+- The assistant should return only the corrected code block without any additional text or explanations.
+
+## General Strategy
+- Read the error message carefully to identify the issue.
+- Modify the function to include the correct formula for the lateral surface area of a cone.
+- Ensure that the function returns a floating-point number.
+
+## Your Next Task
+Please provide the corrected code block for the given task and test case.
+--- solver_prompt ---
+## Instructions
+You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one \`\`\`python\`\`\` code block.
+
+### Input Format
+The input will be a description of a task, typically in the form of a function specification or a problem statement. The task description may include:
+- A docstring or comment block explaining the purpose and requirements of the function.
+- Specific test cases or assertions that the function must pass.
+
+### Task Description
+The task description will be a detailed problem statement or function specification that outlines the requirements for the function to be implemented. The assistant should infer the following from the input:
+- The name and parameters of the function.
+- The logic or algorithm that the function should implement.
+- Any constraints or edge cases that must be handled.
+
+### Domain-Specific Information
+The assistant should be aware of domain-specific information that may be relevant to the task, such as:
+- Mathematical formulas or algorithms.
+- Programming patterns or best practices.
+- Libraries or frameworks that may be useful.
+
+### Example
+Here is an example of a task description and the corresponding function implementation:
+\`\`\`
+## Inputs
+Write a function to calculate the area of a rectangle.
+The function should take two parameters: length and width.
+The function should return the area of the rectangle.
+The area of a rectangle is calculated as length * width.
+Your code should pass this test:
+assert rectangle_area(5, 3) == 15
+
+## Generated code
+def rectangle_area(length, width):
+    return length * width
+
+## Visible test result
+passed
+\`\`\`
+
+### Feedback
+The assistant should provide feedback on the function implementation, including:
+- Whether the function passed all tests.
+- Any issues or bugs in the function.
+- Suggestions for improvement or optimization.
+
+By following these instructions, the assistant will be able to correctly implement the function and provide feedback on its implementation."];
+    3 [label="3\\n(0.70)", fillcolor=lightgray, tooltip="Candidate 3
+Val Score: 0.7000
+Parent(s): 2
+
+--- repair_prompt ---
+# Instructions
+
+## Task Description
+You are provided with a task that requires you to fix a function to pass a specific test case. The function should calculate the lateral surface area of a cone given the radius \\( r \\) and the height \\( h \\). The formula for the lateral surface area of a cone is \\( \\pi r l \\), where \\( l \\) is the slant height of the cone, calculated as \\( \\sqrt{r^2 + h^2} \\).
+
+## Input Format
+The input will consist of a task description, a previous solution, an error message, and a test case that the previous solution failed.
+
+## Assistant&#x27;s Responsibilities
+1. **Identify the Error**: Carefully read the error message to understand why the previous solution failed the test case.
+2. **Correct the Function**: Modify the previous solution to fix the error and ensure it passes the test case.
+3. **Return Only One Corrected Code Block**: Provide the corrected function as a single, properly formatted Python code block.
+
+## Domain-Specific Information
+- The lateral surface area of a cone is calculated using the formula \\( \\pi r l \\), where \\( l \\) is the slant height.
+- The slant height \\( l \\) can be calculated using the Pythagorean theorem: \\( l = \\sqrt{r^2 + h^2} \\).
+- The input parameters \\( r \\) and \\( h \\) are the radius and height of the cone, respectively.
+- The expected output should be a floating-point number representing the lateral surface area of the cone.
+
+## Example Input and Output
+### Example 1
+**Inputs**
+Task:
+Write a function to find the lateral surface area of a cone given radius \\( r \\) and the height \\( h \\).
+Your code should pass this test:
+\`\`\`python
+assert lateralsurface_cone(5,12)==204.20352248333654
+\`\`\`
+
+Previous solution:
+\`\`\`python
+import math
+
+def lateralsurface_cone(r, h):
+    return math.pi * r * h
+\`\`\`
+
+Error:
+\`\`\`python
+assert lateralsurface_cone(5,12)==204.20352248333654
+-&gt; AssertionError: expected 204.20352248333654, got 188.49555921538757
+\`\`\`
+
+**Generated Code**
+\`\`\`python
+import math
+
+def lateralsurface_cone(r, h):
+    l = math.sqrt(r**2 + h**2)
+    return math.pi * r * l
+\`\`\`
+
+### Example 2
+**Inputs**
+Task:
+Write a function to calculate the area of a rectangle given its length and width.
+Your code should pass this test:
+\`\`\`python
+assert rectangle_area(4, 5) == 20
+\`\`\`
+
+Previous solution:
+\`\`\`python
+def rectangle_area(length, width):
+    return length * width + length + width
+\`\`\`
+
+Error:
+\`\`\`python
+assert rectangle_area(4, 5) == 20
+-&gt; AssertionError: expected 20, got 18
+\`\`\`
+
+**Generated Code**
+\`\`\`python
+def rectangle_area(length, width):
+    return length * width
+\`\`\`
+
+## Feedback
+- The assistant should ensure that the function is correctly implemented to pass the test case.
+- The assistant should return only the corrected code block without any additional text or explanations.
+
+## General Strategy
+- Read the error message carefully to identify the issue.
+- Modify the function to include the correct formula for the lateral surface area of a cone.
+- Ensure that the function returns a floating-point number.
+
+## Your Next Task
+Please provide the corrected code block for the given task and test case.
+--- solver_prompt ---
+{
+  &quot;instruction&quot;: &quot;You are a Python programmer. Write a correct, self-contained Python function that solves the task. Return only one \`\`\`python\`\`\` code block.\\n\\n### Input Format\\nThe input will be a description of a task, typically in the form of a function specification or a problem statement. The task description may include:\\n- A docstring or comment block explaining the purpose and requirements of the function.\\n- Specific test cases or assertions that the function must pass.\\n\\n### Task Description\\nThe task description will be a detailed problem statement or function specification that outlines the requirements for the function to be implemented. The assistant should infer the following from the input:\\n- The name and parameters of the function.\\n- The logic or algorithm that the function should implement.\\n- Any constraints or edge cases that must be handled.\\n\\n### Domain-Specific Information\\nThe assistant should be aware of domain-specific information that may be relevant to the task, such as:\\n- Mathematical formulas or algorithms.\\n- Programming patterns or best practices.\\n- Libraries or frameworks that may be useful.\\n\\n### Example\\nHere is an example of a task description and the corresponding function implementation:\\n\`\`\`\\n## Inputs\\nWrite a function to calculate the area of a rectangle.\\nThe function should take two parameters: length and width.\\nThe function should return the area of the rectangle.\\nThe area of a rectangle is calculated as length * width.\\nYour code should pass this test:\\nassert rectangle_area(5, 3) == 15\\n\\n## Generated code\\ndef rectangle_area(length, width):\\n    return length * width\\n\\n## Visible test result\\npassed\\n\`\`\`\\n\\n### Feedback\\nThe assistant should provide feedback on the function implementation, including:\\n- Whether the function passed all tests.\\n- Any issues or bugs in the function.\\n- Suggestions for improvement or optimization.\\n\\nBy following these instructions, the assistant will be able to correctly implement the function and provide feedback on its implementation.\\n\\n### Additional Instructions\\n- Identify and include domain-specific information in the task description if not explicitly provided.\\n- Recognize and implement generalizable strategies where applicable.\\n- Provide detailed feedback on the function implementation, including any niche or domain-specific knowledge used.\\n- Ensure the function is self-contained and follows Python best practices.\\n&quot;
+}"];
+    4 [label="4\\n(0.80)", fillcolor=orange, tooltip="Candidate 4
+Val Score: 0.8000
+Parent(s): 0
+Role: Pareto Front
+
+--- repair_prompt ---
+The previous solution failed a test. Read the error, fix the function, and return only one corrected \`\`\`python\`\`\` code block.
+--- solver_prompt ---
+You are a Python programmer. Write a correct, self-contained Python function to solve the given task. Your function should handle various input formats and edge cases as described in the task description. Ensure your code is well-documented and follows best practices. Include any necessary imports at the beginning of your code block. 
+
+**Task Description:**
+
+Write a function to calculate the sum of all even numbers in a given list.
+
+Your code should pass the following tests:
+assert sum_of_evens([1, 2, 3, 4, 5, 6]) == 12
+assert sum_of_evens([10, 23, 45, 68]) == 178
+assert sum_of_evens([2, 4, 6, 8, 10]) == 30
+
+**Note:** The function should handle both positive and negative integers.
+
+## Example of a Correct Response:
+
+\`\`\`python
+def sum_of_evens(numbers):
+    # Initialize the sum to 0
+    total_sum = 0
+    # Iterate through each number in the list
+    for num in numbers:
+        # Check if the number is even
+        if num % 2 == 0:
+            # Add the even number to the total sum
+            total_sum += num
+    # Return the total sum of even numbers
+    return total_sum
+\`\`\`
+
+**Feedback:**
+- The function correctly calculates the sum of even numbers.
+- The function handles both positive and negative integers.
+- The code is well-documented and follows best practices."];
+    5 [label="5\\n(0.85)", fillcolor=cyan, tooltip="Candidate 5
+Val Score: 0.8500
+Parent(s): 4
+Role: BEST
+
+--- repair_prompt ---
+The previous solution failed a test. Read the error, fix the function, and return only one corrected \`\`\`python\`\`\` code block.
+--- solver_prompt ---
+{
+  &quot;instruction&quot;: &quot;You are a Python programmer. Write a correct, self-contained Python function to solve the given task. Your function should handle various input formats and edge cases as described in the task description. Ensure your code is well-documented and follows best practices. Include any necessary imports at the beginning of your code block.\\n\\n**Task Description:**\\n\\nWrite a function to find the maximum product of any three numbers in a given list.\\n\\nYour code should pass the following tests:\\nassert max_product([1, 2, 3, 4, 5]) == 60\\nassert max_product([-10, -20, 5, 1]) == 1000\\nassert max_product([-1, -2, -3, -4, -5]) == -10\\n\\n**Note:** The function should handle both positive and negative integers.\\n\\n## Example of a Correct Response:\\n\\n\`\`\`python\\ndef max_product(numbers):\\n    # Sort the list in descending order\\n    numbers.sort(reverse=True)\\n    # The maximum product can be either from the three largest numbers\\n    # or from the two smallest (most negative) numbers and the largest number\\n    return max(numbers[0] * numbers[1] * numbers[2], numbers[0] * numbers[1] * numbers[-1])\\n\`\`\`\\n\\n**Feedback:**\\n- The function correctly calculates the maximum product of any three numbers.\\n- The function handles both positive and negative integers.\\n- The code is well-documented and follows best practices.\\n&quot;
+}"];
+    0 -> 1;
+    1 -> 2;
+    2 -> 3;
+    0 -> 4;
+    4 -> 5;
+}`;
+
+const nodeMap = {};
+NODES.forEach(n => { nodeMap[n.idx] = n; });
+
+let pinnedIdx = null;   // non-null when tooltip is click-pinned (scrollable)
+let hoverIdx = null;    // non-null when hovering over a node
+
+function renderTooltip(idx) {
+  const n = nodeMap[idx];
+  if (!n) return "";
+  let roleBadge = "";
+  if (n.role === "Best") roleBadge = '<span class="role-badge role-best">BEST</span>';
+  else if (n.role === "Pareto Front") roleBadge = '<span class="role-badge role-pareto">PARETO</span>';
+  else if (n.role === "Seed") roleBadge = '<span class="role-badge role-seed">SEED</span>';
+
+  let comps = "";
+  for (const [name, text] of Object.entries(n.components)) {
+    const escaped = text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    comps += '<div class="tt-comp-name">' + name + '</div><div class="tt-comp-text">' + escaped + '</div>';
+  }
+
+  return '<div class="tt-header">Candidate ' + n.idx + roleBadge + '</div>' +
+    '<div class="tt-meta">Score: <strong>' + n.score + '</strong>&nbsp;&nbsp;|&nbsp;&nbsp;Parent(s): ' + n.parents +
+    '</div><div class="tt-hint">' + (pinnedIdx === idx ? 'Click node again to dismiss' : 'Click to pin &amp; scroll') + '</div>' +
+    comps;
+}
+
+function positionTooltip(x, y) {
+  const tt = document.getElementById("tooltip");
+  let tx = x + 16, ty = y + 16;
+  const r = tt.getBoundingClientRect();
+  if (tx + r.width > window.innerWidth - 8) tx = x - r.width - 16;
+  if (ty + r.height > window.innerHeight - 8) ty = y - r.height - 16;
+  if (tx < 8) tx = 8;
+  if (ty < 8) ty = 8;
+  tt.style.left = tx + "px";
+  tt.style.top = ty + "px";
+}
+
+function showTooltip(idx, x, y) {
+  const tt = document.getElementById("tooltip");
+  tt.innerHTML = renderTooltip(idx);
+  tt.style.display = "block";
+  positionTooltip(x, y);
+}
+
+function hideTooltip() {
+  pinnedIdx = null;
+  hoverIdx = null;
+  document.getElementById("tooltip").style.display = "none";
+}
+
+// Click outside tooltip and outside nodes dismisses pinned tooltip
+document.addEventListener("mousedown", function(e) {
+  const tt = document.getElementById("tooltip");
+  if (pinnedIdx !== null && tt.style.display === "block"
+      && !tt.contains(e.target) && !e.target.closest(".node")) {
+    hideTooltip();
+  }
+});
+
+async function render() {
+  const { instance } = await import("https://cdn.jsdelivr.net/npm/@viz-js/viz@3.11.0/lib/viz-standalone.mjs");
+  const viz = await instance();
+  const svg = viz.renderSVGElement(DOT);
+  const container = document.getElementById("graph-container");
+  container.innerHTML = "";
+  container.appendChild(svg);
+
+  // Attach hover listeners and strip native <title> tooltips to avoid double tooltips
+  svg.querySelectorAll(".node").forEach(node => {
+    const title = node.querySelector("title");
+    if (!title) return;
+    const idx = parseInt(title.textContent, 10);
+    if (isNaN(idx)) return;
+    title.remove();  // remove native SVG tooltip
+    node.style.cursor = "pointer";
+    // Hover: show tooltip following the mouse (non-interactive)
+    node.addEventListener("mouseenter", e => {
+      if (pinnedIdx !== null) return;  // don't override a pinned tooltip
+      hoverIdx = idx;
+      showTooltip(idx, e.clientX, e.clientY);
+    });
+    node.addEventListener("mousemove", e => {
+      if (pinnedIdx !== null || hoverIdx !== idx) return;
+      positionTooltip(e.clientX, e.clientY);
+    });
+    node.addEventListener("mouseleave", () => {
+      if (pinnedIdx !== null) return;
+      hoverIdx = null;
+      document.getElementById("tooltip").style.display = "none";
+    });
+    // Click: pin the tooltip so user can scroll it
+    node.addEventListener("click", e => {
+      e.stopPropagation();
+      if (pinnedIdx === idx) { hideTooltip(); return; }
+      pinnedIdx = idx;
+      showTooltip(idx, e.clientX, e.clientY);
+    });
+  });
+  // Also strip <title> from edges and the graph itself
+  svg.querySelectorAll(".edge title").forEach(t => t.remove());
+  const graphTitle = svg.querySelector(":scope > title");
+  if (graphTitle) graphTitle.remove();
+}
+
+render().catch(err => {
+  document.getElementById("graph-container").innerHTML =
+    "<p style='color:red'>Failed to render graph: " + err.message + "</p>" +
+    "<pre>" + DOT.replace(/</g,"&lt;") + "</pre>";
+});
+</script>
+</body>
+</html>

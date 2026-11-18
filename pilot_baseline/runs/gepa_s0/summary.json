@@ -1,0 +1,14 @@
+{
+  "run_id": "gepa_s0",
+  "n_candidates": 7,
+  "best_idx": 6,
+  "best_val_score": 0.8,
+  "seed_val_score": 0.75,
+  "best_candidate_hash": "f0d0f3fa62f0869cc8ddae7f73117fbd6a39f66f6b1d276e20baf056e184fec4",
+  "total_metric_calls": 404,
+  "reflection_calls": 31,
+  "reflection_prompt_tokens": 32941,
+  "reflection_completion_tokens": 21272,
+  "wall_time_s": 10234.9043312,
+  "finished_at": "2026-10-02T16:56:03.228512+00:00"
+}

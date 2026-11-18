@@ -1,0 +1,67 @@
+{
+  "checked": "2026-11-02",
+  "report_scope": "Initial tool bridge probe; subsequent event/oracle/container checks are recorded in the readiness report",
+  "superseded_by": "results/autosaddler_reproduction/readiness.json",
+  "benchmark": "GAIA2, not GAIA v1",
+  "verdict": "Tool/MCP compatibility demonstrated; full benchmark compatibility not yet established",
+  "opencode": {
+    "version": "1.19.5",
+    "source": "https://github.com/anomalyco/opencode/releases/download/v1.19.5/opencode-windows-x64.zip",
+    "archive_sha256": "09a6e693157f0887e504f2cf4357a8cbddc5ead5d0dffb9a269dcc47c48640f5",
+    "installation": "Portable, inside ignored third_party directory; isolated XDG directories; no global install or login",
+    "live_check": "opencode mcp list --pure: gaia2_probe connected"
+  },
+  "are": {
+    "source_commit": "8bed1349970f1e8bc682b9352e52b5fb24cad7e6",
+    "mcp_package": "1.11.0",
+    "pydantic_package": "2.10.6",
+    "scenario_id": "scenario_universe_29_096dyu",
+    "split": "AutoSaddler train, universe 29",
+    "apps_loaded": 12,
+    "event_definitions_loaded": 9,
+    "agent_tools_exposed": 99
+  },
+  "verified": [
+    "Real GAIA2 train scenario imports and initializes in memory",
+    "Agent tool allowlist is preserved, with the same four AUI polling tools removed as in the default ARE agent",
+    "All 99 normalized schemas pass JSON Schema validation",
+    "Python MCP client initializes and lists 99 tools",
+    "Calendar read, write and read-after-write succeed through subprocess stdio MCP",
+    "OpenCode CLI connects to the same MCP probe",
+    "No raw application-state MCP resources are exposed by the probe"
+  ],
+  "stock_bridge_findings": [
+    "49 of the 99 checked stock tool schemas fail JSON Schema validation: Python type strings are used as JSON Schema types",
+    "Use the existing Pydantic argument model's JSON Schema without changing execution argument types",
+    "The stock server exposes raw app://.../state resources beyond normal agent tools; these must be excluded from the evaluation bridge",
+    "The stock server initializes scenario apps but does not run the complete ARE event lifecycle"
+  ],
+  "remaining_before_benchmark_run": [
+    "Implement RunnableARESimulationAgent/agent-builder integration around the OpenCode session",
+    "Deliver initial and subsequent user messages, environment notifications and attachments",
+    "Preserve ARE simulated time, waiting behavior and environment-stop handling; validate events during an active OpenCode turn",
+    "Forward final answers through AgentUserInterface; save native environment traces and invoke the official validator/judge",
+    "Collect OpenCode input/output/cache/reasoning counters for every request and auxiliary session",
+    "Run OpenCode in an isolated task workspace: local shell/filesystem tools must not read scenario oracle events, validators, gold data or provider credentials",
+    "Verify filesystem assets and representative search/execution/ambiguity/time/adaptability scenarios",
+    "Run a real model end-to-end train/dev smoke after fixing provider/model/quota configuration"
+  ],
+  "not_claimed": [
+    "No GAIA2 task was solved by OpenCode in this check",
+    "No official benchmark score was computed",
+    "Dynamic event delivery, multimodal behavior and provider compatibility are not validated by a tool-list connection"
+  ],
+  "inference_requests": 0,
+  "environment_note": "Nested stdio checks timed out under the tool sandbox and passed outside it; this was not an inherent GAIA2/OpenCode incompatibility",
+  "evidence": [
+    "results/autosaddler_reproduction/gaia2_compatibility/inspection.json",
+    "results/autosaddler_reproduction/gaia2_compatibility/mcp_roundtrip.json"
+  ],
+  "sources": [
+    "https://opencode.ai/docs/mcp-servers/",
+    "https://opencode.ai/docs/server/",
+    "https://facebookresearch.github.io/meta-agents-research-environments/api_reference/agents.html",
+    "third_party/Meta-ARE/are/simulation/apps/mcp/server/are_simulation_mcp_server.py",
+    "third_party/Meta-ARE/are/simulation/agents/default_agent/are_simulation_main.py"
+  ]
+}

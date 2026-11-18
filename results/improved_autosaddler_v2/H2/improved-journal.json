@@ -1,0 +1,546 @@
+[
+  {
+    "operation_id": "swe-improved-v2-h2-20261112:improved-journal:0",
+    "payload": {
+      "entry": {
+        "accepted": false,
+        "candidate_id": "sha256:7a088d22f80a92b4c626dcc05dd631ba7b4c5e7dfb5e94f9c305049f82d7b4da",
+        "causal_reason": "Behavioral mechanism has not yet been verified by reflection.",
+        "causal_status": "uncertain",
+        "changed_components": [
+          "opencode-src/packages/opencode/src/session/prompt.ts",
+          "opencode-src/packages/opencode/src/tool/apply_patch.ts",
+          "opencode-src/packages/opencode/src/tool/edit.ts",
+          "opencode-src/packages/opencode/src/tool/test-file-hint.ts",
+          "opencode-src/packages/opencode/src/tool/write.ts"
+        ],
+        "fixed_case_ids": [],
+        "iteration": 0,
+        "next_step": "Inspect the changed active code path and matched task traces.",
+        "outcome": "declined",
+        "parent_candidate_id": "sha256:beefdebde99054cc120706fbb41568c68d017ff940c75c6d1a5fbbc30c8b122e",
+        "problem": "Three distinct general failure mechanisms were identified from .autosaddler/training_evidence.json and the delivered trajectories. (1) vuls-ad2edbb8448e2c41a097f1c0b52696c0f6c5924d (0/7): the agent used ~45 tools (reads/greps/shell) but made zero file edits, then stopped with a summary; the outer harness 'Continue...' steer arrived after the loop had already exited, so no more model turns ran. Cause: the core loop exits at the first assistant stop in an idle state; there is no in-loop mechanism to detect 'used tools but implemented nothing' and continue. (2) ansible-935528e22e5283ee3f63a8772830d3d01f55ed8c (3/18): the agent edited source but verified only against stale pre-existing tests it had itself run/modified, believing work was complete; 15 required tests failed. Cause: no signal in tool output telling the agent that modifying or trusting local tests does not satisfy validation against pristine tests. (3) element-hq__element-web-5dfde12c1c1c0b6e48f17e3405468593e39d9492 (54/61): the agent edited test files and a shared test helper test/voice-broadcast/utils/test-utils.ts to make its local validation pass, contaminating 7 required tests that then failed under pristine tests. Same root cause as (2). All three are general capability gaps (no task-specific constants), addressed in core source: a zero-progress steer in the session loop and a test-file warning on file-editing tool outputs.",
+        "proposed_change": {},
+        "regressed_case_ids": [],
+        "root_cause_hypothesis": "Three distinct general failure mechanisms were identified from .autosaddler/training_evidence.json and the delivered trajectories. (1) vuls-ad2edbb8448e2c41a097f1c0b52696c0f6c5924d (0/7): the agent used ~45 tools (reads/greps/shell) but made zero file edits, then stopped with a summary; the outer harness 'Continue...' steer arrived after the loop had already exited, so no more model turns ran. Cause: the core loop exits at the first assistant stop in an idle state; there is no in-loop mechanism to detect 'used tools but implemented nothing' and continue. (2) ansible-935528e22e5283ee3f63a8772830d3d01f55ed8c (3/18): the agent edited source but verified only against stale pre-existing tests it had itself run/modified, believing work was complete; 15 required tests failed. Cause: no signal in tool output telling the agent that modifying or trusting local tests does not satisfy validation against pristine tests. (3) element-hq__element-web-5dfde12c1c1c0b6e48f17e3405468593e39d9492 (54/61): the agent edited test files and a shared test helper test/voice-broadcast/utils/test-utils.ts to make its local validation pass, contaminating 7 required tests that then failed under pristine tests. Same root cause as (2). All three are general capability gaps (no task-specific constants), addressed in core source: a zero-progress steer in the session loop and a test-file warning on file-editing tool outputs.",
+        "schema_version": "autosaddler-improved-journal/v1",
+        "source_events": [
+          "swe-improved-v2-h2-20261112:iteration:0",
+          "swe-improved-v2-h2-20261112:iteration:0:deferred-reflect"
+        ],
+        "train_after": {
+          "aggregate": 0.625,
+          "case_scores": {
+            "swe_bench_pro:instance_NodeBB__NodeBB-0c81642997ea1d827dbd02c311db9d4976112cd4-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e": 1.0,
+            "swe_bench_pro:instance_ansible__ansible-935528e22e5283ee3f63a8772830d3d01f55ed8c-vba6da65a0f3baefda7a058ebbd0a8dcafb8512f5": 0.0,
+            "swe_bench_pro:instance_ansible__ansible-deb54e4c5b32a346f1f0b0a14f1c713d2cc2e961-vba6da65a0f3baefda7a058ebbd0a8dcafb8512f5": 1.0,
+            "swe_bench_pro:instance_element-hq__element-web-5dfde12c1c1c0b6e48f17e3405468593e39d9492-vnan": 0.0,
+            "swe_bench_pro:instance_flipt-io__flipt-0b119520afca1cf25c470ff4288c464d4510b944": 1.0,
+            "swe_bench_pro:instance_future-architect__vuls-ad2edbb8448e2c41a097f1c0b52696c0f6c5924d": 0.0,
+            "swe_bench_pro:instance_qutebrowser__qutebrowser-0b621cb0ce2b54d3f93d8d41d8ff4257888a87e5-v2ef375ac784985212b1805e1d0431dc8f1b3c171": 1.0,
+            "swe_bench_pro:instance_qutebrowser__qutebrowser-5e0d6dc1483cb3336ea0e3dcbd4fe4aa00fc1742-v5149fcda2a9a6fe1d35dfed1bade1444a11ef271": 1.0
+          }
+        },
+        "train_before": {
+          "aggregate": 0.625,
+          "case_scores": {
+            "swe_bench_pro:instance_NodeBB__NodeBB-0c81642997ea1d827dbd02c311db9d4976112cd4-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e": 1.0,
+            "swe_bench_pro:instance_ansible__ansible-935528e22e5283ee3f63a8772830d3d01f55ed8c-vba6da65a0f3baefda7a058ebbd0a8dcafb8512f5": 0.0,
+            "swe_bench_pro:instance_ansible__ansible-deb54e4c5b32a346f1f0b0a14f1c713d2cc2e961-vba6da65a0f3baefda7a058ebbd0a8dcafb8512f5": 1.0,
+            "swe_bench_pro:instance_element-hq__element-web-5dfde12c1c1c0b6e48f17e3405468593e39d9492-vnan": 0.0,
+            "swe_bench_pro:instance_flipt-io__flipt-0b119520afca1cf25c470ff4288c464d4510b944": 1.0,
+            "swe_bench_pro:instance_future-architect__vuls-ad2edbb8448e2c41a097f1c0b52696c0f6c5924d": 0.0,
+            "swe_bench_pro:instance_qutebrowser__qutebrowser-0b621cb0ce2b54d3f93d8d41d8ff4257888a87e5-v2ef375ac784985212b1805e1d0431dc8f1b3c171": 1.0,
+            "swe_bench_pro:instance_qutebrowser__qutebrowser-5e0d6dc1483cb3336ea0e3dcbd4fe4aa00fc1742-v5149fcda2a9a6fe1d35dfed1bade1444a11ef271": 1.0
+          }
+        },
+        "validation": {
+          "candidate_aggregate": null,
+          "parent_aggregate": 0.25
+        }
+      },
+      "kind": "iteration",
+      "namespace": "autosaddler.improved_journal"
+    }
+  },
+  {
+    "operation_id": "swe-improved-v2-h2-20261112:improved-reflection:0",
+    "payload": {
+      "assessment": {
+        "behavioral_mechanism": "Hypothesis: the patch's in-loop zero-progress steer (prompt.ts hasAnyToolPart + ZERO_PROGRESS_STEER after an idle stop with prior tool parts) would cause the vuls-case agent to make file edits instead of stopping, and the FILE_EDIT_TOOLS test-file warnings would stop test-file contamination in the ansible-935528 and element-web cases.",
+        "evidence": "Matched development scores are identical before and after for every one of the 8 training cases (aggregate 0.625 -> 0.625; targeted cases vuls 0->0, ansible-935528 0->0, element-web 0->0), so the intended behavioral change was not observed at score level. However, the diagnosis-referenced .autosaddler/training_evidence.json trajectories were not delivered in the evidence set, so there is no trace evidence of whether the zero-progress steer actually fired in the after-run; identical scores cannot distinguish 'mechanism never engaged' from 'engaged but ineffective'. Evidence is therefore score_only and the mechanism remains unverified.",
+        "evidence_case_ids": [
+          "swe_bench_pro:instance_future-architect__vuls-ad2edbb8448e2c41a097f1c0b52696c0f6c5924d",
+          "swe_bench_pro:instance_ansible__ansible-935528e22e5283ee3f63a8772830d3d01f55ed8c-vba6da65a0f3baefda7a058ebbd0a8dcafb8512f5",
+          "swe_bench_pro:instance_element-hq__element-web-5dfde12c1c1c0b6e48f17e3405468593e39d9492-vnan"
+        ],
+        "evidence_kind": "score_only",
+        "next_step": "Build the next candidate from accepted parent beefdebd with an observable in-loop engagement signal (e.g. log or steer-echo when the zero-progress steer fires and when a FILE_EDIT_TOOLS test-file warning is appended), so the after-run trace can prove or refute mechanism engagement on the three targeted cases instead of relying on unchanged scores.",
+        "source_refs": [
+          "opencode-src/packages/opencode/src/session/prompt.ts",
+          "opencode-src/packages/opencode/src/tool/test-file-hint.ts"
+        ],
+        "status": "uncertain"
+      },
+      "iteration": 0,
+      "kind": "reflection",
+      "namespace": "autosaddler.improved_journal"
+    }
+  },
+  {
+    "operation_id": "swe-improved-v2-h2-20261112:improved-journal:1",
+    "payload": {
+      "entry": {
+        "accepted": true,
+        "candidate_id": "sha256:fa214efe0698bf2ee2c953fe30b2aa5b15098c9f29912805f252f7d39370b64e",
+        "causal_reason": "Behavioral mechanism has not yet been verified by reflection.",
+        "causal_status": "uncertain",
+        "changed_components": [
+          "opencode-src/packages/opencode/src/session/prompt.ts",
+          "opencode-src/packages/opencode/src/tool/apply_patch.ts",
+          "opencode-src/packages/opencode/src/tool/edit.ts",
+          "opencode-src/packages/opencode/src/tool/test-file-hint.ts",
+          "opencode-src/packages/opencode/src/tool/write.ts"
+        ],
+        "fixed_case_ids": [
+          "swe_bench_pro:instance_element-hq__element-web-ecfd1736e5dd9808e87911fc264e6c816653e1a9-vnan"
+        ],
+        "iteration": 1,
+        "next_step": "Inspect the changed active code path and matched task traces.",
+        "outcome": "accepted",
+        "parent_candidate_id": "sha256:beefdebde99054cc120706fbb41568c68d017ff940c75c6d1a5fbbc30c8b122e",
+        "problem": "The declined candidate 7a088d22 (score 0.625 -> 0.625 vs parent beefdebd) failed because its zero-progress steer mutated the in-memory lastUserMsg.parts array and then continued the run loop; the loop reloads messages from the database every iteration (prompt.ts runLoop, MessageV2.filterCompactedEffect), so the steer text was never persisted and never reached the model. Root cause confirmed from the declined diff plus loop mechanics. The new patch persists a brand-new durable SessionV1.User message (fresh MessageID.ascending, agent/model copied from lastUser, valid minimal User schema shape) plus a synthetic SessionV1.TextPart via sessions.updateMessage/updatePart, logs 'zero-progress steer', and continues the loop; the next iteration reloads history from the DB, the exit condition lastAssistant.parentID === lastUser.id fails (lastUser is now the steer message), the model is called with the steer in history, and the resulting assistant message is created with parentID of the steer message so the loop exits normally. Steer conditions: finish === 'stop', no session.parentID (not subagent), agent !== 'plan', has tool parts, no completed edit/write/apply_patch/multiedit part, and a per-session cap of 2 escalating steers (module-level Map). Component B (unchanged from declined patch, whose mechanism was sound since tool outputs persist and reach the model): edit/write/apply_patch append TEST_FILE_WARNING to the persisted tool output when the target path matches test-directory or test-filename patterns (test-file-hint.ts), plus Effect.logInfo('test-file warning appended') as an observable engagement signal. All changes are general: no task IDs, no task-specific constants, no test data.",
+        "proposed_change": {},
+        "regressed_case_ids": [],
+        "root_cause_hypothesis": "The declined candidate 7a088d22 (score 0.625 -> 0.625 vs parent beefdebd) failed because its zero-progress steer mutated the in-memory lastUserMsg.parts array and then continued the run loop; the loop reloads messages from the database every iteration (prompt.ts runLoop, MessageV2.filterCompactedEffect), so the steer text was never persisted and never reached the model. Root cause confirmed from the declined diff plus loop mechanics. The new patch persists a brand-new durable SessionV1.User message (fresh MessageID.ascending, agent/model copied from lastUser, valid minimal User schema shape) plus a synthetic SessionV1.TextPart via sessions.updateMessage/updatePart, logs 'zero-progress steer', and continues the loop; the next iteration reloads history from the DB, the exit condition lastAssistant.parentID === lastUser.id fails (lastUser is now the steer message), the model is called with the steer in history, and the resulting assistant message is created with parentID of the steer message so the loop exits normally. Steer conditions: finish === 'stop', no session.parentID (not subagent), agent !== 'plan', has tool parts, no completed edit/write/apply_patch/multiedit part, and a per-session cap of 2 escalating steers (module-level Map). Component B (unchanged from declined patch, whose mechanism was sound since tool outputs persist and reach the model): edit/write/apply_patch append TEST_FILE_WARNING to the persisted tool output when the target path matches test-directory or test-filename patterns (test-file-hint.ts), plus Effect.logInfo('test-file warning appended') as an observable engagement signal. All changes are general: no task IDs, no task-specific constants, no test data.",
+        "schema_version": "autosaddler-improved-journal/v1",
+        "source_events": [
+          "swe-improved-v2-h2-20261112:iteration:1",
+          "swe-improved-v2-h2-20261112:iteration:1:deferred-reflect"
+        ],
+        "train_after": {
+          "aggregate": 0.375,
+          "case_scores": {
+            "swe_bench_pro:instance_NodeBB__NodeBB-8168c6c40707478f71b8af60300830fe554c778c-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e": 0.0,
+            "swe_bench_pro:instance_ansible__ansible-11c1777d56664b1acb56b387a1ad6aeadef1391d-v0f01c69f1e2528b935359cfe578530722bca2c59": 0.0,
+            "swe_bench_pro:instance_ansible__ansible-9a21e247786ebd294dafafca1105fcd770ff46c6-v67cdaa49f89b34e42b69d5b7830b3c3ad3d8803f": 0.0,
+            "swe_bench_pro:instance_ansible__ansible-d62496fe416623e88b90139dc7917080cb04ce70-v0f01c69f1e2528b935359cfe578530722bca2c59": 0.0,
+            "swe_bench_pro:instance_element-hq__element-web-1077729a19c0ce902e713cf6fab42c91fb7907f1-vnan": 0.0,
+            "swe_bench_pro:instance_element-hq__element-web-ecfd1736e5dd9808e87911fc264e6c816653e1a9-vnan": 1.0,
+            "swe_bench_pro:instance_qutebrowser__qutebrowser-44e64199ed38003253f0296badd4a447645067b6-v2ef375ac784985212b1805e1d0431dc8f1b3c171": 1.0,
+            "swe_bench_pro:instance_qutebrowser__qutebrowser-8f46ba3f6dc7b18375f7aa63c48a1fe461190430-v2ef375ac784985212b1805e1d0431dc8f1b3c171": 1.0
+          }
+        },
+        "train_before": {
+          "aggregate": 0.25,
+          "case_scores": {
+            "swe_bench_pro:instance_NodeBB__NodeBB-8168c6c40707478f71b8af60300830fe554c778c-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e": 0.0,
+            "swe_bench_pro:instance_ansible__ansible-11c1777d56664b1acb56b387a1ad6aeadef1391d-v0f01c69f1e2528b935359cfe578530722bca2c59": 0.0,
+            "swe_bench_pro:instance_ansible__ansible-9a21e247786ebd294dafafca1105fcd770ff46c6-v67cdaa49f89b34e42b69d5b7830b3c3ad3d8803f": 0.0,
+            "swe_bench_pro:instance_ansible__ansible-d62496fe416623e88b90139dc7917080cb04ce70-v0f01c69f1e2528b935359cfe578530722bca2c59": 0.0,
+            "swe_bench_pro:instance_element-hq__element-web-1077729a19c0ce902e713cf6fab42c91fb7907f1-vnan": 0.0,
+            "swe_bench_pro:instance_element-hq__element-web-ecfd1736e5dd9808e87911fc264e6c816653e1a9-vnan": 0.0,
+            "swe_bench_pro:instance_qutebrowser__qutebrowser-44e64199ed38003253f0296badd4a447645067b6-v2ef375ac784985212b1805e1d0431dc8f1b3c171": 1.0,
+            "swe_bench_pro:instance_qutebrowser__qutebrowser-8f46ba3f6dc7b18375f7aa63c48a1fe461190430-v2ef375ac784985212b1805e1d0431dc8f1b3c171": 1.0
+          }
+        },
+        "validation": {
+          "candidate_aggregate": 0.25,
+          "parent_aggregate": 0.25
+        }
+      },
+      "kind": "iteration",
+      "namespace": "autosaddler.improved_journal"
+    }
+  },
+  {
+    "operation_id": "swe-improved-v2-h2-20261112:improved-reflection:1",
+    "payload": {
+      "assessment": {
+        "behavioral_mechanism": "Accepted fa214efe (diff b72b79ec) adds two components: (A) a durable zero-progress steer in session/prompt.ts — when the assistant finishes with 'stop', no parent session, non-plan agent, tool parts exist, and no completed edit/write/apply_patch/multiedit part, it persists a synthetic SessionV1.User message + TextPart via sessions.updateMessage/updatePart (capped at 2 per session) so the next loop iteration reloads it from the DB and continues implementation; (B) a TEST_FILE_WARNING appended to persisted edit/write/apply_patch tool outputs when the target path matches test-directory/test-filename patterns (tool/test-file-hint.ts).",
+        "evidence": "Matched train scores changed on exactly one of eight cases: element-web ecfd1736 0->1 (train aggregate 0.25->0.375, development aggregate 0.25->0.25). The delivered evidence set contains no run traces, logs, or code-route observations for any case (relevant_cases files hold only case_id/schema_version/prior_iterations), so mechanism engagement is unverified. Static inspection of the b72b79ec diff confirms the durable-persist code is present (sessions.updateMessage/updatePart, conditions, cap), but presence is not runtime engagement, and the patch is multi-component so the flipped case cannot be attributed to the steer versus the test-file warning.",
+        "evidence_case_ids": [
+          "swe_bench_pro:instance_element-hq__element-web-ecfd1736e5dd9808e87911fc264e6c816653e1a9-vnan"
+        ],
+        "evidence_kind": "score_only",
+        "next_step": "Obtain after-run traces or logs for ecfd1736 and the five still-failing train cases and check for the 'zero-progress steer' and 'test-file warning appended' logInfo signals to confirm which component engaged and which caused the ecfd1736 flip; also probe why the steer did not rescue the read-only idle-stop failure mode on the remaining 0-score cases before evolving the next candidate from fa214efe.",
+        "source_refs": [
+          ".autosaddler/history/diffs/b72b79ec7277e60ff5ad717c7b4d4d24f3fd41d8531587fa634b918537be62c5.patch",
+          ".autosaddler/history/edges/beefdebde99054cc120706fbb41568c68d017ff940c75c6d1a5fbbc30c8b122e--fa214efe0698bf2ee2c953fe30b2aa5b15098c9f29912805f252f7d39370b64e.json",
+          ".autosaddler/adaptive_memory/journal/0001.json",
+          ".autosaddler/history/relevant_cases/46f50494b5b91f1a0d38cf0b0b0c4f1d7dc49ee03546f405cc38d0b1174f00c5.json"
+        ],
+        "status": "uncertain"
+      },
+      "iteration": 1,
+      "kind": "reflection",
+      "namespace": "autosaddler.improved_journal"
+    }
+  },
+  {
+    "operation_id": "swe-improved-v2-h2-20261112:improved-journal:2",
+    "payload": {
+      "entry": {
+        "accepted": true,
+        "candidate_id": "sha256:746b78ffd0156ee89e6be44bfea4015cb4ecb3df235e094cf18cb90eb09ead71",
+        "causal_reason": "Behavioral mechanism has not yet been verified by reflection.",
+        "causal_status": "uncertain",
+        "changed_components": [
+          "opencode-src/packages/opencode/src/tool/apply_patch.ts",
+          "opencode-src/packages/opencode/src/tool/edit.ts",
+          "opencode-src/packages/opencode/src/tool/shell.ts",
+          "opencode-src/packages/opencode/src/tool/test-file-hint.ts",
+          "opencode-src/packages/opencode/src/tool/write.ts"
+        ],
+        "fixed_case_ids": [
+          "swe_bench_pro:instance_future-architect__vuls-4b680b996061044e93ef5977a081661665d3360a"
+        ],
+        "iteration": 2,
+        "next_step": "Inspect the changed active code path and matched task traces.",
+        "outcome": "accepted",
+        "parent_candidate_id": "sha256:fa214efe0698bf2ee2c953fe30b2aa5b15098c9f29912805f252f7d39370b64e",
+        "problem": "Training evidence shows both failed development cases failed because the agent modified the project's pristine test artifacts, and final validation runs the original tests, so such modifications are discarded and merely waste turns or mask real failures (vuls-4b680b99: snapshot regeneration via `yarn test -u`; element-web-44b98896: direct edits to existing test files). The previously accepted warning-only mechanism (TEST_FILE_WARNING appended after edits) was observed to be insufficient: the agent still proceeded to modify test artifacts after the warning. A scan of all 8 train cases found no case that required creating new test files and none that required modifying existing ones, so blocking only modification/deletion of existing test artifacts is safe. Hypothesis (not yet demonstrated on eval): hard errors at the tool-call boundary redirect the frozen target model to fix source files instead, converting contaminated trajectories into passing ones or at least saving wasted turns; the warning is retained for new-file creation which was never needed but stays permissive to avoid regressions.",
+        "proposed_change": {},
+        "regressed_case_ids": [],
+        "root_cause_hypothesis": "Training evidence shows both failed development cases failed because the agent modified the project's pristine test artifacts, and final validation runs the original tests, so such modifications are discarded and merely waste turns or mask real failures (vuls-4b680b99: snapshot regeneration via `yarn test -u`; element-web-44b98896: direct edits to existing test files). The previously accepted warning-only mechanism (TEST_FILE_WARNING appended after edits) was observed to be insufficient: the agent still proceeded to modify test artifacts after the warning. A scan of all 8 train cases found no case that required creating new test files and none that required modifying existing ones, so blocking only modification/deletion of existing test artifacts is safe. Hypothesis (not yet demonstrated on eval): hard errors at the tool-call boundary redirect the frozen target model to fix source files instead, converting contaminated trajectories into passing ones or at least saving wasted turns; the warning is retained for new-file creation which was never needed but stays permissive to avoid regressions.",
+        "schema_version": "autosaddler-improved-journal/v1",
+        "source_events": [
+          "swe-improved-v2-h2-20261112:iteration:2",
+          "swe-improved-v2-h2-20261112:iteration:2:deferred-reflect"
+        ],
+        "train_after": {
+          "aggregate": 0.875,
+          "case_scores": {
+            "swe_bench_pro:instance_NodeBB__NodeBB-bd80d36e0dcf78cd4360791a82966078b3a07712-v4fbcfae8b15e4ce5d132c408bca69ebb9cf146ed": 1.0,
+            "swe_bench_pro:instance_element-hq__element-web-44b98896a79ede48f5ad7ff22619a39d5f6ff03c-vnan": 0.0,
+            "swe_bench_pro:instance_flipt-io__flipt-b2170346dc37cf42fda1386cd630f24821ad2ac5": 1.0,
+            "swe_bench_pro:instance_flipt-io__flipt-b433bd05ce405837804693bebd5f4b88d87133c8": 1.0,
+            "swe_bench_pro:instance_future-architect__vuls-36456cb151894964ba1683ce7da5c35ada789970": 1.0,
+            "swe_bench_pro:instance_future-architect__vuls-4b680b996061044e93ef5977a081661665d3360a": 1.0,
+            "swe_bench_pro:instance_future-architect__vuls-9aa0d87a21bede91c2b45c32187456bb69455e92": 1.0,
+            "swe_bench_pro:instance_qutebrowser__qutebrowser-6dd402c0d0f7665d32a74c43c5b4cf5dc8aff28d-v5fc38aaf22415ab0b70567368332beee7955b367": 1.0
+          }
+        },
+        "train_before": {
+          "aggregate": 0.75,
+          "case_scores": {
+            "swe_bench_pro:instance_NodeBB__NodeBB-bd80d36e0dcf78cd4360791a82966078b3a07712-v4fbcfae8b15e4ce5d132c408bca69ebb9cf146ed": 1.0,
+            "swe_bench_pro:instance_element-hq__element-web-44b98896a79ede48f5ad7ff22619a39d5f6ff03c-vnan": 0.0,
+            "swe_bench_pro:instance_flipt-io__flipt-b2170346dc37cf42fda1386cd630f24821ad2ac5": 1.0,
+            "swe_bench_pro:instance_flipt-io__flipt-b433bd05ce405837804693bebd5f4b88d87133c8": 1.0,
+            "swe_bench_pro:instance_future-architect__vuls-36456cb151894964ba1683ce7da5c35ada789970": 1.0,
+            "swe_bench_pro:instance_future-architect__vuls-4b680b996061044e93ef5977a081661665d3360a": 0.0,
+            "swe_bench_pro:instance_future-architect__vuls-9aa0d87a21bede91c2b45c32187456bb69455e92": 1.0,
+            "swe_bench_pro:instance_qutebrowser__qutebrowser-6dd402c0d0f7665d32a74c43c5b4cf5dc8aff28d-v5fc38aaf22415ab0b70567368332beee7955b367": 1.0
+          }
+        },
+        "validation": {
+          "candidate_aggregate": 0.1875,
+          "parent_aggregate": 0.25
+        }
+      },
+      "kind": "iteration",
+      "namespace": "autosaddler.improved_journal"
+    }
+  },
+  {
+    "operation_id": "swe-improved-v2-h2-20261112:improved-reflection:2",
+    "payload": {
+      "assessment": {
+        "behavioral_mechanism": "Hard errors raised at the tool-call boundary when the agent attempts to modify or delete existing test artifacts (edit/write/apply_patch) or to run test/snapshot-update commands (shell) are hypothesized to redirect the frozen target model to fix source code instead, converting a contaminated trajectory (vuls-4b680b99: snapshot regeneration via 'yarn test -u') into a passing one.",
+        "evidence": "Supporting: (1) matched before/after scores show vuls-4b680b99 improved 0.0 -> 1.0 under candidate 746b78ff while all 7 other matched cases were unchanged (aggregate 0.75 -> 0.875, strict matched-valid improvement accepted by the minibatch gate); (2) static code-route inspection of the accepted diff proves the guards are installed on every tool mutation path (edit.ts, write.ts, apply_patch.ts non-add changes, shell.ts command pre-check including snapshot-update flags). Against/limiting: (a) no run traces, logs, or tool-call records exist in the delivered evidence, so there is no observation of the guard actually firing or of the agent redirecting to source fixes; (b) element-web-44b98896, whose diagnosed failure mode the guard directly targets, remained failed, so engagement is un demonstrated there; (c) the patch is multi-component and a single-case flip cannot separate the guard effect from run-to-run variability. Conclusion: plausible but unproven.",
+        "evidence_case_ids": [
+          "swe_bench_pro:instance_future-architect__vuls-4b680b996061044e93ef5977a081661665d3360a",
+          "swe_bench_pro:instance_element-hq__element-web-44b98896a79ede48f5ad7ff22619a39d5f6ff03c-vnan"
+        ],
+        "evidence_kind": "code_route",
+        "next_step": "Before stacking further changes on candidate 746b78ff, obtain trace- or tool-call-level evidence that the guard actually fires and that the agent subsequently edits source files: instrument the candidate (e.g. structured log of testFileBlockedMessage/shellTestArtifactGuard firings plus the next tool call after each block) and inspect the element-web-44b98896 trajectory specifically, since its failure mode is directly targeted yet the score did not change - distinguishing 'guard never fired' from 'fired but case fails anyway' decides whether to extend the guard or pursue a different mechanism.",
+        "source_refs": [
+          ".autosaddler/history/diffs/8851d6fd1670658d009dd12d12e764a8532d9a4e300063f4890a69f79b607d4c.patch",
+          "opencode-src/packages/opencode/src/tool/edit.ts",
+          "opencode-src/packages/opencode/src/tool/write.ts",
+          "opencode-src/packages/opencode/src/tool/apply_patch.ts",
+          "opencode-src/packages/opencode/src/tool/shell.ts",
+          "opencode-src/packages/opencode/src/tool/test-file-hint.ts",
+          ".autosaddler/history/iterations/0002.json",
+          ".autosaddler/history/relevant_cases/972f83b06be778549b1b844093390e0da37b5edb668ad88f85afbb12f7f6ee95.json",
+          ".autosaddler/history/relevant_cases/53ee3352d7e44e7a20035c662d83f050bd69879fd49b9caf731069301f9b3b2a.json"
+        ],
+        "status": "uncertain"
+      },
+      "iteration": 2,
+      "kind": "reflection",
+      "namespace": "autosaddler.improved_journal"
+    }
+  },
+  {
+    "operation_id": "swe-improved-v2-h2-20261112:improved-journal:3",
+    "payload": {
+      "entry": {
+        "accepted": false,
+        "candidate_id": "sha256:564b4e5dbfdc90852e762ac7e3a532841ad7dc3e6ce54ba5769bc9adef32b978",
+        "causal_reason": "Behavioral mechanism has not yet been verified by reflection.",
+        "causal_status": "uncertain",
+        "changed_components": [
+          "opencode-src/packages/opencode/src/session/prompt.ts"
+        ],
+        "fixed_case_ids": [
+          "swe_bench_pro:instance_ansible__ansible-deb54e4c5b32a346f1f0b0a14f1c713d2cc2e961-vba6da65a0f3baefda7a058ebbd0a8dcafb8512f5"
+        ],
+        "iteration": 3,
+        "next_step": "Inspect the changed active code path and matched task traces.",
+        "outcome": "declined",
+        "parent_candidate_id": "sha256:746b78ffd0156ee89e6be44bfea4015cb4ecb3df235e094cf18cb90eb09ead71",
+        "problem": "Training evidence on parent 746b78ff shows 3/8 train cases passing and 5 failing with near-miss scores (96/97, 56/61, 55/61, 14/18) plus one read-only spiral (vuls-ad2edbb8, 0/7, 136 calls). Trace artifacts are not locally accessible, so per-turn behavior is inferred from dispositions, usage and validation rationales only. Hypothesis: the failing-tests steer fires but gives only generic instructions ('fix the failing tests'), forcing the model to re-derive which tests fail from context; for near-miss cases with 1-6 remaining failures, naming the exact failing tests from the agent's own most recent test-run output removes that ambiguity. Change: in opencode-src/packages/opencode/src/session/prompt.ts, refactored stoppedOnFailingTests into a latestTestRun helper (latest completed bash run that looks like a test run), added failingTestNames which extracts concrete failing test names via anchored per-line patterns for common runners (Go --- FAIL:, pytest FAILED, TAP not ok, jest/vitest cross marks, mocha/jest numbered failures, deduped, capped at 20), and the failing-tests steer now appends the exact failing-test list plus an instruction to fix exactly those tests and rerun the same suite. No test data, model, provider or evaluator changes; H0 runtime defaults preserved.",
+        "proposed_change": {},
+        "regressed_case_ids": [
+          "swe_bench_pro:instance_qutebrowser__qutebrowser-0b621cb0ce2b54d3f93d8d41d8ff4257888a87e5-v2ef375ac784985212b1805e1d0431dc8f1b3c171"
+        ],
+        "root_cause_hypothesis": "Training evidence on parent 746b78ff shows 3/8 train cases passing and 5 failing with near-miss scores (96/97, 56/61, 55/61, 14/18) plus one read-only spiral (vuls-ad2edbb8, 0/7, 136 calls). Trace artifacts are not locally accessible, so per-turn behavior is inferred from dispositions, usage and validation rationales only. Hypothesis: the failing-tests steer fires but gives only generic instructions ('fix the failing tests'), forcing the model to re-derive which tests fail from context; for near-miss cases with 1-6 remaining failures, naming the exact failing tests from the agent's own most recent test-run output removes that ambiguity. Change: in opencode-src/packages/opencode/src/session/prompt.ts, refactored stoppedOnFailingTests into a latestTestRun helper (latest completed bash run that looks like a test run), added failingTestNames which extracts concrete failing test names via anchored per-line patterns for common runners (Go --- FAIL:, pytest FAILED, TAP not ok, jest/vitest cross marks, mocha/jest numbered failures, deduped, capped at 20), and the failing-tests steer now appends the exact failing-test list plus an instruction to fix exactly those tests and rerun the same suite. No test data, model, provider or evaluator changes; H0 runtime defaults preserved.",
+        "schema_version": "autosaddler-improved-journal/v1",
+        "source_events": [
+          "swe-improved-v2-h2-20261112:iteration:3",
+          "swe-improved-v2-h2-20261112:iteration:3:deferred-reflect"
+        ],
+        "train_after": {
+          "aggregate": 0.375,
+          "case_scores": {
+            "swe_bench_pro:instance_NodeBB__NodeBB-0c81642997ea1d827dbd02c311db9d4976112cd4-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e": 0.0,
+            "swe_bench_pro:instance_ansible__ansible-935528e22e5283ee3f63a8772830d3d01f55ed8c-vba6da65a0f3baefda7a058ebbd0a8dcafb8512f5": 0.0,
+            "swe_bench_pro:instance_ansible__ansible-deb54e4c5b32a346f1f0b0a14f1c713d2cc2e961-vba6da65a0f3baefda7a058ebbd0a8dcafb8512f5": 1.0,
+            "swe_bench_pro:instance_element-hq__element-web-5dfde12c1c1c0b6e48f17e3405468593e39d9492-vnan": 0.0,
+            "swe_bench_pro:instance_flipt-io__flipt-0b119520afca1cf25c470ff4288c464d4510b944": 1.0,
+            "swe_bench_pro:instance_future-architect__vuls-ad2edbb8448e2c41a097f1c0b52696c0f6c5924d": 0.0,
+            "swe_bench_pro:instance_qutebrowser__qutebrowser-0b621cb0ce2b54d3f93d8d41d8ff4257888a87e5-v2ef375ac784985212b1805e1d0431dc8f1b3c171": 0.0,
+            "swe_bench_pro:instance_qutebrowser__qutebrowser-5e0d6dc1483cb3336ea0e3dcbd4fe4aa00fc1742-v5149fcda2a9a6fe1d35dfed1bade1444a11ef271": 1.0
+          }
+        },
+        "train_before": {
+          "aggregate": 0.375,
+          "case_scores": {
+            "swe_bench_pro:instance_NodeBB__NodeBB-0c81642997ea1d827dbd02c311db9d4976112cd4-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e": 0.0,
+            "swe_bench_pro:instance_ansible__ansible-935528e22e5283ee3f63a8772830d3d01f55ed8c-vba6da65a0f3baefda7a058ebbd0a8dcafb8512f5": 0.0,
+            "swe_bench_pro:instance_ansible__ansible-deb54e4c5b32a346f1f0b0a14f1c713d2cc2e961-vba6da65a0f3baefda7a058ebbd0a8dcafb8512f5": 0.0,
+            "swe_bench_pro:instance_element-hq__element-web-5dfde12c1c1c0b6e48f17e3405468593e39d9492-vnan": 0.0,
+            "swe_bench_pro:instance_flipt-io__flipt-0b119520afca1cf25c470ff4288c464d4510b944": 1.0,
+            "swe_bench_pro:instance_future-architect__vuls-ad2edbb8448e2c41a097f1c0b52696c0f6c5924d": 0.0,
+            "swe_bench_pro:instance_qutebrowser__qutebrowser-0b621cb0ce2b54d3f93d8d41d8ff4257888a87e5-v2ef375ac784985212b1805e1d0431dc8f1b3c171": 1.0,
+            "swe_bench_pro:instance_qutebrowser__qutebrowser-5e0d6dc1483cb3336ea0e3dcbd4fe4aa00fc1742-v5149fcda2a9a6fe1d35dfed1bade1444a11ef271": 1.0
+          }
+        },
+        "validation": {
+          "candidate_aggregate": null,
+          "parent_aggregate": 0.1875
+        }
+      },
+      "kind": "iteration",
+      "namespace": "autosaddler.improved_journal"
+    }
+  },
+  {
+    "operation_id": "swe-improved-v2-h2-20261112:improved-reflection:3",
+    "payload": {
+      "assessment": {
+        "behavioral_mechanism": "Hypothesis under test: extracting exact failing test names from the latest test run (latestTestRun/failingTestNames in opencode-src/packages/opencode/src/session/prompt.ts, component_sources sha256:fa214efe...) and appending them to the failing-tests steer reduces ambiguity so the model targets the correct failing tests. Observed: no aggregate change (0.375 -> 0.375) with one flipped gain (ansible-deb54e4 0->1) and one flipped loss (qutebrowser-0b621cb0 1->0). The gain is consistent with the hypothesis but the simultaneous loss and unchanged aggregate mean the mechanism is not demonstrated; without per-turn traces the direction of effect per case cannot be attributed.",
+        "evidence": "Iteration 3 record (.autosaddler/history/iterations/0003.json): parent 746b78ff, candidate 564b4e5d, outcome declined, acceptance_reason 'no strict matched-valid improvement', train_before_aggregate 0.375, train_after_aggregate 0.375. Full 8-case per-case map confirms the two flips and six unchanged cases (flipt 1->1, qutebrowser-5e0d 1->1, NodeBB/vuls/ansible-935/element-web 0->0). Journal 0003 records causal_status 'uncertain' and fixed_case_ids [ansible-deb54e4]. Only dispositions/scores were inspected; matched task traces were not locally accessible, so no trace or per-turn behavioral evidence exists for the flipped cases.",
+        "evidence_case_ids": [
+          "swe_bench_pro:instance_ansible__ansible-deb54e4c5b32a346f1f0b0a14f1c713d2cc2e961-vba6da65a0f3baefda7a058ebbd0a8dcafb8512f5",
+          "swe_bench_pro:instance_qutebrowser__qutebrowser-0b621cb0ce2b54d3f93d8d41d8ff4257888a87e5-v2ef375ac784985212b1805e1d0431dc8f1b3c171"
+        ],
+        "evidence_kind": "score_only",
+        "next_step": "Per journal 0003 next_step ('Inspect the changed active code path and matched task traces'): before any further steer or loop change, obtain and inspect matched task traces for the two flipped cases (ansible-deb54e4, qutebrowser-0b621cb0) to determine whether the named-failing-tests steer actually altered per-turn behavior, and separately investigate the three diagnosed failure mechanisms (vuls early-exit loop control, ansible-935 verification against self-modified tests, element-web near-miss steer specificity) with trace or code-route evidence; do not resubmit steer variations on aggregate score alone.",
+        "source_refs": [
+          "opencode-src/packages/opencode/src/session/prompt.ts",
+          ".autosaddler/history/iterations/0003.json",
+          ".autosaddler/history/candidates/564b4e5dbfdc90852e762ac7e3a532841ad7dc3e6ce54ba5769bc9adef32b978.json",
+          ".autosaddler/adaptive_memory/journal/0003.json"
+        ],
+        "status": "uncertain"
+      },
+      "iteration": 3,
+      "kind": "reflection",
+      "namespace": "autosaddler.improved_journal"
+    }
+  },
+  {
+    "operation_id": "swe-improved-v2-h2-20261112:improved-journal:4",
+    "payload": {
+      "entry": {
+        "accepted": false,
+        "candidate_id": "sha256:4caa2f22e84641d636e79d28aa1f3a2e05eae0d154c9d4282b76a77048a4cf91",
+        "causal_reason": "Behavioral mechanism has not yet been verified by reflection.",
+        "causal_status": "uncertain",
+        "changed_components": [
+          "opencode-src/packages/opencode/src/session/prompt.ts"
+        ],
+        "fixed_case_ids": [],
+        "iteration": 4,
+        "next_step": "Inspect the changed active code path and matched task traces.",
+        "outcome": "declined",
+        "parent_candidate_id": "sha256:746b78ffd0156ee89e6be44bfea4015cb4ecb3df235e094cf18cb90eb09ead71",
+        "problem": "Training evidence shows near-miss failures where the agent edits source files and then stops without completing verification: element-web-1077729a (385/386) and NodeBB-8168c6c4 (309/311) fail with single remaining unmet tests, and ansible-9a21e24 (11/14) similar. In these cases the session ends in an incomplete state, not from lack of edits (the accepted zero-progress steer in the parent only fires when no completed file edit exists) and not necessarily with an observed failing test run (the declined 564b4e5d failing-tests steer required a prior test command reporting failures, and was declined for insufficient mechanism evidence, so it is absent from parent). The uncovered behavioral gap is: the agent completes file edits, performs no shell/validation command after the last edit, and stops, claiming success without command-level verification. Hypothesis mechanism (to be validated by minibatch outcome): persisting a concrete, durable steer at that exact stop boundary re-engages the loop and causes a test run that either confirms the change or exposes the remaining failure to fix, converting near-miss stops into passes. The steer is delivered through the demonstrated-durable fa214efe mechanism (sessions.updateMessage/updatePart) that the loop reloads from the database each iteration, avoiding the non-engagement failure mode of declined 7a088d22 (in-memory-only steer). Risk bounded: fires at most once per session, only when a completed file edit exists, only when no completed bash run follows it, and only for finish=stop non-plan top-level sessions.",
+        "proposed_change": {},
+        "regressed_case_ids": [
+          "swe_bench_pro:instance_ansible__ansible-d62496fe416623e88b90139dc7917080cb04ce70-v0f01c69f1e2528b935359cfe578530722bca2c59"
+        ],
+        "root_cause_hypothesis": "Training evidence shows near-miss failures where the agent edits source files and then stops without completing verification: element-web-1077729a (385/386) and NodeBB-8168c6c4 (309/311) fail with single remaining unmet tests, and ansible-9a21e24 (11/14) similar. In these cases the session ends in an incomplete state, not from lack of edits (the accepted zero-progress steer in the parent only fires when no completed file edit exists) and not necessarily with an observed failing test run (the declined 564b4e5d failing-tests steer required a prior test command reporting failures, and was declined for insufficient mechanism evidence, so it is absent from parent). The uncovered behavioral gap is: the agent completes file edits, performs no shell/validation command after the last edit, and stops, claiming success without command-level verification. Hypothesis mechanism (to be validated by minibatch outcome): persisting a concrete, durable steer at that exact stop boundary re-engages the loop and causes a test run that either confirms the change or exposes the remaining failure to fix, converting near-miss stops into passes. The steer is delivered through the demonstrated-durable fa214efe mechanism (sessions.updateMessage/updatePart) that the loop reloads from the database each iteration, avoiding the non-engagement failure mode of declined 7a088d22 (in-memory-only steer). Risk bounded: fires at most once per session, only when a completed file edit exists, only when no completed bash run follows it, and only for finish=stop non-plan top-level sessions.",
+        "schema_version": "autosaddler-improved-journal/v1",
+        "source_events": [
+          "swe-improved-v2-h2-20261112:iteration:4",
+          "swe-improved-v2-h2-20261112:iteration:4:deferred-reflect"
+        ],
+        "train_after": {
+          "aggregate": 0.25,
+          "case_scores": {
+            "swe_bench_pro:instance_NodeBB__NodeBB-8168c6c40707478f71b8af60300830fe554c778c-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e": 0.0,
+            "swe_bench_pro:instance_ansible__ansible-11c1777d56664b1acb56b387a1ad6aeadef1391d-v0f01c69f1e2528b935359cfe578530722bca2c59": 0.0,
+            "swe_bench_pro:instance_ansible__ansible-9a21e247786ebd294dafafca1105fcd770ff46c6-v67cdaa49f89b34e42b69d5b7830b3c3ad3d8803f": 0.0,
+            "swe_bench_pro:instance_ansible__ansible-d62496fe416623e88b90139dc7917080cb04ce70-v0f01c69f1e2528b935359cfe578530722bca2c59": 0.0,
+            "swe_bench_pro:instance_element-hq__element-web-1077729a19c0ce902e713cf6fab42c91fb7907f1-vnan": 0.0,
+            "swe_bench_pro:instance_element-hq__element-web-ecfd1736e5dd9808e87911fc264e6c816653e1a9-vnan": 0.0,
+            "swe_bench_pro:instance_qutebrowser__qutebrowser-44e64199ed38003253f0296badd4a447645067b6-v2ef375ac784985212b1805e1d0431dc8f1b3c171": 1.0,
+            "swe_bench_pro:instance_qutebrowser__qutebrowser-8f46ba3f6dc7b18375f7aa63c48a1fe461190430-v2ef375ac784985212b1805e1d0431dc8f1b3c171": 1.0
+          }
+        },
+        "train_before": {
+          "aggregate": 0.375,
+          "case_scores": {
+            "swe_bench_pro:instance_NodeBB__NodeBB-8168c6c40707478f71b8af60300830fe554c778c-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e": 0.0,
+            "swe_bench_pro:instance_ansible__ansible-11c1777d56664b1acb56b387a1ad6aeadef1391d-v0f01c69f1e2528b935359cfe578530722bca2c59": 0.0,
+            "swe_bench_pro:instance_ansible__ansible-9a21e247786ebd294dafafca1105fcd770ff46c6-v67cdaa49f89b34e42b69d5b7830b3c3ad3d8803f": 0.0,
+            "swe_bench_pro:instance_ansible__ansible-d62496fe416623e88b90139dc7917080cb04ce70-v0f01c69f1e2528b935359cfe578530722bca2c59": 1.0,
+            "swe_bench_pro:instance_element-hq__element-web-1077729a19c0ce902e713cf6fab42c91fb7907f1-vnan": 0.0,
+            "swe_bench_pro:instance_element-hq__element-web-ecfd1736e5dd9808e87911fc264e6c816653e1a9-vnan": 0.0,
+            "swe_bench_pro:instance_qutebrowser__qutebrowser-44e64199ed38003253f0296badd4a447645067b6-v2ef375ac784985212b1805e1d0431dc8f1b3c171": 1.0,
+            "swe_bench_pro:instance_qutebrowser__qutebrowser-8f46ba3f6dc7b18375f7aa63c48a1fe461190430-v2ef375ac784985212b1805e1d0431dc8f1b3c171": 1.0
+          }
+        },
+        "validation": {
+          "candidate_aggregate": null,
+          "parent_aggregate": 0.1875
+        }
+      },
+      "kind": "iteration",
+      "namespace": "autosaddler.improved_journal"
+    }
+  },
+  {
+    "operation_id": "swe-improved-v2-h2-20261112:improved-reflection:4",
+    "payload": {
+      "assessment": {
+        "behavioral_mechanism": "Hypothesized: the 4caa2f22 verify-after-edit steer persisted into prompt.ts runLoop history (via sessions.updateMessage/updatePart) was intended to re-engage the agent at the post-edit stop boundary so it runs verification commands before claiming success, converting near-miss incomplete sessions into passes.",
+        "evidence": "Score-only evidence: with the steer applied the matched train development aggregate regressed 0.375 -> 0.25 (parent 746b78ff -> 4caa2f22) and ansible-d62496fe regressed 1 -> 0, while the motivator near-miss cases (element-web-1077729a, NodeBB-8168c6c4, ansible-9a21e247) all stayed 0. No trace, tool-call or code-route evidence is available for the regression mechanism, so the causal direction remains unverified.",
+        "evidence_case_ids": [
+          "swe_bench_pro:instance_ansible__ansible-d62496fe416623e88b90139dc7917080cb04ce70-v0f01c69f1e2528b935359cfe578530722bca2c59",
+          "swe_bench_pro:instance_element-hq__element-web-1077729a19c0ce902e713cf6fab42c91fb7907f1-vnan",
+          "swe_bench_pro:instance_NodeBB__NodeBB-8168c6c40707478f71b8af60300830fe554c778c-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e",
+          "swe_bench_pro:instance_ansible__ansible-9a21e247786ebd294dafafca1105fcd770ff46c6-v67cdaa49f89b34e42b69d5b7830b3c3ad3d8803f"
+        ],
+        "evidence_kind": "score_only",
+        "next_step": "Before re-attempting any verify-after-edit steer, obtain tool-call/trace evidence for the ansible-d62496fe regression mechanism under the 4caa2f22 candidate, and gate any retry on preserving the parent development aggregate.",
+        "source_refs": [
+          ".autosaddler/history/iterations/0004.json",
+          ".autosaddler/adaptive_memory/journal/0004.json",
+          ".autosaddler/adaptive_memory/reflect.json"
+        ],
+        "status": "uncertain"
+      },
+      "iteration": 4,
+      "kind": "reflection",
+      "namespace": "autosaddler.improved_journal"
+    }
+  },
+  {
+    "operation_id": "swe-improved-v2-h2-20261112:improved-journal:5",
+    "payload": {
+      "entry": {
+        "accepted": false,
+        "candidate_id": "sha256:caea7787711f7eab697d04abd31e0b6d0608df12839d9ac6dcb1933f2af9a801",
+        "causal_reason": "Behavioral mechanism has not yet been verified by reflection.",
+        "causal_status": "uncertain",
+        "changed_components": [
+          "instructions.md"
+        ],
+        "fixed_case_ids": [],
+        "iteration": 5,
+        "next_step": "Inspect the changed active code path and matched task traces.",
+        "outcome": "declined",
+        "parent_candidate_id": "sha256:746b78ffd0156ee89e6be44bfea4015cb4ecb3df235e094cf18cb90eb09ead71",
+        "problem": "element-web-44b98896 failure mechanism (from the 87-interaction train trajectory): the agent implemented the Widget feature-flag gate only at the call site in SecurityUserSettingsTab.tsx instead of inside the SetIntegrationManager component, while the golden test SetIntegrationManager-test.tsx renders the component directly and expects in-component null/manage-section gating, causing 4 of 5 test failures; the fifth failure came from a snapshot placement mismatch of the rendered SetIntegrationManager section. The agent never ran the repository's own tests during the entire interaction, so it reported completion without detecting any of these failures.",
+        "proposed_change": {},
+        "regressed_case_ids": [
+          "swe_bench_pro:instance_future-architect__vuls-4b680b996061044e93ef5977a081661665d3360a",
+          "swe_bench_pro:instance_future-architect__vuls-9aa0d87a21bede91c2b45c32187456bb69455e92",
+          "swe_bench_pro:instance_qutebrowser__qutebrowser-6dd402c0d0f7665d32a74c43c5b4cf5dc8aff28d-v5fc38aaf22415ab0b70567368332beee7955b367"
+        ],
+        "root_cause_hypothesis": "element-web-44b98896 failure mechanism (from the 87-interaction train trajectory): the agent implemented the Widget feature-flag gate only at the call site in SecurityUserSettingsTab.tsx instead of inside the SetIntegrationManager component, while the golden test SetIntegrationManager-test.tsx renders the component directly and expects in-component null/manage-section gating, causing 4 of 5 test failures; the fifth failure came from a snapshot placement mismatch of the rendered SetIntegrationManager section. The agent never ran the repository's own tests during the entire interaction, so it reported completion without detecting any of these failures.",
+        "schema_version": "autosaddler-improved-journal/v1",
+        "source_events": [
+          "swe-improved-v2-h2-20261112:iteration:5",
+          "swe-improved-v2-h2-20261112:iteration:5:deferred-reflect"
+        ],
+        "train_after": {
+          "aggregate": 0.375,
+          "case_scores": {
+            "swe_bench_pro:instance_NodeBB__NodeBB-bd80d36e0dcf78cd4360791a82966078b3a07712-v4fbcfae8b15e4ce5d132c408bca69ebb9cf146ed": 1.0,
+            "swe_bench_pro:instance_element-hq__element-web-44b98896a79ede48f5ad7ff22619a39d5f6ff03c-vnan": 0.0,
+            "swe_bench_pro:instance_flipt-io__flipt-b2170346dc37cf42fda1386cd630f24821ad2ac5": 1.0,
+            "swe_bench_pro:instance_flipt-io__flipt-b433bd05ce405837804693bebd5f4b88d87133c8": 0.0,
+            "swe_bench_pro:instance_future-architect__vuls-36456cb151894964ba1683ce7da5c35ada789970": 1.0,
+            "swe_bench_pro:instance_future-architect__vuls-4b680b996061044e93ef5977a081661665d3360a": 0.0,
+            "swe_bench_pro:instance_future-architect__vuls-9aa0d87a21bede91c2b45c32187456bb69455e92": 0.0,
+            "swe_bench_pro:instance_qutebrowser__qutebrowser-6dd402c0d0f7665d32a74c43c5b4cf5dc8aff28d-v5fc38aaf22415ab0b70567368332beee7955b367": 0.0
+          }
+        },
+        "train_before": {
+          "aggregate": 0.75,
+          "case_scores": {
+            "swe_bench_pro:instance_NodeBB__NodeBB-bd80d36e0dcf78cd4360791a82966078b3a07712-v4fbcfae8b15e4ce5d132c408bca69ebb9cf146ed": 1.0,
+            "swe_bench_pro:instance_element-hq__element-web-44b98896a79ede48f5ad7ff22619a39d5f6ff03c-vnan": 0.0,
+            "swe_bench_pro:instance_flipt-io__flipt-b2170346dc37cf42fda1386cd630f24821ad2ac5": 1.0,
+            "swe_bench_pro:instance_flipt-io__flipt-b433bd05ce405837804693bebd5f4b88d87133c8": 0.0,
+            "swe_bench_pro:instance_future-architect__vuls-36456cb151894964ba1683ce7da5c35ada789970": 1.0,
+            "swe_bench_pro:instance_future-architect__vuls-4b680b996061044e93ef5977a081661665d3360a": 1.0,
+            "swe_bench_pro:instance_future-architect__vuls-9aa0d87a21bede91c2b45c32187456bb69455e92": 1.0,
+            "swe_bench_pro:instance_qutebrowser__qutebrowser-6dd402c0d0f7665d32a74c43c5b4cf5dc8aff28d-v5fc38aaf22415ab0b70567368332beee7955b367": 1.0
+          }
+        },
+        "validation": {
+          "candidate_aggregate": null,
+          "parent_aggregate": 0.1875
+        }
+      },
+      "kind": "iteration",
+      "namespace": "autosaddler.improved_journal"
+    }
+  },
+  {
+    "operation_id": "swe-improved-v2-h2-20261112:improved-reflection:5",
+    "payload": {
+      "assessment": {
+        "behavioral_mechanism": "Claimed mechanism of the accepted iteration-2 candidate (746b78ff): tool-boundary guards on edit/write/apply_patch/shell (plus test-file-hint logic) block the agent from modifying pristine test artifacts, steering it to fix the target code instead, which resolved vuls-4b680b99 (0.0->1.0) while leaving the other seven matched cases unchanged.",
+        "evidence": "Matched train scores (identical train sets, before vs after): iteration 2, candidate 746b78ff, accepted; vuls-4b680b99 0.0->1.0, other 7 cases unchanged, agg 0.75->0.875. Iteration 5, candidate caea778 (instructions.md-only, parent 746b78ff), declined; matched regressions vuls-4b680b99, vuls-9aa0d87a, qutebrowser-6dd402c each 1.0->0.0, agg 0.75->0.375, gate message 'no strict matched-valid improvement'. Static code-route inspection of the 746b78ff diff proves the guards are installed on every tool mutation path, but no trace proves a guard actually fired in the failing trajectories, so engagement is unverified. Additionally, the same 746b78ff bytes scored flipt-b433bd 1.0 in the iteration-2 after-run and 0.0 in the iteration-5 before-run, demonstrating run-to-run evaluation variability on identical candidate bytes; a single-case matched flip therefore cannot confirm causation. Causal status remains uncertain pending trace/reproduction evidence.",
+        "evidence_case_ids": [
+          "swe_bench_pro:instance_future-architect__vuls-4b680b996061044e93ef5977a081661665d3360a",
+          "swe_bench_pro:instance_flipt-io__flipt-b433bd05ce405837804693bebd5f4b88d87133c8",
+          "swe_bench_pro:instance_future-architect__vuls-9aa0d87a21bede91c2b45c32187456bb69455e92",
+          "swe_bench_pro:instance_qutebrowser__qutebrowser-6dd402c0d0f7665d32a74c43c5b4cf5dc8aff28d-v5fc38aaf22415ab0b70567368332beee7955b367"
+        ],
+        "evidence_kind": "score_only",
+        "next_step": "Instrument the accepted candidate: log every mutation-guard firing (tool name, attempted target path, action taken) and record the tool paths taken in the vuls-4b680b99 trajectory; re-run vuls-4b680b99 (and flipt-b433bd as a variability control) several times on identical bytes to separate evaluation variance from a true source-level effect before promoting the causal status from uncertain to confirmed.",
+        "source_refs": [
+          ".autosaddler/adaptive_memory/journal/0002.json",
+          ".autosaddler/adaptive_memory/journal/0005.json",
+          ".autosaddler/adaptive_memory/reflect.json",
+          ".autosaddler/session_context.json",
+          ".autosaddler/history/candidates/746b78ffd0156ee89e6be44bfea4015cb4ecb3df235e094cf18cb90eb09ead71.json",
+          ".autosaddler/history/candidates/caea7787711f7eab697d04abd31e0b6d0608df12839d9ac6dcb1933f2af9a801.json"
+        ],
+        "status": "uncertain"
+      },
+      "iteration": 5,
+      "kind": "reflection",
+      "namespace": "autosaddler.improved_journal"
+    }
+  }
+]

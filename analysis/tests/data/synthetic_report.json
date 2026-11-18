@@ -1,0 +1,215 @@
+{
+  "n_rows": 97,
+  "n_rows_nonheldout": 96,
+  "n_tasks": 24,
+  "main": {
+    "aggregate": {
+      "direct": {
+        "n": 48,
+        "success": 0.5,
+        "reward": 0.49,
+        "tokens": 100.0,
+        "tool_calls": 0.0,
+        "latency_s_median": 1.0,
+        "latency_s_p90": 1.0
+      },
+      "verifier_loop": {
+        "n": 48,
+        "success": 0.5,
+        "reward": 0.45999999999999996,
+        "tokens": 200.0,
+        "tool_calls": 1.0,
+        "latency_s_median": 1.0,
+        "latency_s_p90": 1.0
+      }
+    },
+    "winners": {
+      "best_fixed": "direct",
+      "best_fixed_reward": 0.49,
+      "mean_oracle_gap": 0.48500000000000004,
+      "oracle_gap_ci95": [
+        0.48500000000000004,
+        0.2867861979973448,
+        0.6832138020026552
+      ],
+      "n_tasks": 24,
+      "unique_best_share": {
+        "direct": 0.5,
+        "verifier_loop": 0.5
+      },
+      "practically_best_share": {
+        "direct": 0.5,
+        "verifier_loop": 0.5
+      },
+      "practical_threshold_reward": 0.05
+    },
+    "seed_stability": {
+      "n_seeds": 2,
+      "reward_by_seed": {
+        "0": {
+          "direct": 0.49,
+          "verifier_loop": 0.45999999999999996
+        },
+        "1": {
+          "direct": 0.49,
+          "verifier_loop": 0.45999999999999996
+        }
+      },
+      "consensus_order": [
+        "direct",
+        "verifier_loop"
+      ],
+      "order_agreement_share": 1.0
+    }
+  },
+  "sensitivity": {
+    "low_cost": {
+      "aggregate": {
+        "direct": {
+          "n": 48,
+          "success": 0.5,
+          "reward": 0.49500000000000005,
+          "tokens": 100.0,
+          "tool_calls": 0.0,
+          "latency_s_median": 1.0,
+          "latency_s_p90": 1.0
+        },
+        "verifier_loop": {
+          "n": 48,
+          "success": 0.5,
+          "reward": 0.48,
+          "tokens": 200.0,
+          "tool_calls": 1.0,
+          "latency_s_median": 1.0,
+          "latency_s_p90": 1.0
+        }
+      },
+      "winners": {
+        "best_fixed": "direct",
+        "best_fixed_reward": 0.49500000000000005,
+        "mean_oracle_gap": 0.4925,
+        "oracle_gap_ci95": [
+          0.4925,
+          0.2912210361107057,
+          0.6937789638892943
+        ],
+        "n_tasks": 24,
+        "unique_best_share": {
+          "direct": 0.5,
+          "verifier_loop": 0.5
+        },
+        "practically_best_share": {
+          "direct": 0.5,
+          "verifier_loop": 0.5
+        },
+        "practical_threshold_reward": 0.05
+      }
+    },
+    "high_cost": {
+      "aggregate": {
+        "direct": {
+          "n": 48,
+          "success": 0.5,
+          "reward": 0.48,
+          "tokens": 100.0,
+          "tool_calls": 0.0,
+          "latency_s_median": 1.0,
+          "latency_s_p90": 1.0
+        },
+        "verifier_loop": {
+          "n": 48,
+          "success": 0.5,
+          "reward": 0.41,
+          "tokens": 200.0,
+          "tool_calls": 1.0,
+          "latency_s_median": 1.0,
+          "latency_s_p90": 1.0
+        }
+      },
+      "winners": {
+        "best_fixed": "direct",
+        "best_fixed_reward": 0.48,
+        "mean_oracle_gap": 0.465,
+        "oracle_gap_ci95": [
+          0.465,
+          0.2749599630283821,
+          0.655040036971618
+        ],
+        "n_tasks": 24,
+        "unique_best_share": {
+          "direct": 0.5,
+          "verifier_loop": 0.5
+        },
+        "practically_best_share": {
+          "direct": 0.5,
+          "verifier_loop": 0.5
+        },
+        "practical_threshold_reward": 0.05
+      }
+    },
+    "quality_first": {
+      "aggregate": {
+        "direct": {
+          "n": 48,
+          "success": 0.5,
+          "reward": 0.5,
+          "tokens": 100.0,
+          "tool_calls": 0.0,
+          "latency_s_median": 1.0,
+          "latency_s_p90": 1.0
+        },
+        "verifier_loop": {
+          "n": 48,
+          "success": 0.5,
+          "reward": 0.5,
+          "tokens": 200.0,
+          "tool_calls": 1.0,
+          "latency_s_median": 1.0,
+          "latency_s_p90": 1.0
+        }
+      },
+      "winners": {
+        "best_fixed": "verifier_loop",
+        "best_fixed_reward": 0.5,
+        "mean_oracle_gap": 0.5,
+        "oracle_gap_ci95": [
+          0.5,
+          0.2956558742240667,
+          0.7043441257759333
+        ],
+        "n_tasks": 24,
+        "unique_best_share": {
+          "direct": 0.5,
+          "verifier_loop": 0.5
+        },
+        "practically_best_share": {
+          "direct": 0.5,
+          "verifier_loop": 0.5
+        },
+        "practical_threshold_reward": 0.05
+      }
+    }
+  },
+  "predictive": {
+    "status": "unavailable",
+    "reason": "scikit-learn is not installed"
+  },
+  "config": {
+    "seed": 20261008,
+    "practical_reward": 0.05,
+    "bootstrap_replicates": 10000,
+    "heldout_used_for_fit": false
+  },
+  "heldout_quality": {
+    "direct": {
+      "n": 1,
+      "success": 1.0,
+      "reward": 0.99,
+      "tokens": 100.0,
+      "tool_calls": 0.0,
+      "latency_s_median": 1.0,
+      "latency_s_p90": 1.0
+    }
+  },
+  "heldout_n_tasks": 1
+}

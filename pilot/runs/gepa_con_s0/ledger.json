@@ -1,0 +1,16 @@
+{
+ "target": {
+  "calls": 331,
+  "prompt_tokens": 102511,
+  "completion_tokens": 23164,
+  "seconds": 1384.7782866954803,
+  "total_tokens": 125675
+ },
+ "teacher": {
+  "calls": 23,
+  "prompt_tokens": 33746,
+  "completion_tokens": 12735,
+  "seconds": 3439.1330630779266,
+  "total_tokens": 46481
+ }
+}

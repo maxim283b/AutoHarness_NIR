@@ -1,0 +1,18 @@
+{
+  "run_id": "gepa_s0_test",
+  "split": "test",
+  "n_tasks": 50,
+  "pass_at_1": 0.6,
+  "n_pass": 30,
+  "visible_pass_after_solve": 0.64,
+  "repair_triggered": 18,
+  "repair_success": 1,
+  "harness_errors": 0,
+  "lm_calls": 68,
+  "prompt_tokens_total": 37173,
+  "completion_tokens_total": 6143,
+  "tokens_per_task_mean": 866.32,
+  "lm_latency_per_task_mean_s": 7.220609490000061,
+  "wall_time_s": 385.5351404999965,
+  "finished_at": "2026-10-02T17:04:14.213887+00:00"
+}

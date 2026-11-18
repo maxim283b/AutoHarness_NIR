@@ -1,0 +1,5 @@
+{
+    "task_id": 597,
+    "final_code": "def find_kth(arr1, arr2, k):\n    i, j = 0, 0\n    while i < len(arr1) and j < len(arr2):\n        if arr1[i] < arr2[j]:\n            k -= 1\n            if k == 0:\n                return arr1[i]\n            i += 1\n        else:\n            k -= 1\n            if k == 0:\n                return arr2[j]\n            j += 1\n    while i < len(arr1):\n        k -= 1\n        if k == 0:\n            return arr1[i]\n        i += 1\n    while j < len(arr2):\n        k -= 1\n        if k == 0:\n            return arr2[j]\n        j += 1",
+    "final_pass": true
+}

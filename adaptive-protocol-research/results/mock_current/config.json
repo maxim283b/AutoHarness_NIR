@@ -1,0 +1,27 @@
+{
+  "mode": "mock",
+  "best_fixed_train": "P1",
+  "train_ids": [
+    742,
+    792
+  ],
+  "test_ids": [
+    98,
+    249
+  ],
+  "limits": {
+    "mode": "mock",
+    "real_budget_approved": false,
+    "limit": 2,
+    "max_calls_per_task": 12,
+    "max_tokens_per_task": 10000,
+    "max_seconds_per_task": 120,
+    "max_total_calls": 2000,
+    "max_total_tokens": 1500000,
+    "max_total_seconds": 7200,
+    "out": "results\\mock_current"
+  },
+  "total_calls": 157,
+  "total_tokens": 23969,
+  "completed": true
+}

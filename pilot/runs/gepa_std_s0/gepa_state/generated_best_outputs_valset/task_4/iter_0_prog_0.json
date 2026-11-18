@@ -1,0 +1,5 @@
+{
+    "task_id": 581,
+    "final_code": "def surface_Area(base_edge, height):\n    # Calculate the area of the square base\n    base_area = base_edge ** 2\n    # Calculate the area of the triangular faces\n    triangular_area = (base_edge * height) / 2\n    # Calculate the total surface area\n    total_surface_area = base_area + 4 * triangular_area\n    return total_surface_area",
+    "final_pass": true
+}

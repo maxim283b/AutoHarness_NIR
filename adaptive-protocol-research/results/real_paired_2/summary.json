@@ -1,0 +1,254 @@
+{
+  "test/P1": {
+    "split": "test",
+    "arm": "P1",
+    "n": 2,
+    "successes": 2,
+    "success_rate": 1.0,
+    "wilson_95": [
+      0.34237195288961925,
+      1
+    ],
+    "mean_tokens": 183.5,
+    "mean_calls": 1.0,
+    "mean_errors": 0.0,
+    "mean_tool_calls": 1.0,
+    "mean_wall_s": 19.712778150001213,
+    "mean_switches": 0.0,
+    "mean_controller_tokens": 0.0
+  },
+  "test/P2": {
+    "split": "test",
+    "arm": "P2",
+    "n": 2,
+    "successes": 2,
+    "success_rate": 1.0,
+    "wilson_95": [
+      0.34237195288961925,
+      1
+    ],
+    "mean_tokens": 473.5,
+    "mean_calls": 2.0,
+    "mean_errors": 0.0,
+    "mean_tool_calls": 1.0,
+    "mean_wall_s": 42.96267710000029,
+    "mean_switches": 0.0,
+    "mean_controller_tokens": 0.0
+  },
+  "test/P3": {
+    "split": "test",
+    "arm": "P3",
+    "n": 2,
+    "successes": 2,
+    "success_rate": 1.0,
+    "wilson_95": [
+      0.34237195288961925,
+      1
+    ],
+    "mean_tokens": 475.0,
+    "mean_calls": 2.0,
+    "mean_errors": 0.0,
+    "mean_tool_calls": 1.0,
+    "mean_wall_s": 46.77195425000082,
+    "mean_switches": 0.0,
+    "mean_controller_tokens": 0.0
+  },
+  "test/P4": {
+    "split": "test",
+    "arm": "P4",
+    "n": 2,
+    "successes": 2,
+    "success_rate": 1.0,
+    "wilson_95": [
+      0.34237195288961925,
+      1
+    ],
+    "mean_tokens": 762.5,
+    "mean_calls": 3.0,
+    "mean_errors": 0.0,
+    "mean_tool_calls": 1.0,
+    "mean_wall_s": 62.60695735000081,
+    "mean_switches": 0.0,
+    "mean_controller_tokens": 0.0
+  },
+  "test/bandit_cold": {
+    "split": "test",
+    "arm": "bandit_cold",
+    "n": 2,
+    "successes": 2,
+    "success_rate": 1.0,
+    "wilson_95": [
+      0.34237195288961925,
+      1
+    ],
+    "mean_tokens": 183.5,
+    "mean_calls": 1.0,
+    "mean_errors": 0.0,
+    "mean_tool_calls": 1.0,
+    "mean_wall_s": 14.434137150000424,
+    "mean_switches": 0.0,
+    "mean_controller_tokens": 0.0
+  },
+  "test/bandit_trained": {
+    "split": "test",
+    "arm": "bandit_trained",
+    "n": 2,
+    "successes": 2,
+    "success_rate": 1.0,
+    "wilson_95": [
+      0.34237195288961925,
+      1
+    ],
+    "mean_tokens": 183.5,
+    "mean_calls": 1.0,
+    "mean_errors": 0.0,
+    "mean_tool_calls": 1.0,
+    "mean_wall_s": 12.62194935000116,
+    "mean_switches": 0.0,
+    "mean_controller_tokens": 0.0
+  },
+  "test/llm_controller": {
+    "split": "test",
+    "arm": "llm_controller",
+    "n": 2,
+    "successes": 2,
+    "success_rate": 1.0,
+    "wilson_95": [
+      0.34237195288961925,
+      1
+    ],
+    "mean_tokens": 370.0,
+    "mean_calls": 2.0,
+    "mean_errors": 0.0,
+    "mean_tool_calls": 1.0,
+    "mean_wall_s": 30.401771650000228,
+    "mean_switches": 0.0,
+    "mean_controller_tokens": 186.5
+  },
+  "test/random": {
+    "split": "test",
+    "arm": "random",
+    "n": 2,
+    "successes": 2,
+    "success_rate": 1.0,
+    "wilson_95": [
+      0.34237195288961925,
+      1
+    ],
+    "mean_tokens": 485.5,
+    "mean_calls": 2.0,
+    "mean_errors": 0.0,
+    "mean_tool_calls": 1.0,
+    "mean_wall_s": 47.34181024999907,
+    "mean_switches": 0.0,
+    "mean_controller_tokens": 0.0
+  },
+  "test/rule": {
+    "split": "test",
+    "arm": "rule",
+    "n": 2,
+    "successes": 2,
+    "success_rate": 1.0,
+    "wilson_95": [
+      0.34237195288961925,
+      1
+    ],
+    "mean_tokens": 183.5,
+    "mean_calls": 1.0,
+    "mean_errors": 0.0,
+    "mean_tool_calls": 1.0,
+    "mean_wall_s": 13.821612549999372,
+    "mean_switches": 0.0,
+    "mean_controller_tokens": 0.0
+  },
+  "test/rule_front_only": {
+    "split": "test",
+    "arm": "rule_front_only",
+    "n": 2,
+    "successes": 2,
+    "success_rate": 1.0,
+    "wilson_95": [
+      0.34237195288961925,
+      1
+    ],
+    "mean_tokens": 183.5,
+    "mean_calls": 1.0,
+    "mean_errors": 0.0,
+    "mean_tool_calls": 1.0,
+    "mean_wall_s": 12.287989399999788,
+    "mean_switches": 0.0,
+    "mean_controller_tokens": 0.0
+  },
+  "train/P1": {
+    "split": "train",
+    "arm": "P1",
+    "n": 2,
+    "successes": 2,
+    "success_rate": 1.0,
+    "wilson_95": [
+      0.34237195288961925,
+      1
+    ],
+    "mean_tokens": 215.0,
+    "mean_calls": 1.0,
+    "mean_errors": 0.0,
+    "mean_tool_calls": 1.0,
+    "mean_wall_s": 26.373647000000346,
+    "mean_switches": 0.0,
+    "mean_controller_tokens": 0.0
+  },
+  "train/P2": {
+    "split": "train",
+    "arm": "P2",
+    "n": 2,
+    "successes": 2,
+    "success_rate": 1.0,
+    "wilson_95": [
+      0.34237195288961925,
+      1
+    ],
+    "mean_tokens": 503.5,
+    "mean_calls": 2.0,
+    "mean_errors": 0.0,
+    "mean_tool_calls": 1.0,
+    "mean_wall_s": 54.91605215000072,
+    "mean_switches": 0.0,
+    "mean_controller_tokens": 0.0
+  },
+  "train/P3": {
+    "split": "train",
+    "arm": "P3",
+    "n": 2,
+    "successes": 2,
+    "success_rate": 1.0,
+    "wilson_95": [
+      0.34237195288961925,
+      1
+    ],
+    "mean_tokens": 538.0,
+    "mean_calls": 2.0,
+    "mean_errors": 0.0,
+    "mean_tool_calls": 1.0,
+    "mean_wall_s": 57.40577719999965,
+    "mean_switches": 0.0,
+    "mean_controller_tokens": 0.0
+  },
+  "train/P4": {
+    "split": "train",
+    "arm": "P4",
+    "n": 2,
+    "successes": 2,
+    "success_rate": 1.0,
+    "wilson_95": [
+      0.34237195288961925,
+      1
+    ],
+    "mean_tokens": 837.0,
+    "mean_calls": 3.0,
+    "mean_errors": 0.0,
+    "mean_tool_calls": 1.0,
+    "mean_wall_s": 91.02589920000082,
+    "mean_switches": 0.0,
+    "mean_controller_tokens": 0.0
+  }
+}

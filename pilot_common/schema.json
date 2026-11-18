@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HarnessConfig and Trajectory",
+  "type": "object",
+  "description": "The canonical Python dataclass schema is pilot_common.schema; this document describes the serialized record shape.",
+  "required": ["task_id", "harness_config_hash", "harness_source_hash", "steps", "success", "stop_reason"],
+  "properties": {
+    "task_id": {}, "harness_config_hash": {"type": "string"}, "harness_source_hash": {"type": "string"},
+    "success": {"type": "boolean"}, "error_type": {"type": ["string", "null"]},
+    "stop_reason": {"type": ["string", "null"]}, "steps": {"type": "array"},
+    "total_prompt_tokens": {"type": "integer"}, "total_completion_tokens": {"type": "integer"},
+    "model_calls": {"type": "integer"}, "tool_calls": {"type": "integer"},
+    "latency_s": {"type": "number"}, "wall_time_s": {"type": "number"}
+  }
+}

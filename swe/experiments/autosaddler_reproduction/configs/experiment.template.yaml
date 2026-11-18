@@ -1,0 +1,28 @@
+schema_version: autosaddler/v2
+scenario:
+  type: shared_opencode
+  settings:
+    mode: real
+    capability_phase_iterations: null
+    capability_phase_epochs: 1
+    batch_per_benchmark: 1
+    train_per_benchmark: 6
+    development_per_benchmark: 3
+    target_model: null
+    judge: null
+optimization:
+  task_selection: {type: balanced_benchmarks, batch_size: 3, seed: 42}
+  acceptance: {type: matched_valid_strict_improvement}
+  development: {type: full_on_accept}
+  ranking: {type: macro_benchmark_development}
+  budget: {max_rollouts: 150, max_iterations: 8}
+  diagnosis_patch_timeout_seconds: 1200
+  session_retries: 0
+provider:
+  type: opencode_acp
+  capabilities: [read_workspace, edit_workspace, run_commands, load_skills]
+  settings:
+    model: null
+storage:
+  type: local
+  run_root: ../../../results/autosaddler_reproduction/runs

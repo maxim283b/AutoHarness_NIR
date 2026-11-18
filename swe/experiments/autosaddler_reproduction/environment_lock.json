@@ -1,0 +1,38 @@
+{
+  "platform": "Windows x64 + Docker Desktop Linux",
+  "python": "3.12.15",
+  "opencode": "1.19.5",
+  "repos": {
+    "AutoSaddler": {
+      "commit": "e841543ce6cf6bdf690e65134b12a829ec9f66d1",
+      "tracked_changes": "M src/autosaddler/v2/harness/component_map.py\n M src/autosaddler/v2/harness/git.py\n M src/autosaddler/v2/plugins/meta_are/config.py\n M src/autosaddler/v2/plugins/meta_are/evaluator.py\n M src/autosaddler/v2/plugins/meta_are/provisioning.py\n M src/autosaddler/v2/plugins/meta_are/runner.py\n M src/autosaddler/v2/providers/claude.py\n M src/autosaddler/v2/providers/codex.py\n M src/autosaddler/v2/providers/copilot.py\n M src/autosaddler/v2/providers/workspace_renderer.py\n M src/autosaddler/v2/storage/local.py",
+      "local_patch_sha256": "3335047e0cfe95f05fe3741ac33b33e2187ef983f7121204d6f76b13dc53797f"
+    },
+    "Meta-ARE": {
+      "commit": "8bed1349970f1e8bc682b9352e52b5fb24cad7e6",
+      "tracked_changes": "M are/simulation/apps/utils/fallback_file_system.py"
+    },
+    "SWE-bench_Pro-os": {
+      "commit": "66f92766bba642462d4bbe5479e83f91f9211862",
+      "tracked_changes": ""
+    },
+    "terminal-bench-2": {
+      "commit": "2fd12b88aafdd04a52c298e3940bcb189f9766d6",
+      "tracked_changes": ""
+    }
+  },
+  "meta_are_base": "395d1dd512add1e3aeb5a6a092490768b51e3ce5",
+  "meta_are_patch_sha256": "a55daebf8d2dbb93b955be3c318245a33da22193fbe1ec55e7087d0a5b27158f",
+  "experiment_dependencies_sha256": "266731418f73fb88e79109163d8f66529d9eccf45271ae5204d6e30a00bc0f0d",
+  "are_dependencies_sha256": "09b2d2dd624251c6ff38d3a7aa07e14964fe4ceb5f9bbd8495d0ba628a7abe82",
+  "binary_sha256": {
+    "third_party/opencode-1.19.5/opencode.exe": "d7b473388cb62555970e400ce54cdfb6d6573608beea6f8fdf382cd1a698a3fa",
+    "third_party/opencode-1.19.5-linux/opencode": "7df4e4136301f16589b0f30bf91a61380fca5f8ef22dd36570f5ebe1d4ec802c"
+  },
+  "codex_acp": {
+    "version": "2.5.0",
+    "adapter_sha256": "3b5e86570b8431583bec2f083776d1b73465c5846d28c80fe5273a41048a3b54",
+    "local_patch": "codex_acp_scope.patch",
+    "note": "Preserve disabled global MCP servers when adding task-scoped action-selection tools"
+  }
+}

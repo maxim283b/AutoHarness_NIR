@@ -1,0 +1,5 @@
+{
+    "task_id": 579,
+    "final_code": "def find_dissimilar(tuple1, tuple2):\n    # Convert tuples to sets to remove duplicates and then find the difference\n    return tuple(set(tuple1) ^ set(tuple2))",
+    "final_pass": true
+}
